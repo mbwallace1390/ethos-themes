@@ -2,10 +2,10 @@
     "manifestVersion": 1,
     "name": "RF Suite Blue",
     "key": "mbwallace1390-theme-RFBlue",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "releaseNotes": {
         "format": "markdown",
-        "content": "Use the short internal theme key RFBlue for ETHOS compatibility."
+        "content": "Stable visual refinement with a thinner 784x50 toolbar gradient and blue-black outer page background. Keeps the proven RFBlue key."
     },
     "folder": "theme-rfsuite-blue",
     "files": [
