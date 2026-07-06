@@ -1,14 +1,15 @@
 {
     "manifestVersion": 1,
     "name": "RF Suite Blue",
-    "key": "mbwallace1390-theme-rfsuite-blue",
-    "version": "1.0.0",
+    "key": "mbwallace1390-theme-RFSuiteBlue",
+    "version": "1.0.1",
     "releaseNotes": {
         "format": "markdown",
-        "content": "Dark ETHOS theme with blue focus and selection highlights, created to improve selected-tile visibility in Rotorflight RF Suite."
+        "content": "Exact working Dracula-theme structure with the focus, active, and active-border colors changed to blue for Rotorflight RF Suite testing."
     },
     "folder": "theme-rfsuite-blue",
     "files": [
-        "main.lua"
+        "main.lua",
+        "toolbar-*"
     ]
 }
