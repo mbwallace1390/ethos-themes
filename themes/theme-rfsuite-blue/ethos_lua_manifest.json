@@ -2,10 +2,10 @@
     "manifestVersion": 1,
     "name": "RF Suite Blue",
     "key": "mbwallace1390-theme-RFSuiteBlue",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "releaseNotes": {
         "format": "markdown",
-        "content": "Exact working Dracula-theme structure with the focus, active, and active-border colors changed to blue for Rotorflight RF Suite testing."
+        "content": "Fix package folder mismatch so the ZIP folder, manifest folder, compiled Lua source path, and toolbar asset all use theme-rfsuite-blue."
     },
     "folder": "theme-rfsuite-blue",
     "files": [
