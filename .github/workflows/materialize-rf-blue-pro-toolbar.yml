@@ -1,0 +1,34 @@
+name: Materialize RF Blue Pro toolbar
+
+on:
+  push:
+    branches:
+      - rf-blue-pro-v1-0-0
+    paths:
+      - themes/theme-rfblue-pro/toolbar-rfblue-pro.png.b64
+      - .github/workflows/materialize-rf-blue-pro-toolbar.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-toolbar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rf-blue-pro-v1-0-0
+      - name: Decode toolbar PNG
+        run: base64 --decode themes/theme-rfblue-pro/toolbar-rfblue-pro.png.b64 > themes/theme-rfblue-pro/toolbar-rfblue-pro.png
+      - name: Commit generated toolbar
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add themes/theme-rfblue-pro/toolbar-rfblue-pro.png
+          if git diff --cached --quiet; then
+            echo "Toolbar already up to date"
+          else
+            git commit -m "Generate RF Blue Pro toolbar asset"
+            git push origin HEAD:rf-blue-pro-v1-0-0
+          fi
