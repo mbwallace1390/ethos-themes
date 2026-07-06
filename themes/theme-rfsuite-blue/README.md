@@ -1,23 +1,18 @@
-# RF Suite Blue
+# RF Suite Blue v1.0.4 Test 1
 
-Stable version: 1.0.3
+This is a visual test build based on the proven working v1.0.3 theme.
 
-RF Suite Blue is a dark FrSky ETHOS theme that changes the selected-control highlight from yellow to blue. It has been confirmed to improve the selected Rotorflight RF Suite menu tiles.
+## Changes
 
-## Compatibility
+- Changes `PAGE_BGCOLOR` to a deep blue-black so the unused left and right screen gutters blend into the RF Suite layout instead of appearing gray.
+- Replaces the broad toolbar gradient with a narrower, sharper highlight band.
+- Keeps the working internal ETHOS key `RFBlue`.
+- Does not include `main.luac`; ETHOS will compile a fresh copy.
 
-The internal theme key is `RFBlue`, which is six characters long. FrSky supplied themes use short internal keys, and this corrected key allows the theme to appear in the ETHOS theme list.
+## Clean test install
 
-## Installation
-
-Copy the complete `theme-rfsuite-blue` folder into the transmitter `scripts` directory, restart the transmitter, and select **RF Suite Blue** under **System > General > Theme**.
-
-Expected files:
-
-```text
-scripts/theme-rfsuite-blue/main.lua
-scripts/theme-rfsuite-blue/ethos_lua_manifest.json
-scripts/theme-rfsuite-blue/toolbar-rfsuite-blue.png
-```
-
-The release omits `main.luac` so ETHOS can create a fresh compiled copy from the corrected source.
+1. Delete `scripts/theme-rfsuite-blue`.
+2. Restart the radio once.
+3. Install this package.
+4. Restart again.
+5. Select **RF Suite Blue**.
