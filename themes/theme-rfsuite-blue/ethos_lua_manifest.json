@@ -2,10 +2,10 @@
     "manifestVersion": 1,
     "name": "RF Suite Blue",
     "key": "mbwallace1390-theme-RFBlue",
-    "version": "1.0.4-test1",
+    "version": "1.0.4",
     "releaseNotes": {
         "format": "markdown",
-        "content": "Test build: changes the outer page background from charcoal to blue-black to blend the left/right gutters, and replaces the broad toolbar glow with a thinner, sharper highlight band. The working RFBlue theme key is unchanged."
+        "content": "Stable visual refinement with a thinner 784x50 toolbar gradient and blue-black outer page background. Keeps the proven RFBlue key."
     },
     "folder": "theme-rfsuite-blue",
     "files": [
