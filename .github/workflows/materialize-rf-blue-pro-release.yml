@@ -1,0 +1,26 @@
+name: Build RF Blue Pro package
+
+on:
+  push:
+    branches:
+      - rf-blue-pro-v1-0-0
+    paths:
+      - releases/RF-Blue-Pro-v1.0.0.zip.b64
+      - .github/workflows/materialize-rf-blue-pro-release.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rf-blue-pro-v1-0-0
+      - run: base64 --decode releases/RF-Blue-Pro-v1.0.0.zip.b64 > releases/RF-Blue-Pro-v1.0.0.zip
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add releases/RF-Blue-Pro-v1.0.0.zip
+          git diff --cached --quiet || (git commit -m "Generate RF Blue Pro package" && git push origin HEAD:rf-blue-pro-v1-0-0)
