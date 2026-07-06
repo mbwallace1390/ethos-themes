@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "RF Blue Pro",
+    "key": "mbwallace1390-theme-RFPro",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable RF Blue Pro release: outline focus, sharper square controls, bright cyan-blue active accents, improved inactive/disabled contrast, and a lightweight 784x50 thin-line toolbar."
+    },
+    "folder": "theme-rfblue-pro",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}
