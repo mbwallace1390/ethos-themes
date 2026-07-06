@@ -1,11 +1,11 @@
 {
     "manifestVersion": 1,
     "name": "RF Suite Blue",
-    "key": "mbwallace1390-theme-RFSuiteBlue",
-    "version": "1.0.2",
+    "key": "mbwallace1390-theme-RFBlue",
+    "version": "1.0.3",
     "releaseNotes": {
         "format": "markdown",
-        "content": "Fix package folder mismatch so the ZIP folder, manifest folder, compiled Lua source path, and toolbar asset all use theme-rfsuite-blue."
+        "content": "Use the short internal theme key RFBlue for ETHOS compatibility."
     },
     "folder": "theme-rfsuite-blue",
     "files": [
