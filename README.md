@@ -1,30 +1,32 @@
 # ETHOS Themes
 
-Custom themes for FrSky ETHOS, focused on improving Rotorflight RF Suite.
+Custom FrSky ETHOS themes focused on improving Rotorflight RF Suite.
 
-## Stable theme
+## Recommended theme
+
+### RF Blue Pro v1.0.0
+
+RF Blue Pro uses dark controls, bright cyan-blue outline focus, sharper square controls, clearer inactive and disabled states, and a lightweight 784x50 toolbar.
+
+- [Download RF Blue Pro v1.0.0](releases/RF-Blue-Pro-v1.0.0.zip)
+- [View RF Blue Pro source](themes/theme-rfblue-pro)
+
+## Classic theme
 
 ### RF Suite Blue v1.0.4
 
-Stable source: [`themes/theme-rfsuite-blue`](themes/theme-rfsuite-blue)
+RF Suite Blue keeps the original rounded controls and solid blue selected-control style.
 
-Version 1.0.4 keeps the working `RFBlue` key, uses a thinner 784x50 toolbar gradient, and changes the page background to blue-black so ETHOS's fixed side margins blend into the layout.
+- [View RF Suite Blue source](themes/theme-rfsuite-blue)
+- [Download previous packaged release v1.0.3](releases/RF-Suite-Blue-v1.0.3.zip)
 
 ## Installation
 
-1. Open [`themes/theme-rfsuite-blue`](themes/theme-rfsuite-blue).
-2. Copy the complete `theme-rfsuite-blue` folder into the transmitter's `scripts` folder.
-3. Restart the transmitter.
-4. Select **RF Suite Blue** under **System > General > Theme**.
+1. Download the desired ZIP or copy its complete theme folder into the transmitter's `scripts` folder.
+2. Restart the transmitter.
+3. Open **System > General > Theme**.
+4. Select **RF Blue Pro** or **RF Suite Blue**.
 
-Expected files:
+Both themes can remain installed at the same time.
 
-```text
-scripts/theme-rfsuite-blue/main.lua
-scripts/theme-rfsuite-blue/ethos_lua_manifest.json
-scripts/theme-rfsuite-blue/toolbar-rfsuite-blue.png
-```
-
-`main.luac` is intentionally omitted so ETHOS creates a fresh compiled copy.
-
-Previous packaged release: [`v1.0.3`](releases/RF-Suite-Blue-v1.0.3.zip)
+`main.luac` is intentionally omitted from source packages so ETHOS creates a fresh compiled copy.
