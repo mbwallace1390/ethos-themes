@@ -1,37 +1,39 @@
 # ETHOS Themes
 
-Custom themes and interface experiments for FrSky ETHOS, with an initial focus on improving the appearance and readability of Rotorflight RF Suite.
+Custom themes for FrSky ETHOS, with an initial focus on improving the appearance and readability of Rotorflight RF Suite.
 
-## Themes
+## Stable theme
 
-### RF Suite Blue Test
+### RF Suite Blue v1.0.3
 
-Location: [`themes/theme-rfsuite-blue-test`](themes/theme-rfsuite-blue-test)
+Location: [`themes/theme-rfsuite-blue`](themes/theme-rfsuite-blue)
 
-This first theme replaces the yellowish selected-control highlight with a deep blue highlight. It is intended to confirm that RF Suite's standard menu tiles inherit their selected appearance from the active ETHOS system theme.
+RF Suite Blue replaces the yellow selected-control highlight with a clearer blue highlight. It has been tested successfully on an ETHOS transmitter and confirmed to change the selected Rotorflight RF Suite menu tiles from yellow to blue.
+
+The working build uses the short internal ETHOS theme key `RFBlue`. FrSky's supplied themes use internal keys of seven characters or fewer, and longer keys may cause a theme to be silently omitted from the theme list.
 
 ## Requirements
 
 - FrSky ETHOS 26.1 or newer with Lua theme support
 - A compatible ETHOS transmitter or the ETHOS simulator
 
-## Installing a theme
+## Installation
 
-1. Download or clone this repository.
-2. Open the desired folder under `themes`.
-3. Copy that complete theme folder into the transmitter's `scripts` directory.
-4. On the transmitter, open **System → General → Theme**.
-5. Select the installed theme.
+1. Download [`RF-Suite-Blue-v1.0.3.zip`](releases/RF-Suite-Blue-v1.0.3.zip).
+2. Install it through ETHOS Suite, or extract it manually.
+3. For a manual installation, copy the complete `theme-rfsuite-blue` folder into the transmitter's `scripts` directory.
+4. Restart the transmitter.
+5. Open **System → General → Theme** and select **RF Suite Blue**.
 
-Example installed path:
+The installed files should appear at:
 
 ```text
-scripts/theme-rfsuite-blue-test/main.lua
+scripts/theme-rfsuite-blue/main.lua
+scripts/theme-rfsuite-blue/ethos_lua_manifest.json
+scripts/theme-rfsuite-blue/toolbar-rfsuite-blue.png
 ```
 
-## Project status
-
-The included theme is currently a test build. Results should be verified in the ETHOS simulator and on a transmitter before treating it as a finished release.
+`main.luac` is intentionally not distributed. ETHOS creates a fresh compiled copy from `main.lua`.
 
 ## Repository structure
 
@@ -39,8 +41,12 @@ The included theme is currently a test build. Results should be verified in the 
 ethos-themes/
 ├── README.md
 ├── TESTING.md
+├── releases/
+│   └── RF-Suite-Blue-v1.0.3.zip
 └── themes/
-    └── theme-rfsuite-blue-test/
+    └── theme-rfsuite-blue/
         ├── README.md
-        └── main.lua
+        ├── ethos_lua_manifest.json
+        ├── main.lua
+        └── toolbar-rfsuite-blue.png
 ```
