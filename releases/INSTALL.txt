@@ -1,0 +1,3 @@
+RF Suite Blue v1.0.3
+
+Install the ZIP through ETHOS Suite, or copy the theme-rfsuite-blue folder into the transmitter scripts directory. Restart the transmitter and select RF Suite Blue under System > General > Theme.
