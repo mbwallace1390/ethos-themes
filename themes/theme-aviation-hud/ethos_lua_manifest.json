@@ -2,10 +2,10 @@
     "manifestVersion": 1,
     "name": "Aviation HUD",
     "key": "mbwallace1390-theme-AvHUD",
-    "version": "1.0.0",
+    "version": "1.0.1-beta1",
     "releaseNotes": {
         "format": "markdown",
-        "content": "First stable Aviation HUD release from the Flight Systems collection. Custom radio-theme artwork only; no Rotorflight or RF Suite files are changed."
+        "content": "X18 compatibility test. Automatically selects a 464x50 toolbar on 480px displays and the existing 784x50 toolbar on 800px displays. Rotorflight and RF Suite files are not changed."
     },
     "folder": "theme-aviation-hud",
     "files": [
