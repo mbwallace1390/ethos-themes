@@ -62,12 +62,7 @@ def build_theme(theme: dict[str, object]) -> None:
     RELEASES_ROOT.mkdir(parents=True, exist_ok=True)
 
     toolbar_name = f"toolbar-{folder.removeprefix('theme-')}.png"
-    make_toolbar(
-        theme_dir / toolbar_name,
-        theme["accent"],
-        theme["page_bg"],
-        theme["primary_bg"],
-    )
+    make_toolbar(theme_dir / toolbar_name, theme["accent"], theme["page_bg"], theme["primary_bg"])
 
     main_lua = f'''-- {name}
 -- Lightweight RF Pro outline-focus color variant.
@@ -107,18 +102,18 @@ return {{
 '''
     (theme_dir / "main.lua").write_text(main_lua, encoding="utf-8", newline="\n")
 
-    manifest = {{
+    manifest = {
         "manifestVersion": 1,
         "name": name,
         "key": theme["manifest_key"],
         "version": "1.0.0",
-        "releaseNotes": {{
+        "releaseNotes": {
             "format": "markdown",
-            "content": f"First stable {{name}} release using the proven RF Pro outline-focus layout, square controls, and lightweight 784x50 toolbar.",
-        }},
+            "content": f"First stable {name} release using the proven RF Pro outline-focus layout, square controls, and lightweight 784x50 toolbar.",
+        },
         "folder": folder,
         "files": ["main.lua", "toolbar-*"],
-    }}
+    }
     (theme_dir / "ethos_lua_manifest.json").write_text(json.dumps(manifest, indent=4) + "\n", encoding="utf-8", newline="\n")
 
     readme = f'''# {name} v1.0.0
