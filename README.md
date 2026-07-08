@@ -2,6 +2,42 @@
 
 Custom FrSky ETHOS themes focused on improving Rotorflight RF Suite and the wider ETHOS interface.
 
+## Custom-art collections
+
+These 12 themes add detailed toolbar artwork while remaining normal standalone ETHOS radio themes. Every theme has its own folder, short key, source link, and separate ZIP download. No Rotorflight or RF Suite Lua files are modified.
+
+### Flight Systems
+
+<a href="previews/flight-systems.png"><img src="previews/flight-systems.png" alt="Flight Systems theme previews" width="760"></a>
+
+- **Aviation HUD v1.0.0** — targeting reticle, heading ticks, and green HUD styling — [Download](releases/Aviation-HUD-v1.0.0.zip) — [Source](themes/theme-aviation-hud)
+- **Midnight Blueprint v1.0.0** — dark technical grid and blueprint markings — [Download](releases/Midnight-Blueprint-v1.0.0.zip) — [Source](themes/theme-midnight-blueprint)
+- **Rotor Command v1.0.0** — rotor silhouette and command-panel accents — [Download](releases/Rotor-Command-v1.0.0.zip) — [Source](themes/theme-rotor-command)
+
+### Tactical
+
+<a href="previews/tactical.png"><img src="previews/tactical.png" alt="Tactical theme previews" width="760"></a>
+
+- **Woodland Tactical v1.0.0** — dark woodland camouflage and amber active states — [Download](releases/Woodland-Tactical-v1.0.0.zip) — [Source](themes/theme-woodland-tactical)
+- **Arctic Tactical v1.0.0** — pale arctic camouflage with blue controls — [Download](releases/Arctic-Tactical-v1.0.0.zip) — [Source](themes/theme-arctic-tactical)
+- **Desert Tactical v1.0.0** — sand camouflage with brown and orange accents — [Download](releases/Desert-Tactical-v1.0.0.zip) — [Source](themes/theme-desert-tactical)
+
+### Cosmic
+
+<a href="previews/cosmic.png"><img src="previews/cosmic.png" alt="Cosmic theme previews" width="760"></a>
+
+- **Deep Space v1.0.0** — star field, violet nebula tones, and cyan active states — [Download](releases/Deep-Space-v1.0.0.zip) — [Source](themes/theme-deep-space)
+- **Lunar Command v1.0.0** — cratered lunar surface and instrument styling — [Download](releases/Lunar-Command-v1.0.0.zip) — [Source](themes/theme-lunar-command)
+- **Neon Horizon v1.0.0** — glowing sunset, perspective grid, and neon controls — [Download](releases/Neon-Horizon-v1.0.0.zip) — [Source](themes/theme-neon-horizon)
+
+### Tech & Racing
+
+<a href="previews/tech-racing.png"><img src="previews/tech-racing.png" alt="Tech and Racing theme previews" width="760"></a>
+
+- **Circuit Trace v1.0.0** — circuit-board paths and illuminated connection nodes — [Download](releases/Circuit-Trace-v1.0.0.zip) — [Source](themes/theme-circuit-trace)
+- **Racing Division v1.0.0** — checkered pattern, speed stripes, and red race styling — [Download](releases/Racing-Division-v1.0.0.zip) — [Source](themes/theme-racing-division)
+- **Hex Core v1.0.0** — illuminated honeycomb pattern with orange and cyan — [Download](releases/Hex-Core-v1.0.0.zip) — [Source](themes/theme-hex-core)
+
 ## Standalone style collection
 
 These themes use six genuinely different visual styles rather than only changing accent colors. Every theme has a unique ETHOS-safe internal key, a static 784x50 toolbar, and its own individual ZIP.
@@ -93,6 +129,7 @@ All themes can remain installed together. `main.luac` is intentionally omitted s
 
 ## Development
 
+- `tools/generate_custom_art_themes.py` regenerates the 12 custom-art themes, separate ZIPs, and four collection previews.
 - `tools/generate_readme_previews.py` regenerates the six standalone-family README preview images from the actual theme source files.
 - `tools/generate_rf_pro_preview.py` regenerates the RF Pro collection preview from the actual RF Pro source files.
 - `tools/generate_standalone_themes.py` regenerates the 22 standalone themes and their separate ZIPs.
