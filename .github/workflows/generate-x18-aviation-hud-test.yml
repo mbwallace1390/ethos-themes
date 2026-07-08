@@ -1,0 +1,40 @@
+name: Generate X18 Aviation HUD test
+
+on:
+  push:
+    branches:
+      - x18-toolbar-test
+    paths:
+      - themes/theme-aviation-hud/main.lua
+      - themes/theme-aviation-hud/ethos_lua_manifest.json
+      - themes/theme-aviation-hud/README.md
+      - tools/generate_x18_aviation_hud_test.py
+      - .github/workflows/generate-x18-aviation-hud-test.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: x18-toolbar-test
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pillow
+      - run: python tools/generate_x18_aviation_hud_test.py
+      - name: Commit X18 toolbar and test ZIP
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add themes/theme-aviation-hud/toolbar-aviation-hud-x18.png testing/Aviation-HUD-X18-Test-v1.0.1-beta1.zip
+          if git diff --cached --quiet; then
+            echo "X18 Aviation HUD test assets already up to date"
+          else
+            git commit -m "Generate Aviation HUD X18 test assets"
+            git push origin HEAD:x18-toolbar-test
+          fi
