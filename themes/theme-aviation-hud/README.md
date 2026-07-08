@@ -1,13 +1,16 @@
-# Aviation HUD v1.0.0
+# Aviation HUD v1.0.1-beta1
 
-**Collection:** Flight Systems
+**Collection:** Flight Systems  
+**Status:** X18 compatibility test
 
-A standalone FrSky ETHOS radio theme with custom toolbar artwork.
+A standalone FrSky ETHOS radio theme with responsive toolbar artwork.
 
 - Focus: `outline`
 - Controls: square
 - Internal key: `AvHUD`
-- Static 784x50 toolbar
+- Uses 784x50 artwork on 800px displays such as the X20 Pro
+- Uses 464x50 artwork on 480px displays such as the standard X18
+- Selects the matching toolbar automatically from `system.getVersion().lcdWidth`
 - Does not modify Rotorflight or RF Suite Lua files
 
-Copy `theme-aviation-hud` into the transmitter `scripts` folder, restart, then select **Aviation HUD** under **System > General > Theme**.
+Replace the existing `theme-aviation-hud` folder in the transmitter's `scripts` folder, restart, and select **Aviation HUD** under **System > General > Theme**.
