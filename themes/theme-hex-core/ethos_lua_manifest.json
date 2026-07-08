@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Hex Core",
+    "key": "mbwallace1390-theme-HexCore",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Hex Core release from the Tech & Racing collection. Custom radio-theme artwork only; no Rotorflight or RF Suite files are changed."
+    },
+    "folder": "theme-hex-core",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}
