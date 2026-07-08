@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Green Courage",
+    "key": "mbwallace1390-theme-GrnCour",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Green Courage release for Liver Cancer Awareness. Includes original generic awareness-ribbon toolbar artwork and changes only the ETHOS radio theme."
+    },
+    "folder": "theme-green-courage",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

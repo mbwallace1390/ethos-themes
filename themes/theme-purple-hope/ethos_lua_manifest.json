@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Purple Hope",
+    "key": "mbwallace1390-theme-PurHope",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Purple Hope release for Pancreatic Cancer Awareness. Includes original generic awareness-ribbon toolbar artwork and changes only the ETHOS radio theme."
+    },
+    "folder": "theme-purple-hope",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}
