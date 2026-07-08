@@ -2,6 +2,23 @@
 
 Custom FrSky ETHOS themes focused on improving Rotorflight RF Suite and the wider ETHOS interface.
 
+## Cancer Awareness collection
+
+These 10 themes use original generic awareness-ribbon artwork and matching color palettes. Every theme remains a separate download with its own folder, short ETHOS key, source link, and ZIP. No Rotorflight or RF Suite Lua files are modified.
+
+<a href="previews/cancer-awareness.png"><img src="previews/cancer-awareness.png" alt="Cancer Awareness theme previews" width="760"></a>
+
+- **Pink Hope v1.0.0** — breast cancer awareness — [Download](releases/Pink-Hope-v1.0.0.zip) — [Source](themes/theme-pink-hope)
+- **Golden Courage v1.0.0** — childhood cancer awareness — [Download](releases/Golden-Courage-v1.0.0.zip) — [Source](themes/theme-golden-courage)
+- **Lavender Unity v1.0.0** — all-cancers awareness — [Download](releases/Lavender-Unity-v1.0.0.zip) — [Source](themes/theme-lavender-unity)
+- **Teal Strength v1.0.0** — ovarian cancer awareness — [Download](releases/Teal-Strength-v1.0.0.zip) — [Source](themes/theme-teal-strength)
+- **Blue Resolve v1.0.0** — prostate cancer awareness — [Download](releases/Blue-Resolve-v1.0.0.zip) — [Source](themes/theme-blue-resolve)
+- **Orange Warrior v1.0.0** — leukemia awareness — [Download](releases/Orange-Warrior-v1.0.0.zip) — [Source](themes/theme-orange-warrior)
+- **Purple Hope v1.0.0** — pancreatic cancer awareness — [Download](releases/Purple-Hope-v1.0.0.zip) — [Source](themes/theme-purple-hope)
+- **Pearl Breath v1.0.0** — lung cancer awareness — [Download](releases/Pearl-Breath-v1.0.0.zip) — [Source](themes/theme-pearl-breath)
+- **Royal Blue Strong v1.0.0** — colorectal cancer awareness — [Download](releases/Royal-Blue-Strong-v1.0.0.zip) — [Source](themes/theme-royal-blue-strong)
+- **Green Courage v1.0.0** — liver cancer awareness — [Download](releases/Green-Courage-v1.0.0.zip) — [Source](themes/theme-green-courage)
+
 ## Custom-art collections
 
 These 12 themes add detailed toolbar artwork while remaining normal standalone ETHOS radio themes. Every theme has its own folder, short key, source link, and separate ZIP download. No Rotorflight or RF Suite Lua files are modified.
@@ -129,6 +146,7 @@ All themes can remain installed together. `main.luac` is intentionally omitted s
 
 ## Development
 
+- `tools/generate_cancer_awareness_themes.py` regenerates the 10 Cancer Awareness themes, separate ZIPs, and collection preview.
 - `tools/generate_custom_art_themes.py` regenerates the 12 custom-art themes, separate ZIPs, and four collection previews.
 - `tools/generate_readme_previews.py` regenerates the six standalone-family README preview images from the actual theme source files.
 - `tools/generate_rf_pro_preview.py` regenerates the RF Pro collection preview from the actual RF Pro source files.
