@@ -62,6 +62,8 @@ These themes use six genuinely different visual styles rather than only changing
 
 All RF Pro themes use dark square controls, outline focus, clear inactive and disabled states, and a lightweight 784x50 toolbar. Every theme has a separate short ETHOS-safe key, so they can remain installed together.
 
+<a href="previews/rf-pro.png"><img src="previews/rf-pro.png" alt="RF Pro color collection previews" width="760"></a>
+
 - **RF Blue Pro v1.0.0** — [Download](releases/RF-Blue-Pro-v1.0.0.zip) — [Source](themes/theme-rfblue-pro)
 - **RF Violet Pro v1.0.0** — [Download](releases/RF-Violet-Pro-v1.0.0.zip) — [Source](themes/theme-rf-violet-pro)
 - **RF Emerald Pro v1.0.0** — [Download](releases/RF-Emerald-Pro-v1.0.0.zip) — [Source](themes/theme-rf-emerald-pro)
@@ -91,6 +93,7 @@ All themes can remain installed together. `main.luac` is intentionally omitted s
 
 ## Development
 
-- `tools/generate_readme_previews.py` regenerates the six README preview images from the actual theme source files.
+- `tools/generate_readme_previews.py` regenerates the six standalone-family README preview images from the actual theme source files.
+- `tools/generate_rf_pro_preview.py` regenerates the RF Pro collection preview from the actual RF Pro source files.
 - `tools/generate_standalone_themes.py` regenerates the 22 standalone themes and their separate ZIPs.
 - `tools/generate_rf_pro_collection.py` regenerates the RF Pro color variants and their separate ZIPs.
