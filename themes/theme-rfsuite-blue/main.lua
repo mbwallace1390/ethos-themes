@@ -1,6 +1,14 @@
 -- @author flyingeek
 -- more widgets on my github page https://github.com/flyingeek
 --
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "RFBlue",
@@ -28,7 +36,7 @@ local function init()
             lcd.RGB(0x0A, 0x0F, 0x19), -- TOPLCD_BGCOLOR (XE/S)
         },
         --toolbarLogo = "none",
-        toolbarBackground = lcd.loadBitmap("toolbar-rfsuite-blue.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-rfsuite-blue.png", "toolbar-rfsuite-blue-x18.png")),
     })
 end
 return {

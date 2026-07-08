@@ -1,5 +1,13 @@
 -- OLED Blue
 -- Lightweight standalone ETHOS theme.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "OLBlue",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x00, 0x12, 0x05), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x00, 0x00, 0x00), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-oled-blue.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-oled-blue.png", "toolbar-oled-blue-x18.png")),
     })
 end
 

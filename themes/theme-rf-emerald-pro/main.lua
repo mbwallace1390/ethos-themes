@@ -1,5 +1,13 @@
 -- RF Emerald Pro
 -- Lightweight RF Pro outline-focus color variant.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "RFEmer",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x08, 0x11, 0x0D), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x07, 0x11, 0x0F), -- TOPLCD_BGCOLOR (XE/S)
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-rf-emerald-pro.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-rf-emerald-pro.png", "toolbar-rf-emerald-pro-x18.png")),
     })
 end
 

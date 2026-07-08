@@ -7,6 +7,6 @@ A lightweight standalone FrSky ETHOS theme.
 - Focus: `invert`
 - Controls: rounded
 - Internal key: `DayGrn`
-- Static 784x50 toolbar
+- Responsive 784x50 X20 / 464x50 X18 toolbar
 
 Copy `theme-daylight-green` into the transmitter `scripts` folder, restart, and select **Daylight Green**.

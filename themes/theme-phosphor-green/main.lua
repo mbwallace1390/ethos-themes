@@ -1,5 +1,13 @@
 -- Phosphor Green
 -- Lightweight standalone ETHOS theme.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "PhosGr",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x07, 0x18, 0x0C), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x08, 0x11, 0x08), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-phosphor-green.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-phosphor-green.png", "toolbar-phosphor-green-x18.png")),
     })
 end
 

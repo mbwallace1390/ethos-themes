@@ -1,5 +1,13 @@
 -- Hex Core
 -- Standalone ETHOS radio theme. Rotorflight and RF Suite files are not modified.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "HexCore",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x07, 0x19, 0x0E), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x0B, 0x11, 0x17), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-hex-core.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-hex-core.png", "toolbar-hex-core-x18.png")),
     })
 end
 
