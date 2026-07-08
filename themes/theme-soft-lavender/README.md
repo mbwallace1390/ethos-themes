@@ -7,6 +7,6 @@ A lightweight standalone FrSky ETHOS theme.
 - Focus: `invert`
 - Controls: rounded
 - Internal key: `SoftLav`
-- Static 784x50 toolbar
+- Responsive 784x50 X20 / 464x50 X18 toolbar
 
 Copy `theme-soft-lavender` into the transmitter `scripts` folder, restart, and select **Soft Lavender**.

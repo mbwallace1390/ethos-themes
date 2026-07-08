@@ -7,7 +7,7 @@ A standalone FrSky ETHOS radio theme with original generic awareness-ribbon tool
 
 - Outline focus with square controls
 - Unique internal key: `GrnCour`
-- Static 784x50 toolbar
+- Responsive 784x50 X20 / 464x50 X18 toolbar
 - Separate installable package
 - Does not modify Rotorflight or RF Suite Lua files
 

@@ -1,5 +1,13 @@
 -- Midnight Blueprint
 -- Standalone ETHOS radio theme. Rotorflight and RF Suite files are not modified.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "MidBpt",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x07, 0x1A, 0x10), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x07, 0x17, 0x25), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-midnight-blueprint.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-midnight-blueprint.png", "toolbar-midnight-blueprint-x18.png")),
     })
 end
 

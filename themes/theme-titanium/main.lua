@@ -1,5 +1,13 @@
 -- Titanium
 -- Lightweight standalone ETHOS theme.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "Titani",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x05, 0x16, 0x0A), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x1F, 0x24, 0x29), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-titanium.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-titanium.png", "toolbar-titanium-x18.png")),
     })
 end
 

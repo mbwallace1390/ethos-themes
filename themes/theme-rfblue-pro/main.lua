@@ -1,5 +1,13 @@
 -- RF Blue Pro
 -- Lightweight outline-focus variant of RF Suite Blue.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "RFPro",
@@ -27,7 +35,7 @@ local function init()
             lcd.RGB(0x08, 0x0D, 0x16), -- TOPLCD_BGCOLOR (XE/S)
         },
         --toolbarLogo = "none",
-        toolbarBackground = lcd.loadBitmap("toolbar-rfblue-pro.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-rfblue-pro.png", "toolbar-rfblue-pro-x18.png")),
     })
 end
 

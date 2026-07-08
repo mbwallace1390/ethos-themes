@@ -1,5 +1,13 @@
 -- RF Teal Pro
 -- Lightweight RF Pro outline-focus color variant.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "RFTeal",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x08, 0x11, 0x0D), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x05, 0x11, 0x11), -- TOPLCD_BGCOLOR (XE/S)
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-rf-teal-pro.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-rf-teal-pro.png", "toolbar-rf-teal-pro-x18.png")),
     })
 end
 

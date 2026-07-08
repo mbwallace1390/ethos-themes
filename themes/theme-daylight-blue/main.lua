@@ -1,5 +1,13 @@
 -- Daylight Blue
 -- Lightweight standalone ETHOS theme.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "DayBlu",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0xF5, 0xF7, 0xFA), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0xEC, 0xF2, 0xF9), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-daylight-blue.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-daylight-blue.png", "toolbar-daylight-blue-x18.png")),
     })
 end
 
