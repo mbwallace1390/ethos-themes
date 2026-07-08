@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Orange Warrior",
+    "key": "mbwallace1390-theme-OrgWar",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Orange Warrior release for Leukemia Awareness. Includes original generic awareness-ribbon toolbar artwork and changes only the ETHOS radio theme."
+    },
+    "folder": "theme-orange-warrior",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}
