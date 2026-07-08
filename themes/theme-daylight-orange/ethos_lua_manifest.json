@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Daylight Orange",
+    "key": "mbwallace1390-theme-DayOrg",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Daylight Orange release from the Daylight family."
+    },
+    "folder": "theme-daylight-orange",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

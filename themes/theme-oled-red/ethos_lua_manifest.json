@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "OLED Red",
+    "key": "mbwallace1390-theme-OLRed",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable OLED Red release from the OLED Stealth family."
+    },
+    "folder": "theme-oled-red",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

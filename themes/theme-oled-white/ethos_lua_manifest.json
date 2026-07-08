@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "OLED White",
+    "key": "mbwallace1390-theme-OLWht",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable OLED White release from the OLED Stealth family."
+    },
+    "folder": "theme-oled-white",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

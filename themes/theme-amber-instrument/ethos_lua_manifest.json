@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Amber Instrument",
+    "key": "mbwallace1390-theme-Amber",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Amber Instrument release from the Retro Instrument family."
+    },
+    "folder": "theme-amber-instrument",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Soft Lavender",
+    "key": "mbwallace1390-theme-SoftLav",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Soft Lavender release from the Soft family."
+    },
+    "folder": "theme-soft-lavender",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

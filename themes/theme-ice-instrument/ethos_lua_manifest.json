@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Ice Instrument",
+    "key": "mbwallace1390-theme-IceIns",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Ice Instrument release from the Retro Instrument family."
+    },
+    "folder": "theme-ice-instrument",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

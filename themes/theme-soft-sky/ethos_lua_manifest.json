@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Soft Sky",
+    "key": "mbwallace1390-theme-SSky",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Soft Sky release from the Soft family."
+    },
+    "folder": "theme-soft-sky",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

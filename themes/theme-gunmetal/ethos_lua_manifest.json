@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Gunmetal",
+    "key": "mbwallace1390-theme-Gunmet",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Gunmetal release from the Industrial family."
+    },
+    "folder": "theme-gunmetal",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}
