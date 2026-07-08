@@ -1,8 +1,8 @@
-# RF Suite Blue v1.0.4
+# RF Suite Blue v1.0.5
 
 A dark FrSky ETHOS theme that replaces the yellow selected-control highlight with blue, including selected controls inside Rotorflight RF Suite.
 
-## Changes in v1.0.4
+## Changes in v1.0.5
 
 - Uses a thinner, sharper 784x50 toolbar gradient.
 - Changes the outer page background to blue-black so ETHOS's fixed side margins blend into the theme instead of appearing gray.
@@ -17,3 +17,5 @@ A dark FrSky ETHOS theme that replaces the yellow selected-control highlight wit
 3. Install the release ZIP through ETHOS Suite, or copy the included `theme-rfsuite-blue` folder into `scripts`.
 4. Restart the transmitter again.
 5. Select **RF Suite Blue** under **System > General > Theme**.
+
+- Automatically selects 784x50 artwork on 800px radios and 464x50 artwork on standard X18 radios

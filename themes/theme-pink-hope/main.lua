@@ -1,6 +1,14 @@
 -- Pink Hope
 -- Standalone ETHOS cancer-awareness radio theme.
 -- Rotorflight and RF Suite files are not modified.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "PinkHp",
@@ -27,7 +35,7 @@ local function init()
             lcd.RGB(0x07, 0x18, 0x0C), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x1A, 0x0E, 0x15), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-pink-hope.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-pink-hope.png", "toolbar-pink-hope-x18.png")),
     })
 end
 

@@ -5,7 +5,7 @@ A lightweight FrSky ETHOS theme based on the proven RF Blue Pro design.
 - Bright ember outline focus
 - Dark square controls
 - Clear active, inactive, and disabled states
-- Lightweight 784x50 toolbar
+- Responsive 784x50 X20 / 464x50 X18 toolbar
 - ETHOS-safe internal key `RFEmbr`
 - Installs beside every other RF Pro theme
 

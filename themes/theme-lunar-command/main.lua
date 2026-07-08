@@ -1,5 +1,13 @@
 -- Lunar Command
 -- Standalone ETHOS radio theme. Rotorflight and RF Suite files are not modified.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "Lunar",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x0B, 0x18, 0x0F), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x18, 0x1B, 0x1F), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-lunar-command.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-lunar-command.png", "toolbar-lunar-command-x18.png")),
     })
 end
 

@@ -1,5 +1,13 @@
 -- Carbon
 -- Lightweight standalone ETHOS theme.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "Carbon",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x05, 0x16, 0x0A), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x0C, 0x0E, 0x11), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-carbon.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-carbon.png", "toolbar-carbon-x18.png")),
     })
 end
 

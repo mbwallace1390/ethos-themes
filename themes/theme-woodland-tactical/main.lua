@@ -1,5 +1,13 @@
 -- Woodland Tactical
 -- Standalone ETHOS radio theme. Rotorflight and RF Suite files are not modified.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "WoodTac",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x0A, 0x18, 0x08), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x16, 0x1C, 0x11), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-woodland-tactical.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-woodland-tactical.png", "toolbar-woodland-tactical-x18.png")),
     })
 end
 

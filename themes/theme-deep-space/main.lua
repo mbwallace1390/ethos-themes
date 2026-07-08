@@ -1,5 +1,13 @@
 -- Deep Space
 -- Standalone ETHOS radio theme. Rotorflight and RF Suite files are not modified.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "DSpace",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x07, 0x1A, 0x10), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x08, 0x06, 0x0F), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-deep-space.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-deep-space.png", "toolbar-deep-space-x18.png")),
     })
 end
 

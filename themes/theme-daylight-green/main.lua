@@ -1,5 +1,13 @@
 -- Daylight Green
 -- Lightweight standalone ETHOS theme.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "DayGrn",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0xF5, 0xF7, 0xFA), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0xED, 0xF3, 0xF4), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-daylight-green.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-daylight-green.png", "toolbar-daylight-green-x18.png")),
     })
 end
 

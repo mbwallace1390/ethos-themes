@@ -1,5 +1,13 @@
 -- Soft Mint
 -- Lightweight standalone ETHOS theme.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "SMint",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x14, 0x2A, 0x1E), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x1A, 0x24, 0x1F), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-soft-mint.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-soft-mint.png", "toolbar-soft-mint-x18.png")),
     })
 end
 

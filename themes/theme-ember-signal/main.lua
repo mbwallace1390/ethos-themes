@@ -1,5 +1,13 @@
 -- Ember Signal
 -- Lightweight standalone ETHOS theme.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "EmbSig",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x07, 0x18, 0x0C), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x11, 0x0D, 0x08), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-ember-signal.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-ember-signal.png", "toolbar-ember-signal-x18.png")),
     })
 end
 

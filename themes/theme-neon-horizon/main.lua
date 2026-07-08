@@ -1,5 +1,13 @@
 -- Neon Horizon
 -- Standalone ETHOS radio theme. Rotorflight and RF Suite files are not modified.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "NeoHor",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x07, 0x1A, 0x11), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x0B, 0x07, 0x16), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-neon-horizon.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-neon-horizon.png", "toolbar-neon-horizon-x18.png")),
     })
 end
 

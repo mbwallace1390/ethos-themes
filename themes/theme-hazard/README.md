@@ -7,6 +7,6 @@ A lightweight standalone FrSky ETHOS theme.
 - Focus: `outline`
 - Controls: square
 - Internal key: `Hazard`
-- Static 784x50 toolbar
+- Responsive 784x50 X20 / 464x50 X18 toolbar
 
 Copy `theme-hazard` into the transmitter `scripts` folder, restart, and select **Hazard**.
