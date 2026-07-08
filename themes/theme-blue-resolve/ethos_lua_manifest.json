@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Blue Resolve",
+    "key": "mbwallace1390-theme-BluRsv",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Blue Resolve release for Prostate Cancer Awareness. Includes original generic awareness-ribbon toolbar artwork and changes only the ETHOS radio theme."
+    },
+    "folder": "theme-blue-resolve",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

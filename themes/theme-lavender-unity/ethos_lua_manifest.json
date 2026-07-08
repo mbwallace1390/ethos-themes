@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Lavender Unity",
+    "key": "mbwallace1390-theme-LavUnt",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Lavender Unity release for All Cancers Awareness. Includes original generic awareness-ribbon toolbar artwork and changes only the ETHOS radio theme."
+    },
+    "folder": "theme-lavender-unity",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}
