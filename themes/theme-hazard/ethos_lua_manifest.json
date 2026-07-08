@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Hazard",
+    "key": "mbwallace1390-theme-Hazard",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Hazard release from the Industrial family."
+    },
+    "folder": "theme-hazard",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

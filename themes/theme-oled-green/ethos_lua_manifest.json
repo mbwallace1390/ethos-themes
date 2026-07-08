@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "OLED Green",
+    "key": "mbwallace1390-theme-OLGrn",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable OLED Green release from the OLED Stealth family."
+    },
+    "folder": "theme-oled-green",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

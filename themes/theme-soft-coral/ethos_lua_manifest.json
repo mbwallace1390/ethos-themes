@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Soft Coral",
+    "key": "mbwallace1390-theme-SCoral",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Soft Coral release from the Soft family."
+    },
+    "folder": "theme-soft-coral",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}
