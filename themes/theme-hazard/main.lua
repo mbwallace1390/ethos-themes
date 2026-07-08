@@ -1,5 +1,13 @@
 -- Hazard
 -- Lightweight standalone ETHOS theme.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "Hazard",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x05, 0x16, 0x0A), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x0E, 0x0E, 0x0B), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-hazard.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-hazard.png", "toolbar-hazard-x18.png")),
     })
 end
 

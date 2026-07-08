@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "releaseNotes": {
         "format": "markdown",
-        "content": "First stable RF Teal Pro release using the proven RF Pro outline-focus layout, square controls, and lightweight 784x50 toolbar."
+        "content": "First stable RF Teal Pro release using the proven RF Pro outline-focus layout, square controls, and responsive X18/X20 toolbar. Automatically selects 464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios."
     },
     "folder": "theme-rf-teal-pro",
     "files": [

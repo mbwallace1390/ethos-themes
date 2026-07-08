@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "releaseNotes": {
         "format": "markdown",
-        "content": "First stable OLED Green release from the OLED Stealth family."
+        "content": "First stable OLED Green release from the OLED Stealth family. Automatically selects 464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios."
     },
     "folder": "theme-oled-green",
     "files": [

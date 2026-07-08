@@ -1,5 +1,13 @@
 -- Daylight Orange
 -- Lightweight standalone ETHOS theme.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "DayOrg",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0xF5, 0xF7, 0xFA), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0xF5, 0xF2, 0xF1), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-daylight-orange.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-daylight-orange.png", "toolbar-daylight-orange-x18.png")),
     })
 end
 

@@ -1,5 +1,13 @@
 -- RF Gold Pro
 -- Lightweight RF Pro outline-focus color variant.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "RFGold",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x08, 0x11, 0x0D), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x13, 0x0F, 0x04), -- TOPLCD_BGCOLOR (XE/S)
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-rf-gold-pro.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-rf-gold-pro.png", "toolbar-rf-gold-pro-x18.png")),
     })
 end
 

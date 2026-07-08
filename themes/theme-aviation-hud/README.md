@@ -1,8 +1,6 @@
-# Aviation HUD v1.0.1-beta1
+# Aviation HUD v1.0.0
 
 **Collection:** Flight Systems  
-**Status:** X18 compatibility test
-
 A standalone FrSky ETHOS radio theme with responsive toolbar artwork.
 
 - Focus: `outline`

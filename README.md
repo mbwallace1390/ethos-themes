@@ -2,6 +2,10 @@
 
 Custom FrSky ETHOS themes focused on improving Rotorflight RF Suite and the wider ETHOS interface.
 
+## Radio compatibility
+
+Every current theme download automatically selects the correct toolbar artwork: **784x50** on 800px radios such as the X20 Pro and X18RS, or **464x50** on standard 480px X18 radios. One ZIP works on both display sizes. Rotorflight and RF Suite Lua files are not modified.
+
 ## Cancer Awareness collection
 
 These 10 themes use original generic awareness-ribbon artwork and matching color palettes. Every theme remains a separate download with its own folder, short ETHOS key, source link, and ZIP. No Rotorflight or RF Suite Lua files are modified.
@@ -57,7 +61,7 @@ These 12 themes add detailed toolbar artwork while remaining normal standalone E
 
 ## Standalone style collection
 
-These themes use six genuinely different visual styles rather than only changing accent colors. Every theme has a unique ETHOS-safe internal key, a static 784x50 toolbar, and its own individual ZIP.
+These themes use six genuinely different visual styles rather than only changing accent colors. Every theme has a unique ETHOS-safe internal key, responsive 784x50/464x50 toolbar artwork, and its own individual ZIP.
 
 ### Retro Instrument
 
@@ -113,7 +117,7 @@ These themes use six genuinely different visual styles rather than only changing
 
 ## RF Pro color collection
 
-All RF Pro themes use dark square controls, outline focus, clear inactive and disabled states, and a lightweight 784x50 toolbar. Every theme has a separate short ETHOS-safe key, so they can remain installed together.
+All RF Pro themes use dark square controls, outline focus, clear inactive and disabled states, and responsive 784x50/464x50 toolbar artwork. Every theme has a separate short ETHOS-safe key, so they can remain installed together.
 
 <a href="previews/rf-pro.png"><img src="previews/rf-pro.png" alt="RF Pro color collection previews" width="760"></a>
 
@@ -130,9 +134,10 @@ All RF Pro themes use dark square controls, outline focus, clear inactive and di
 
 ## Classic theme
 
-**RF Suite Blue v1.0.4** keeps rounded controls and solid blue selected controls.
+**RF Suite Blue v1.0.5** keeps rounded controls and solid blue selected controls.
 
 - [View source](themes/theme-rfsuite-blue)
+- [Download current responsive release v1.0.5](releases/RF-Suite-Blue-v1.0.5.zip)
 - [Download previous packaged release v1.0.3](releases/RF-Suite-Blue-v1.0.3.zip)
 
 ## Installation
@@ -146,6 +151,7 @@ All themes can remain installed together. `main.luac` is intentionally omitted s
 
 ## Development
 
+- `tools/add_x18_support_all_themes.py` regenerates 464x50 X18 artwork, applies automatic display-size selection, validates all themes, and rebuilds the existing separate ZIPs.
 - `tools/generate_cancer_awareness_themes.py` regenerates the 10 Cancer Awareness themes, separate ZIPs, and collection preview.
 - `tools/generate_custom_art_themes.py` regenerates the 12 custom-art themes, separate ZIPs, and four collection previews.
 - `tools/generate_readme_previews.py` regenerates the six standalone-family README preview images from the actual theme source files.

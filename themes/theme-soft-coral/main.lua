@@ -1,5 +1,13 @@
 -- Soft Coral
 -- Lightweight standalone ETHOS theme.
+local function selectToolbar(largeFile, smallFile)
+    local version = system.getVersion()
+    if version and version.lcdWidth and version.lcdWidth <= 480 then
+        return smallFile
+    end
+    return largeFile
+end
+
 local function init()
     system.registerTheme({
         key = "SCoral",
@@ -26,7 +34,7 @@ local function init()
             lcd.RGB(0x14, 0x2A, 0x1E), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x24, 0x1B, 0x1A), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap("toolbar-soft-coral.png"),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-soft-coral.png", "toolbar-soft-coral-x18.png")),
     })
 end
 

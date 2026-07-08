@@ -2,10 +2,10 @@
     "manifestVersion": 1,
     "name": "RF Suite Blue",
     "key": "mbwallace1390-theme-RFBlue",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "releaseNotes": {
         "format": "markdown",
-        "content": "Stable visual refinement with a thinner 784x50 toolbar gradient and blue-black outer page background. Keeps the proven RFBlue key."
+        "content": "Stable visual refinement with a thinner 784x50 toolbar gradient and blue-black outer page background. Keeps the proven RFBlue key. Automatically selects 464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios."
     },
     "folder": "theme-rfsuite-blue",
     "files": [

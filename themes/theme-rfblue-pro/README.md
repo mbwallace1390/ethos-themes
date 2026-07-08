@@ -6,7 +6,7 @@ Features:
 - Bright cyan-blue outline focus
 - Sharper square controls
 - Clear active, inactive, and disabled states
-- Lightweight 784x50 toolbar
+- Responsive 784x50 X20 / 464x50 X18 toolbar
 - Internal theme key RFPro
 - Installs beside RF Suite Blue
 

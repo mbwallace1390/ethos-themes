@@ -7,6 +7,6 @@ A lightweight standalone FrSky ETHOS theme.
 - Focus: `outline`
 - Controls: square
 - Internal key: `Carbon`
-- Static 784x50 toolbar
+- Responsive 784x50 X20 / 464x50 X18 toolbar
 
 Copy `theme-carbon` into the transmitter `scripts` folder, restart, and select **Carbon**.
