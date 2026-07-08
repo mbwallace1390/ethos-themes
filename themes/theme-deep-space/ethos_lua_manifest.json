@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Deep Space",
+    "key": "mbwallace1390-theme-DSpace",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Deep Space release from the Cosmic collection. Custom radio-theme artwork only; no Rotorflight or RF Suite files are changed."
+    },
+    "folder": "theme-deep-space",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}
