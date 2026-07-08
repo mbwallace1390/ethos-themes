@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "RF Lime Pro",
+    "key": "mbwallace1390-theme-RFLime",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable RF Lime Pro release using the proven RF Pro outline-focus layout, square controls, and lightweight 784x50 toolbar."
+    },
+    "folder": "theme-rf-lime-pro",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}
