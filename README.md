@@ -8,11 +8,15 @@ These themes use six genuinely different visual styles rather than only changing
 
 ### Retro Instrument
 
+<a href="previews/retro-instrument.png"><img src="previews/retro-instrument.png" alt="Retro Instrument theme previews" width="760"></a>
+
 - **Amber Instrument v1.0.0** — amber cockpit-display styling — [Download](releases/Amber-Instrument-v1.0.0.zip) — [Source](themes/theme-amber-instrument)
 - **Phosphor Green v1.0.0** — green CRT-style display — [Download](releases/Phosphor-Green-v1.0.0.zip) — [Source](themes/theme-phosphor-green)
 - **Ice Instrument v1.0.0** — cool blue instrument panel — [Download](releases/Ice-Instrument-v1.0.0.zip) — [Source](themes/theme-ice-instrument)
 
 ### Soft
+
+<a href="previews/soft.png"><img src="previews/soft.png" alt="Soft theme previews" width="760"></a>
 
 - **Soft Lavender v1.0.0** — rounded pastel lavender — [Download](releases/Soft-Lavender-v1.0.0.zip) — [Source](themes/theme-soft-lavender)
 - **Soft Mint v1.0.0** — rounded pastel mint — [Download](releases/Soft-Mint-v1.0.0.zip) — [Source](themes/theme-soft-mint)
@@ -21,6 +25,8 @@ These themes use six genuinely different visual styles rather than only changing
 
 ### OLED Stealth
 
+<a href="previews/oled-stealth.png"><img src="previews/oled-stealth.png" alt="OLED Stealth theme previews" width="760"></a>
+
 - **OLED Blue v1.0.0** — near-black with blue focus — [Download](releases/Oled-Blue-v1.0.0.zip) — [Source](themes/theme-oled-blue)
 - **OLED Red v1.0.0** — near-black with red focus — [Download](releases/Oled-Red-v1.0.0.zip) — [Source](themes/theme-oled-red)
 - **OLED Green v1.0.0** — near-black with green focus — [Download](releases/Oled-Green-v1.0.0.zip) — [Source](themes/theme-oled-green)
@@ -28,11 +34,15 @@ These themes use six genuinely different visual styles rather than only changing
 
 ### Daylight
 
+<a href="previews/daylight.png"><img src="previews/daylight.png" alt="Daylight theme previews" width="760"></a>
+
 - **Daylight Blue v1.0.0** — light background with blue selection — [Download](releases/Daylight-Blue-v1.0.0.zip) — [Source](themes/theme-daylight-blue)
 - **Daylight Orange v1.0.0** — light background with orange selection — [Download](releases/Daylight-Orange-v1.0.0.zip) — [Source](themes/theme-daylight-orange)
 - **Daylight Green v1.0.0** — light background with green selection — [Download](releases/Daylight-Green-v1.0.0.zip) — [Source](themes/theme-daylight-green)
 
 ### Industrial
+
+<a href="previews/industrial.png"><img src="previews/industrial.png" alt="Industrial theme previews" width="760"></a>
 
 - **Carbon v1.0.0** — carbon texture and cyan accent — [Download](releases/Carbon-v1.0.0.zip) — [Source](themes/theme-carbon)
 - **Gunmetal v1.0.0** — brushed gunmetal styling — [Download](releases/Gunmetal-v1.0.0.zip) — [Source](themes/theme-gunmetal)
@@ -40,6 +50,8 @@ These themes use six genuinely different visual styles rather than only changing
 - **Titanium v1.0.0** — brushed cool-silver styling — [Download](releases/Titanium-v1.0.0.zip) — [Source](themes/theme-titanium)
 
 ### Two-Tone
+
+<a href="previews/two-tone.png"><img src="previews/two-tone.png" alt="Two-Tone theme previews" width="760"></a>
 
 - **Violet Circuit v1.0.0** — violet focus with cyan active states — [Download](releases/Violet-Circuit-v1.0.0.zip) — [Source](themes/theme-violet-circuit)
 - **Blue Vector v1.0.0** — blue focus with green active states — [Download](releases/Blue-Vector-v1.0.0.zip) — [Source](themes/theme-blue-vector)
@@ -79,5 +91,6 @@ All themes can remain installed together. `main.luac` is intentionally omitted s
 
 ## Development
 
+- `tools/generate_readme_previews.py` regenerates the six README preview images from the actual theme source files.
 - `tools/generate_standalone_themes.py` regenerates the 22 standalone themes and their separate ZIPs.
 - `tools/generate_rf_pro_collection.py` regenerates the RF Pro color variants and their separate ZIPs.
