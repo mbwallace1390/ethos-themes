@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Ember Signal",
+    "key": "mbwallace1390-theme-EmbSig",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Ember Signal release from the Two-Tone family."
+    },
+    "folder": "theme-ember-signal",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

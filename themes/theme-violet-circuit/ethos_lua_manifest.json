@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Violet Circuit",
+    "key": "mbwallace1390-theme-VioCkt",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Violet Circuit release from the Two-Tone family."
+    },
+    "folder": "theme-violet-circuit",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

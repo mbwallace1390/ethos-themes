@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Daylight Green",
+    "key": "mbwallace1390-theme-DayGrn",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Daylight Green release from the Daylight family."
+    },
+    "folder": "theme-daylight-green",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}
