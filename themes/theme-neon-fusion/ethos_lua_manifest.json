@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Neon Fusion",
+    "key": "mbwallace1390-theme-NeoFus",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Neon Fusion release from the Two-Tone family."
+    },
+    "folder": "theme-neon-fusion",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

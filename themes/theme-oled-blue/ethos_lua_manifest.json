@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "OLED Blue",
+    "key": "mbwallace1390-theme-OLBlue",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable OLED Blue release from the OLED Stealth family."
+    },
+    "folder": "theme-oled-blue",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

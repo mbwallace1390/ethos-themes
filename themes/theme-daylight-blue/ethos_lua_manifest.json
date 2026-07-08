@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Daylight Blue",
+    "key": "mbwallace1390-theme-DayBlu",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Daylight Blue release from the Daylight family."
+    },
+    "folder": "theme-daylight-blue",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

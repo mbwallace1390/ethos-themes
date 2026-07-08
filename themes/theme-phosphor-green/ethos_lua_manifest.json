@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Phosphor Green",
+    "key": "mbwallace1390-theme-PhosGr",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Phosphor Green release from the Retro Instrument family."
+    },
+    "folder": "theme-phosphor-green",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

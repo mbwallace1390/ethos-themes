@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Blue Vector",
+    "key": "mbwallace1390-theme-BluVec",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Blue Vector release from the Two-Tone family."
+    },
+    "folder": "theme-blue-vector",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

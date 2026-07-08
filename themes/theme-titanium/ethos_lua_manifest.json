@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Titanium",
+    "key": "mbwallace1390-theme-Titani",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Titanium release from the Industrial family."
+    },
+    "folder": "theme-titanium",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}
