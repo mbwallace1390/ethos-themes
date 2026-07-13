@@ -33,6 +33,10 @@ FAMILIES = {
         "Two-Tone",
         ["violet-circuit", "blue-vector", "ember-signal", "neon-fusion"],
     ),
+    "molten": (
+        "Molten",
+        ["molten-ember", "molten-sulfur", "molten-verdigris"],
+    ),
 }
 
 ROLE_RE = re.compile(
@@ -77,9 +81,11 @@ def parse_theme(slug: str) -> dict:
     if not name_match or not round_match or not focus_match:
         raise ValueError(f"Could not parse theme metadata from {lua_path}")
 
-    toolbar_files = sorted(folder.glob("toolbar-*.png"))
+    toolbar_files = sorted(
+        path for path in folder.glob("toolbar-*.png") if not path.stem.endswith("-x18")
+    )
     if len(toolbar_files) != 1:
-        raise ValueError(f"Expected one toolbar PNG in {folder}")
+        raise ValueError(f"Expected one large toolbar PNG in {folder}")
 
     required = {
         "PRIMARY_COLOR",

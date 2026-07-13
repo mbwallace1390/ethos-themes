@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "Molten Ember",
+    "key": "mbwallace1390-theme-MltEmbr",
+    "version": "1.0.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "First stable Molten Ember release from the Molten family. Automatically selects 464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios."
+    },
+    "folder": "theme-molten-ember",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}
