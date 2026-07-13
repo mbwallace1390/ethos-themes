@@ -115,6 +115,14 @@ These themes use six genuinely different visual styles rather than only changing
 - **Ember Signal v1.0.0** — orange focus with red active states — [Download](releases/Ember-Signal-v1.0.0.zip) — [Source](themes/theme-ember-signal)
 - **Neon Fusion v1.0.0** — cyan focus with magenta active states — [Download](releases/Neon-Fusion-v1.0.0.zip) — [Source](themes/theme-neon-fusion)
 
+### Molten
+
+<a href="previews/molten.png"><img src="previews/molten.png" alt="Molten theme previews" width="760"></a>
+
+- **Molten Ember v1.0.0** — glowing lava-crack toolbar with a red-orange fissure — [Download](releases/Molten-Ember-v1.0.0.zip) — [Source](themes/theme-molten-ember)
+- **Molten Sulfur v1.0.0** — glowing lava-crack toolbar with an acid yellow-green fissure — [Download](releases/Molten-Sulfur-v1.0.0.zip) — [Source](themes/theme-molten-sulfur)
+- **Molten Verdigris v1.0.0** — glowing lava-crack toolbar with a cooled teal-green fissure — [Download](releases/Molten-Verdigris-v1.0.0.zip) — [Source](themes/theme-molten-verdigris)
+
 ## RF Pro color collection
 
 All RF Pro themes use dark square controls, outline focus, clear inactive and disabled states, and responsive 784x50/464x50 toolbar artwork. Every theme has a separate short ETHOS-safe key, so they can remain installed together.
@@ -154,7 +162,8 @@ All themes can remain installed together. `main.luac` is intentionally omitted s
 - `tools/add_x18_support_all_themes.py` regenerates 464x50 X18 artwork, applies automatic display-size selection, validates all themes, and rebuilds the existing separate ZIPs.
 - `tools/generate_cancer_awareness_themes.py` regenerates the 10 Cancer Awareness themes, separate ZIPs, and collection preview.
 - `tools/generate_custom_art_themes.py` regenerates the 12 custom-art themes, separate ZIPs, and four collection previews.
-- `tools/generate_readme_previews.py` regenerates the six standalone-family README preview images from the actual theme source files.
+- `tools/generate_readme_previews.py` regenerates the seven standalone-family README preview images from the actual theme source files.
 - `tools/generate_rf_pro_preview.py` regenerates the RF Pro collection preview from the actual RF Pro source files.
 - `tools/generate_standalone_themes.py` regenerates the 22 standalone themes and their separate ZIPs.
 - `tools/generate_rf_pro_collection.py` regenerates the RF Pro color variants and their separate ZIPs.
+- `tools/generate_molten_themes.py` regenerates the 3 Molten themes, their responsive X18/X20 toolbar artwork, and their separate ZIPs.
