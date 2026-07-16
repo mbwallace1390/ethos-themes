@@ -5,6 +5,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 from generate_custom_art_themes import THEMES, artwork, color, mix
+from png_optimize import optimize_png
 
 ROOT = Path(__file__).resolve().parents[1]
 THEME_DIR = ROOT / "themes" / "theme-aviation-hud"
@@ -28,6 +29,7 @@ def make_x18_toolbar() -> None:
     artwork(draw, style, width, height, page, panel, accent, active)
     draw.line((0, height - 1, width - 1, height - 1), fill=mix(page, (0, 0, 0), 0.35))
     image.save(X18_TOOLBAR, optimize=True)
+    optimize_png(X18_TOOLBAR)
 
 
 def validate_sources() -> None:
