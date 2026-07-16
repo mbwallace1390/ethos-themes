@@ -18,7 +18,7 @@ local function init()
             lcd.RGB(0xF4, 0xF7, 0xFB), -- PRIMARY_COLOR
             lcd.RGB(0x13, 0x2F, 0x2E), -- SECONDARY_BGCOLOR
             lcd.RGB(0x00, 0xC8, 0xC0), -- HIGHLIGHT_COLOR
-            lcd.RGB(0xFF, 0xFF, 0xFF), -- HIGHLIGHT_CONTRASTING_COLOR
+            lcd.RGB(0x09, 0x1D, 0x1D), -- HIGHLIGHT_CONTRASTING_COLOR
             lcd.RGB(0x68, 0x74, 0x86), -- DISABLE_COLOR
             lcd.RGB(0x09, 0x1D, 0x1D), -- PRIMARY_BGCOLOR
             COLOR_BLACK,               -- OVERLAY_COLOR
