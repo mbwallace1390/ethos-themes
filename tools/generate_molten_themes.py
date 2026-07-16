@@ -7,6 +7,8 @@ import zipfile
 from pathlib import Path
 from PIL import Image, ImageDraw
 
+from png_optimize import optimize_png
+
 ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 RELEASES_ROOT = ROOT / "releases"
@@ -91,8 +93,12 @@ def build(defn: tuple[str, str, str, str, str, int]) -> None:
 
     large_name = f"toolbar-{slug}.png"
     small_name = f"toolbar-{slug}-x18.png"
-    toolbar(X20_SIZE[0], p["page"], p["primary_bg"], focus, active, seed).save(theme_dir / large_name, optimize=True)
-    toolbar(X18_SIZE[0], p["page"], p["primary_bg"], focus, active, seed).save(theme_dir / small_name, optimize=True)
+    large_path = theme_dir / large_name
+    small_path = theme_dir / small_name
+    toolbar(X20_SIZE[0], p["page"], p["primary_bg"], focus, active, seed).save(large_path, optimize=True)
+    toolbar(X18_SIZE[0], p["page"], p["primary_bg"], focus, active, seed).save(small_path, optimize=True)
+    optimize_png(large_path)
+    optimize_png(small_path)
 
     roles = [
         ("PRIMARY_COLOR", p["primary"]), ("SECONDARY_BGCOLOR", p["secondary_bg"]),
