@@ -10,6 +10,8 @@ from pathlib import Path
 
 from PIL import Image
 
+from png_optimize import optimize_png
+
 ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 RELEASES_ROOT = ROOT / "releases"
@@ -100,6 +102,7 @@ def make_x18_toolbar(large_toolbar: Path, small_toolbar: Path) -> None:
 
     if source.size == X18_SIZE:
         source.save(small_toolbar, optimize=True)
+        optimize_png(small_toolbar)
         return
 
     if source.height != 50:
@@ -121,6 +124,7 @@ def make_x18_toolbar(large_toolbar: Path, small_toolbar: Path) -> None:
         output.paste(column, (output_x, 0))
 
     output.save(small_toolbar, optimize=True)
+    optimize_png(small_toolbar)
 
 
 def make_main_responsive(theme_dir: Path, large_name: str, small_name: str) -> None:

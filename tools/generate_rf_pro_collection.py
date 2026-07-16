@@ -7,6 +7,8 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
+from png_optimize import optimize_png
+
 ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 RELEASES_ROOT = ROOT / "releases"
@@ -47,6 +49,7 @@ def make_toolbar(path: Path, accent: tuple[int, int, int], page_bg: tuple[int, i
     edge = tuple(max(value - 2, 0) for value in page_bg)
     draw.line((0, height - 1, width - 1, height - 1), fill=edge)
     image.save(path, optimize=True)
+    optimize_png(path)
 
 
 def build_theme(theme: dict[str, object]) -> None:

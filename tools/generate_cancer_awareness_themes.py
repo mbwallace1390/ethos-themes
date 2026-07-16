@@ -7,6 +7,8 @@ import zipfile
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
+from png_optimize import optimize_png
+
 ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 RELEASES_ROOT = ROOT / "releases"
@@ -152,6 +154,7 @@ def draw_toolbar(theme, path: Path) -> None:
 
     draw.line((0, height - 1, width - 1, height - 1), fill=mix(page, (0, 0, 0), .38))
     image.save(path, optimize=True)
+    optimize_png(path)
 
 
 def palette(theme):
@@ -338,7 +341,9 @@ def generate_preview() -> None:
         draw.line((x + 60, y + 166, x + 145, y + 166), fill=active, width=2)
         draw.text((x + 175, y + 158), "Disabled", font=label_font, fill=disabled)
 
-    canvas.save(PREVIEWS_ROOT / "cancer-awareness.png", optimize=True)
+    preview_path = PREVIEWS_ROOT / "cancer-awareness.png"
+    canvas.save(preview_path, optimize=True)
+    optimize_png(preview_path)
 
 
 def main() -> None:

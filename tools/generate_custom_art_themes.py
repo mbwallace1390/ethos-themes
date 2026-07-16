@@ -8,6 +8,8 @@ import zipfile
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
+from png_optimize import optimize_png
+
 ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 RELEASES_ROOT = ROOT / "releases"
@@ -187,6 +189,7 @@ def make_toolbar(theme, path):
     artwork(draw,style,784,50,page,panel,accent,active)
     draw.line((0,49,783,49), fill=mix(page,(0,0,0),.35))
     image.save(path,optimize=True)
+    optimize_png(path)
 
 
 def build_theme(theme):
@@ -276,7 +279,9 @@ def previews():
             draw.text((x+144,y+81),"Normal",font=label_font,fill=text)
             draw.text((x+11,y+127),"Active",font=label_font,fill=active); draw.line((x+57,y+135,x+105,y+135),fill=active,width=2)
             draw.text((x+122,y+127),"Disabled",font=label_font,fill=disabled)
-        canvas.save(PREVIEWS_ROOT/f"{preview_slug}.png",optimize=True)
+        preview_path = PREVIEWS_ROOT/f"{preview_slug}.png"
+        canvas.save(preview_path,optimize=True)
+        optimize_png(preview_path)
 
 
 def main():
