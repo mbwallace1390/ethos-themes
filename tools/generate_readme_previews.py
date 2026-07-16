@@ -4,6 +4,8 @@ import re
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
+from png_optimize import optimize_png
+
 ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 PREVIEWS_ROOT = ROOT / "previews"
@@ -173,7 +175,9 @@ def generate_family(slug: str, title: str, theme_slugs: list[str]) -> None:
         draw_card(canvas, draw, theme, x, y)
 
     PREVIEWS_ROOT.mkdir(parents=True, exist_ok=True)
-    canvas.save(PREVIEWS_ROOT / f"{slug}.png", optimize=True)
+    preview_path = PREVIEWS_ROOT / f"{slug}.png"
+    canvas.save(preview_path, optimize=True)
+    optimize_png(preview_path)
 
 
 if __name__ == "__main__":

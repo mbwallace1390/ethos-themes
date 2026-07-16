@@ -7,6 +7,8 @@ import zipfile
 from pathlib import Path
 from PIL import Image, ImageDraw
 
+from png_optimize import optimize_png
+
 ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 RELEASES_ROOT = ROOT / "releases"
@@ -167,6 +169,7 @@ def toolbar(path: Path, style: str, page: tuple[int, int, int], primary: tuple[i
             draw.line((x + 28, 37, x + 52, 37), fill=active)
     draw.line((0, h - 1, w - 1, h - 1), fill=mix(page, (0, 0, 0), .35))
     image.save(path, optimize=True)
+    optimize_png(path)
 
 
 def build(defn: tuple[str, str, str, str, str, str, str]) -> None:

@@ -4,6 +4,8 @@ import re
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
+from png_optimize import optimize_png
+
 ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 PREVIEWS_ROOT = ROOT / "previews"
@@ -101,6 +103,7 @@ def main() -> None:
     PREVIEWS_ROOT.mkdir(parents=True, exist_ok=True)
     output = PREVIEWS_ROOT / "rf-pro.png"
     canvas.save(output, optimize=True)
+    optimize_png(output)
     print(f"Generated {output}")
 
 
