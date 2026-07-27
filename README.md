@@ -59,6 +59,17 @@ These 12 themes add detailed toolbar artwork while remaining normal standalone E
 - **Racing Division v1.0.0** — checkered pattern, speed stripes, and red race styling — [Download](releases/Racing-Division-v1.0.0.zip) — [Source](themes/theme-racing-division)
 - **Hex Core v1.0.0** — illuminated honeycomb pattern with orange and cyan — [Download](releases/Hex-Core-v1.0.0.zip) — [Source](themes/theme-hex-core)
 
+## Elements collection
+
+Four themes named for a natural phenomenon, each built from a different procedural drawing technique rather than a recolored gradient. The artwork is rendered natively at both display sizes, so the fine linework stays sharp on a standard X18 instead of being resampled down from the larger version.
+
+<a href="previews/elements.png"><img src="previews/elements.png" alt="Elements theme previews" width="760"></a>
+
+- **Summit v1.0.0** — stacked elevation contours with two peak rings, amber on warm charcoal — [Download](releases/Summit-v1.0.0.zip) — [Source](themes/theme-summit)
+- **Aurora v1.0.0** — banded aurora curtains drifting between green and violet — [Download](releases/Aurora-v1.0.0.zip) — [Source](themes/theme-aurora)
+- **Abyss v1.0.0** — sonar rings expanding from below the bar, cyan on deep navy — [Download](releases/Abyss-v1.0.0.zip) — [Source](themes/theme-abyss)
+- **Prism v1.0.0** — a light beam splitting into its full spectrum, violet focus with gold active states — [Download](releases/Prism-v1.0.0.zip) — [Source](themes/theme-prism)
+
 ## Standalone style collection
 
 These themes use six genuinely different visual styles rather than only changing accent colors. Every theme has a unique ETHOS-safe internal key, responsive 784x50/464x50 toolbar artwork, and its own individual ZIP.
@@ -166,8 +177,9 @@ Every generator writes both toolbar sizes, the automatic display-size selection,
 - `tools/rebuild_releases.py` repackages every theme's current release ZIP from its source folder, leaving superseded archives untouched.
 - `tools/generate_cancer_awareness_themes.py` regenerates the 10 Cancer Awareness themes, separate ZIPs, and collection preview.
 - `tools/generate_custom_art_themes.py` regenerates the 12 custom-art themes, separate ZIPs, and four collection previews.
-- `tools/generate_readme_previews.py` regenerates the seven standalone-family README preview images from the actual theme source files.
+- `tools/generate_readme_previews.py` regenerates the eight standalone-family README preview images from the actual theme source files.
 - `tools/generate_rf_pro_preview.py` regenerates the RF Pro collection preview from the actual RF Pro source files.
 - `tools/generate_standalone_themes.py` regenerates the 22 standalone themes and their separate ZIPs.
 - `tools/generate_rf_pro_collection.py` regenerates the RF Pro color variants and their separate ZIPs.
 - `tools/generate_molten_themes.py` regenerates the 3 Molten themes, their responsive X18/X20 toolbar artwork, and their separate ZIPs.
+- `tools/generate_elements_themes.py` regenerates the 4 Elements themes, their natively rendered X18/X20 toolbar artwork, and their separate ZIPs.

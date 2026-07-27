@@ -39,6 +39,10 @@ FAMILIES = {
         "Molten",
         ["molten-ember", "molten-sulfur", "molten-verdigris"],
     ),
+    "elements": (
+        "Elements",
+        ["summit", "aurora", "abyss", "prism"],
+    ),
 }
 
 ROLE_RE = re.compile(
