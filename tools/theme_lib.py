@@ -59,10 +59,11 @@ def contrasting(
 
     Uses perceived luminance rather than a plain channel sum, which would call
     a mid-teal and a bright amber equally light despite reading very
-    differently behind text.
+    differently behind text. The cutoff sits where white text starts to fail on
+    saturated cyans and limes but still holds on crimson and violet.
     """
     luminance = 0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2]
-    return dark if luminance > 140 else light
+    return dark if luminance > 135 else light
 
 
 def toolbar_call(large_name: str, small_name: str) -> str:

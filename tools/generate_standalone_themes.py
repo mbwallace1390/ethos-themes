@@ -15,6 +15,7 @@ from theme_lib import (
     downscale_to_x18,
     lua_color,
     mix,
+    contrasting,
     rgb,
     save_png,
     toolbar_call,
@@ -72,7 +73,7 @@ def palette(family: str, focus: tuple[int, int, int], active: tuple[int, int, in
         primary_bg = tint_dark(focus, .045, .32)
         secondary_bg = tint_dark(focus, .085, .30)
         return dict(round=False, focus_style="outline", primary=white, secondary_bg=secondary_bg,
-                    highlight=focus, highlight_contrast=black if sum(focus) > 500 else white, disabled=(72, 78, 86),
+                    highlight=focus, highlight_contrast=black if sum(focus) > 500 else contrasting(focus, white, primary_bg), disabled=(72, 78, 86),
                     primary_bg=primary_bg, secondary=mix(focus, white, .55), safe=(60, 255, 122), page=page,
                     error=(255, 64, 79), active=active, inactive=mix(primary_bg, white, .38),
                     active_border=active, border=mix(primary_bg, white, .20), warning=(255, 196, 55),

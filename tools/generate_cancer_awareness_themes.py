@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 from png_optimize import optimize_png
 from theme_lib import (
+    contrasting,
     PREVIEWS_ROOT,
     RELEASES_ROOT,
     SELECTOR_LUA,
@@ -165,7 +166,7 @@ def palette(theme):
     _, _, _, _, ribbon_hex, active_hex, page_hex, primary_hex, secondary_hex, border_hex, _ = theme
     ribbon, active, page, primary, secondary, border = map(rgb, (ribbon_hex, active_hex, page_hex, primary_hex, secondary_hex, border_hex))
     primary_text = (245, 247, 250)
-    highlight_contrast = (12, 10, 13) if sum(ribbon) > 430 else (255, 255, 255)
+    highlight_contrast = (12, 10, 13) if sum(ribbon) > 430 else contrasting(ribbon, (255, 255, 255), primary)
     return {
         "PRIMARY_COLOR": primary_text,
         "SECONDARY_BGCOLOR": secondary,

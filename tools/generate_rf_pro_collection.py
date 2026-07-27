@@ -11,6 +11,7 @@ from theme_lib import (
     SELECTOR_LUA,
     THEMES_ROOT,
     X20_SIZE,
+    contrasting,
     downscale_to_x18,
     save_png,
     toolbar_call,
@@ -85,7 +86,7 @@ def build_theme(theme: dict[str, object]) -> None:
             lcd.RGB(0xF4, 0xF7, 0xFB), -- PRIMARY_COLOR
             {rgb_lua(theme["secondary_bg"])}, -- SECONDARY_BGCOLOR
             {rgb_lua(theme["accent"])}, -- HIGHLIGHT_COLOR
-            lcd.RGB(0xFF, 0xFF, 0xFF), -- HIGHLIGHT_CONTRASTING_COLOR
+            {rgb_lua(contrasting(theme["accent"], (255, 255, 255), theme["primary_bg"]))}, -- HIGHLIGHT_CONTRASTING_COLOR
             lcd.RGB(0x68, 0x74, 0x86), -- DISABLE_COLOR
             {rgb_lua(theme["primary_bg"])}, -- PRIMARY_BGCOLOR
             COLOR_BLACK,               -- OVERLAY_COLOR
