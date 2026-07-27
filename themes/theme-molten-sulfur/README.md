@@ -2,11 +2,11 @@
 
 **Family:** Molten
 
-A lightweight standalone FrSky ETHOS theme.
+A standalone FrSky ETHOS theme.
 
 - Focus: `outline`
 - Controls: square
 - Internal key: `MltSulf`
 - Automatically selects 784x50 artwork on 800px radios and 464x50 artwork on standard X18 radios
 
-Copy `theme-molten-sulfur` into the transmitter `scripts` folder, restart, and select **Molten Sulfur**.
+Copy `theme-molten-sulfur` into the transmitter `scripts` folder, restart, and select **Molten Sulfur** under **System > General > Theme**.

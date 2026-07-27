@@ -2,16 +2,21 @@ from __future__ import annotations
 
 import json
 import shutil
-import zipfile
 from pathlib import Path
 
 from PIL import Image, ImageDraw
 
-from png_optimize import optimize_png
-
-ROOT = Path(__file__).resolve().parents[1]
-THEMES_ROOT = ROOT / "themes"
-RELEASES_ROOT = ROOT / "releases"
+from theme_lib import (
+    RELEASES_ROOT,
+    SELECTOR_LUA,
+    THEMES_ROOT,
+    X20_SIZE,
+    contrasting,
+    downscale_to_x18,
+    save_png,
+    toolbar_call,
+    write_release,
+)
 
 THEMES = [
     {"slug":"violet","folder":"theme-rf-violet-pro","name":"RF Violet Pro","key":"RFVio","manifest_key":"mbwallace1390-theme-RFVio","accent":(177,76,255),"secondary_bg":(37,28,52),"button_border":(74,54,96),"inactive":(137,119,158),"page_bg":(13,8,20),"primary_bg":(24,16,34)},
@@ -30,8 +35,8 @@ def rgb_lua(color: tuple[int, int, int]) -> str:
     return f"lcd.RGB(0x{color[0]:02X}, 0x{color[1]:02X}, 0x{color[2]:02X})"
 
 
-def make_toolbar(path: Path, accent: tuple[int, int, int], page_bg: tuple[int, int, int], primary_bg: tuple[int, int, int]) -> None:
-    width, height = 784, 50
+def make_toolbar(accent: tuple[int, int, int], page_bg: tuple[int, int, int], primary_bg: tuple[int, int, int]) -> Image.Image:
+    width, height = X20_SIZE
     image = Image.new("RGB", (width, height))
     draw = ImageDraw.Draw(image)
 
@@ -48,8 +53,7 @@ def make_toolbar(path: Path, accent: tuple[int, int, int], page_bg: tuple[int, i
 
     edge = tuple(max(value - 2, 0) for value in page_bg)
     draw.line((0, height - 1, width - 1, height - 1), fill=edge)
-    image.save(path, optimize=True)
-    optimize_png(path)
+    return image
 
 
 def build_theme(theme: dict[str, object]) -> None:
@@ -64,12 +68,15 @@ def build_theme(theme: dict[str, object]) -> None:
     theme_dir.mkdir(parents=True)
     RELEASES_ROOT.mkdir(parents=True, exist_ok=True)
 
-    toolbar_name = f"toolbar-{folder.removeprefix('theme-')}.png"
-    make_toolbar(theme_dir / toolbar_name, theme["accent"], theme["page_bg"], theme["primary_bg"])
+    large_name = f"toolbar-{folder.removeprefix('theme-')}.png"
+    small_name = f"toolbar-{folder.removeprefix('theme-')}-x18.png"
+    large_art = make_toolbar(theme["accent"], theme["page_bg"], theme["primary_bg"])
+    save_png(large_art, theme_dir / large_name)
+    save_png(downscale_to_x18(large_art), theme_dir / small_name)
 
     main_lua = f'''-- {name}
 -- Lightweight RF Pro outline-focus color variant.
-local function init()
+{SELECTOR_LUA}local function init()
     system.registerTheme({{
         key = "{key}",
         name = "{name}",
@@ -79,7 +86,7 @@ local function init()
             lcd.RGB(0xF4, 0xF7, 0xFB), -- PRIMARY_COLOR
             {rgb_lua(theme["secondary_bg"])}, -- SECONDARY_BGCOLOR
             {rgb_lua(theme["accent"])}, -- HIGHLIGHT_COLOR
-            lcd.RGB(0xFF, 0xFF, 0xFF), -- HIGHLIGHT_CONTRASTING_COLOR
+            {rgb_lua(contrasting(theme["accent"], (255, 255, 255), theme["primary_bg"]))}, -- HIGHLIGHT_CONTRASTING_COLOR
             lcd.RGB(0x68, 0x74, 0x86), -- DISABLE_COLOR
             {rgb_lua(theme["primary_bg"])}, -- PRIMARY_BGCOLOR
             COLOR_BLACK,               -- OVERLAY_COLOR
@@ -95,7 +102,7 @@ local function init()
             lcd.RGB(0x08, 0x11, 0x0D), -- SAFE_CONTRASTING_COLOR
             {rgb_lua(theme["page_bg"])}, -- TOPLCD_BGCOLOR (XE/S)
         }},
-        toolbarBackground = lcd.loadBitmap("{toolbar_name}"),
+        toolbarBackground = {toolbar_call(large_name, small_name)},
     }})
 end
 
@@ -112,7 +119,11 @@ return {{
         "version": "1.0.0",
         "releaseNotes": {
             "format": "markdown",
-            "content": f"First stable {name} release using the proven RF Pro outline-focus layout, square controls, and lightweight 784x50 toolbar.",
+            "content": (
+                f"First stable {name} release using the proven RF Pro outline-focus layout, "
+                "square controls, and responsive X18/X20 toolbar. Automatically selects 464x50 "
+                "artwork on standard X18 radios and 784x50 artwork on 800px radios."
+            ),
         },
         "folder": folder,
         "files": ["main.lua", "toolbar-*"],
@@ -126,7 +137,7 @@ A lightweight FrSky ETHOS theme based on the proven RF Blue Pro design.
 - Bright {slug} outline focus
 - Dark square controls
 - Clear active, inactive, and disabled states
-- Lightweight 784x50 toolbar
+- Responsive 784x50 X20 / 464x50 X18 toolbar
 - ETHOS-safe internal key `{key}`
 - Installs beside every other RF Pro theme
 
@@ -136,16 +147,7 @@ Copy the complete `{folder}` folder into the transmitter's `scripts` folder, res
 '''
     (theme_dir / "README.md").write_text(readme, encoding="utf-8", newline="\n")
 
-    release_path = RELEASES_ROOT / f"RF-{slug.title()}-Pro-v1.0.0.zip"
-    if release_path.exists():
-        release_path.unlink()
-
-    with zipfile.ZipFile(release_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
-        directory = zipfile.ZipInfo(folder + "/")
-        directory.external_attr = (0o40777 << 16) | 0x10
-        archive.writestr(directory, b"")
-        for path in sorted(theme_dir.iterdir(), key=lambda item: item.name):
-            archive.write(path, f"{folder}/{path.name}")
+    write_release(theme_dir, RELEASES_ROOT / f"RF-{slug.title()}-Pro-v1.0.0.zip")
 
 
 if __name__ == "__main__":
