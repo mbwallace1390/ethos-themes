@@ -50,6 +50,21 @@ def lua_color(color: tuple[int, int, int]) -> str:
     return f"lcd.RGB(0x{color[0]:02X}, 0x{color[1]:02X}, 0x{color[2]:02X})"
 
 
+def contrasting(
+    color: tuple[int, int, int],
+    light: tuple[int, int, int] = (244, 246, 250),
+    dark: tuple[int, int, int] = (12, 12, 16),
+) -> tuple[int, int, int]:
+    """Pick readable text for a control filled with ``color``.
+
+    Uses perceived luminance rather than a plain channel sum, which would call
+    a mid-teal and a bright amber equally light despite reading very
+    differently behind text.
+    """
+    luminance = 0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2]
+    return dark if luminance > 140 else light
+
+
 def toolbar_call(large_name: str, small_name: str) -> str:
     return f'lcd.loadBitmap(selectToolbar("{large_name}", "{small_name}"))'
 

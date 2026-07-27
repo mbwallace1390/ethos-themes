@@ -70,6 +70,17 @@ Four themes named for a natural phenomenon, each built from a different procedur
 - **Abyss v1.0.0** — sonar rings expanding from below the bar, cyan on deep navy — [Download](releases/Abyss-v1.0.0.zip) — [Source](themes/theme-abyss)
 - **Prism v1.0.0** — a light beam splitting into its full spectrum, violet focus with gold active states — [Download](releases/Prism-v1.0.0.zip) — [Source](themes/theme-prism)
 
+## Texture collection
+
+Four themes built from a surface texture rather than a scene, each drawn with a different technique. As with the Elements collection the artwork is rendered natively at both display sizes, so the dot screen and the weave stay aligned to the pixel grid on a standard X18.
+
+<a href="previews/texture.png"><img src="previews/texture.png" alt="Texture theme previews" width="760"></a>
+
+- **Loom v1.0.0** — an over-under basket weave in warm rust and amber — [Download](releases/Loom-v1.0.0.zip) — [Source](themes/theme-loom)
+- **Mosaic v1.0.0** — jittered stained-glass cells with lit seams, teal and gold — [Download](releases/Mosaic-v1.0.0.zip) — [Source](themes/theme-mosaic)
+- **Halftone v1.0.0** — a dot screen that swells and fades across the bar, crimson focus with amber active states — [Download](releases/Halftone-v1.0.0.zip) — [Source](themes/theme-halftone)
+- **Bloom v1.0.0** — soft overlapping bokeh orbs in pink and violet — [Download](releases/Bloom-v1.0.0.zip) — [Source](themes/theme-bloom)
+
 ## Standalone style collection
 
 These themes use six genuinely different visual styles rather than only changing accent colors. Every theme has a unique ETHOS-safe internal key, responsive 784x50/464x50 toolbar artwork, and its own individual ZIP.
@@ -177,9 +188,10 @@ Every generator writes both toolbar sizes, the automatic display-size selection,
 - `tools/rebuild_releases.py` repackages every theme's current release ZIP from its source folder, leaving superseded archives untouched.
 - `tools/generate_cancer_awareness_themes.py` regenerates the 10 Cancer Awareness themes, separate ZIPs, and collection preview.
 - `tools/generate_custom_art_themes.py` regenerates the 12 custom-art themes, separate ZIPs, and four collection previews.
-- `tools/generate_readme_previews.py` regenerates the eight standalone-family README preview images from the actual theme source files.
+- `tools/generate_readme_previews.py` regenerates the nine standalone-family README preview images from the actual theme source files.
 - `tools/generate_rf_pro_preview.py` regenerates the RF Pro collection preview from the actual RF Pro source files.
 - `tools/generate_standalone_themes.py` regenerates the 22 standalone themes and their separate ZIPs.
 - `tools/generate_rf_pro_collection.py` regenerates the RF Pro color variants and their separate ZIPs.
 - `tools/generate_molten_themes.py` regenerates the 3 Molten themes, their responsive X18/X20 toolbar artwork, and their separate ZIPs.
 - `tools/generate_elements_themes.py` regenerates the 4 Elements themes, their natively rendered X18/X20 toolbar artwork, and their separate ZIPs.
+- `tools/generate_texture_themes.py` regenerates the 4 Texture themes, their natively rendered X18/X20 toolbar artwork, and their separate ZIPs.
