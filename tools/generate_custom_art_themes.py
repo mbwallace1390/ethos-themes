@@ -4,16 +4,26 @@ import json
 import math
 import random
 import shutil
-import zipfile
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 from png_optimize import optimize_png
+from theme_lib import (
+    PREVIEWS_ROOT,
+    RELEASES_ROOT,
+    SELECTOR_LUA,
+    THEMES_ROOT,
+    X18_SIZE,
+    X20_SIZE,
+    downscale_to_x18,
+    save_png,
+    toolbar_call,
+    write_release,
+)
 
-ROOT = Path(__file__).resolve().parents[1]
-THEMES_ROOT = ROOT / "themes"
-RELEASES_ROOT = ROOT / "releases"
-PREVIEWS_ROOT = ROOT / "previews"
+# The X18 artwork for this theme was validated on real hardware, so it is kept
+# byte-for-byte instead of being re-derived from the X20 art.
+PRESERVED_X18 = {"aviation-hud"}
 
 # collection, slug, display name, short ETHOS key, release ZIP, artwork style,
 # round buttons, focus style, then 16 palette colors:
@@ -181,26 +191,38 @@ def artwork(draw, style, width, height, page, panel, accent, active):
         draw.line((0,38,width-1,38), fill=accent, width=2)
 
 
-def make_toolbar(theme, path):
+def make_toolbar(theme):
     _, _, _, _, _, style, _, _, palette = theme
     page, panel, accent, active = color(palette[8]), color(palette[5]), color(palette[2]), color(palette[10])
-    image = Image.new("RGB", (784,50), page)
+    width, height = X20_SIZE
+    image = Image.new("RGB", (width,height), page)
     draw = ImageDraw.Draw(image)
-    artwork(draw,style,784,50,page,panel,accent,active)
-    draw.line((0,49,783,49), fill=mix(page,(0,0,0),.35))
-    image.save(path,optimize=True)
-    optimize_png(path)
+    artwork(draw,style,width,height,page,panel,accent,active)
+    draw.line((0,height-1,width-1,height-1), fill=mix(page,(0,0,0),.35))
+    return image
 
 
 def build_theme(theme):
     collection, slug, name, key, release_name, _, rounded, focus, palette = theme
     folder = f"theme-{slug}"
     theme_dir = THEMES_ROOT / folder
+    large_name = f"toolbar-{slug}.png"
+    small_name = f"toolbar-{slug}-x18.png"
+
+    approved_x18 = None
+    if slug in PRESERVED_X18 and (theme_dir / small_name).exists():
+        approved_x18 = (theme_dir / small_name).read_bytes()
+
     if theme_dir.exists(): shutil.rmtree(theme_dir)
     theme_dir.mkdir(parents=True)
     RELEASES_ROOT.mkdir(parents=True,exist_ok=True)
-    toolbar_name = f"toolbar-{slug}.png"
-    make_toolbar(theme,theme_dir/toolbar_name)
+
+    large_art = make_toolbar(theme)
+    save_png(large_art, theme_dir/large_name)
+    if approved_x18 is not None:
+        (theme_dir/small_name).write_bytes(approved_x18)
+    else:
+        save_png(downscale_to_x18(large_art), theme_dir/small_name)
 
     lines = []
     for index, role in enumerate(ROLES):
@@ -209,7 +231,7 @@ def build_theme(theme):
     lines.append(f"            {lua_rgb(palette[8])}, -- TOPLCD_BGCOLOR")
     lua = f'''-- {name}
 -- Standalone ETHOS radio theme. Rotorflight and RF Suite files are not modified.
-local function init()
+{SELECTOR_LUA}local function init()
     system.registerTheme({{
         key = "{key}",
         name = "{name}",
@@ -218,7 +240,7 @@ local function init()
         colors = {{
 {chr(10).join(lines)}
         }},
-        toolbarBackground = lcd.loadBitmap("{toolbar_name}"),
+        toolbarBackground = {toolbar_call(large_name, small_name)},
     }})
 end
 
@@ -227,27 +249,21 @@ return {{ init = init }}
     (theme_dir/"main.lua").write_text(lua,encoding="utf-8",newline="\n")
     manifest = {
         "manifestVersion":1,"name":name,"key":f"mbwallace1390-theme-{key}","version":"1.0.0",
-        "releaseNotes":{"format":"markdown","content":f"First stable {name} release from the {collection} collection. Custom radio-theme artwork only; no Rotorflight or RF Suite files are changed."},
+        "releaseNotes":{"format":"markdown","content":(f"First stable {name} release from the {collection} collection. Custom "
+                    "radio-theme artwork only; no Rotorflight or RF Suite files are changed. "
+                    "Automatically selects 464x50 artwork on standard X18 radios and 784x50 "
+                    "artwork on 800px radios.")},
         "folder":folder,"files":["main.lua","toolbar-*"]
     }
     (theme_dir/"ethos_lua_manifest.json").write_text(json.dumps(manifest,indent=4)+"\n",encoding="utf-8",newline="\n")
     (theme_dir/"README.md").write_text(
         f"# {name} v1.0.0\n\n**Collection:** {collection}\n\nA standalone FrSky ETHOS radio theme with custom toolbar artwork.\n\n"
-        f"- Focus: `{focus}`\n- Controls: {'rounded' if rounded else 'square'}\n- Internal key: `{key}`\n- Static 784x50 toolbar\n"
+        f"- Focus: `{focus}`\n- Controls: {'rounded' if rounded else 'square'}\n- Internal key: `{key}`\n- Responsive 784x50 X20 / 464x50 X18 toolbar\n"
         "- Does not modify Rotorflight or RF Suite Lua files\n\n"
         f"Copy `{folder}` into the transmitter `scripts` folder, restart, then select **{name}** under **System > General > Theme**.\n",
         encoding="utf-8",newline="\n")
 
-    release = RELEASES_ROOT/release_name
-    if release.exists(): release.unlink()
-    with zipfile.ZipFile(release,"w",zipfile.ZIP_DEFLATED,compresslevel=9) as archive:
-        info = zipfile.ZipInfo(folder+"/"); info.external_attr = (0o40777 << 16) | 0x10; archive.writestr(info,b"")
-        for item in sorted(theme_dir.iterdir(),key=lambda item:item.name): archive.write(item,f"{folder}/{item.name}")
-    with zipfile.ZipFile(release,"r") as archive:
-        if archive.testzip() is not None: raise ValueError(f"Corrupt ZIP: {release}")
-        if f"{folder}/main.luac" in archive.namelist(): raise ValueError("main.luac must not be packaged")
-        with archive.open(f"{folder}/{toolbar_name}") as image_file:
-            if Image.open(image_file).size != (784,50): raise ValueError("Wrong toolbar size")
+    write_release(theme_dir, RELEASES_ROOT/release_name)
 
 
 def load_font(size,bold=False):
@@ -270,7 +286,8 @@ def previews():
             radius = 8 if rounded else 0
             draw.rounded_rectangle((x,y,x+226,y+160),radius=10,fill=page,outline=border,width=2)
             draw.text((x+11,y+9),name,font=name_font,fill=text)
-            toolbar = Image.open(THEMES_ROOT/f"theme-{slug}"/f"toolbar-{slug}.png").convert("RGB").resize((204,14),Image.Resampling.LANCZOS)
+            with Image.open(THEMES_ROOT/f"theme-{slug}"/f"toolbar-{slug}.png") as opened:
+                toolbar = opened.convert("RGB").resize((204,14),Image.Resampling.LANCZOS)
             canvas.paste(toolbar,(x+11,y+36))
             selected_fill, selected_text = (accent,contrast) if focus=="invert" else (panel,text)
             draw.rounded_rectangle((x+11,y+66,x+103,y+108),radius=radius,fill=selected_fill,outline=accent,width=4)
@@ -279,9 +296,8 @@ def previews():
             draw.text((x+144,y+81),"Normal",font=label_font,fill=text)
             draw.text((x+11,y+127),"Active",font=label_font,fill=active); draw.line((x+57,y+135,x+105,y+135),fill=active,width=2)
             draw.text((x+122,y+127),"Disabled",font=label_font,fill=disabled)
-        preview_path = PREVIEWS_ROOT/f"{preview_slug}.png"
-        canvas.save(preview_path,optimize=True)
-        optimize_png(preview_path)
+        canvas.save(PREVIEWS_ROOT/f"{preview_slug}.png",optimize=True)
+        optimize_png(PREVIEWS_ROOT/f"{preview_slug}.png")
 
 
 def main():

@@ -51,7 +51,9 @@ def parse_theme(slug: str) -> dict:
         for red, green, blue, role in ROLE_RE.findall(source)
     }
     name_match = NAME_RE.search(source)
-    toolbar_files = sorted(folder.glob("toolbar-*.png"))
+    toolbar_files = sorted(
+        path for path in folder.glob("toolbar-*.png") if not path.stem.endswith("-x18")
+    )
     if not name_match or len(toolbar_files) != 1:
         raise ValueError(f"Could not parse {folder}")
     return {"name": name_match.group(1), "colors": colors, "toolbar": toolbar_files[0]}

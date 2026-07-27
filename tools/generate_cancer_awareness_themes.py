@@ -3,16 +3,21 @@ from __future__ import annotations
 import json
 import math
 import shutil
-import zipfile
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 from png_optimize import optimize_png
-
-ROOT = Path(__file__).resolve().parents[1]
-THEMES_ROOT = ROOT / "themes"
-RELEASES_ROOT = ROOT / "releases"
-PREVIEWS_ROOT = ROOT / "previews"
+from theme_lib import (
+    PREVIEWS_ROOT,
+    RELEASES_ROOT,
+    SELECTOR_LUA,
+    THEMES_ROOT,
+    X20_SIZE,
+    downscale_to_x18,
+    save_png,
+    toolbar_call,
+    write_release,
+)
 
 # slug, display name, ETHOS key, awareness label, ribbon color, active color,
 # page background, primary background, secondary background, border, artwork style
@@ -89,9 +94,9 @@ def draw_ribbon(draw: ImageDraw.ImageDraw, cx: int, top: int, ribbon: tuple[int,
     draw.line(right_loop + [right_loop[0]], fill=dark, width=max(1, round(scale)))
 
 
-def draw_toolbar(theme, path: Path) -> None:
+def draw_toolbar(theme) -> Image.Image:
     slug, _, _, _, ribbon_hex, active_hex, page_hex, primary_hex, _, _, style = theme
-    width, height = 784, 50
+    width, height = X20_SIZE
     ribbon, active, page, primary = map(rgb, (ribbon_hex, active_hex, page_hex, primary_hex))
     image = Image.new("RGB", (width, height), page)
     draw = ImageDraw.Draw(image)
@@ -153,8 +158,7 @@ def draw_toolbar(theme, path: Path) -> None:
             draw.line((x + 18, 16, x + 18, 35), fill=mix(page, ribbon, .52))
 
     draw.line((0, height - 1, width - 1, height - 1), fill=mix(page, (0, 0, 0), .38))
-    image.save(path, optimize=True)
-    optimize_png(path)
+    return image
 
 
 def palette(theme):
@@ -192,8 +196,11 @@ def build_theme(theme) -> None:
     theme_dir.mkdir(parents=True)
     RELEASES_ROOT.mkdir(parents=True, exist_ok=True)
 
-    toolbar_name = f"toolbar-{slug}.png"
-    draw_toolbar(theme, theme_dir / toolbar_name)
+    large_name = f"toolbar-{slug}.png"
+    small_name = f"toolbar-{slug}-x18.png"
+    large_art = draw_toolbar(theme)
+    save_png(large_art, theme_dir / large_name)
+    save_png(downscale_to_x18(large_art), theme_dir / small_name)
     colors = palette(theme)
     color_lines = []
     order = [
@@ -210,7 +217,7 @@ def build_theme(theme) -> None:
     lua = f'''-- {name}
 -- Standalone ETHOS cancer-awareness radio theme.
 -- Rotorflight and RF Suite files are not modified.
-local function init()
+{SELECTOR_LUA}local function init()
     system.registerTheme({{
         key = "{key}",
         name = "{name}",
@@ -219,7 +226,7 @@ local function init()
         colors = {{
 {chr(10).join(color_lines)}
         }},
-        toolbarBackground = lcd.loadBitmap("{toolbar_name}"),
+        toolbarBackground = {toolbar_call(large_name, small_name)},
     }})
 end
 
@@ -234,7 +241,12 @@ return {{ init = init }}
         "version": "1.0.0",
         "releaseNotes": {
             "format": "markdown",
-            "content": f"First stable {name} release for {awareness}. Includes original generic awareness-ribbon toolbar artwork and changes only the ETHOS radio theme.",
+            "content": (
+                f"First stable {name} release for {awareness}. Includes original generic "
+                "awareness-ribbon toolbar artwork and changes only the ETHOS radio theme. "
+                "Automatically selects 464x50 artwork on standard X18 radios and 784x50 "
+                "artwork on 800px radios."
+            ),
         },
         "folder": folder,
         "files": ["main.lua", "toolbar-*"],
@@ -250,7 +262,7 @@ A standalone FrSky ETHOS radio theme with original generic awareness-ribbon tool
 
 - Outline focus with square controls
 - Unique internal key: `{key}`
-- Static 784x50 toolbar
+- Responsive 784x50 X20 / 464x50 X18 toolbar
 - Separate installable package
 - Does not modify Rotorflight or RF Suite Lua files
 
@@ -259,27 +271,7 @@ Copy `{folder}` into the transmitter's `scripts` folder, restart, and select **{
     (theme_dir / "README.md").write_text(readme, encoding="utf-8", newline="\n")
 
     release_name = "-".join(word.capitalize() for word in slug.split("-")) + "-v1.0.0.zip"
-    release_path = RELEASES_ROOT / release_name
-    if release_path.exists():
-        release_path.unlink()
-    with zipfile.ZipFile(release_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
-        directory = zipfile.ZipInfo(folder + "/")
-        directory.external_attr = (0o40777 << 16) | 0x10
-        archive.writestr(directory, b"")
-        for item in sorted(theme_dir.iterdir(), key=lambda path: path.name):
-            archive.write(item, f"{folder}/{item.name}")
-
-    with zipfile.ZipFile(release_path, "r") as archive:
-        if archive.testzip() is not None:
-            raise ValueError(f"Corrupt package: {release_path}")
-        names = archive.namelist()
-        if f"{folder}/main.luac" in names:
-            raise ValueError("main.luac must not be packaged")
-        if f"{folder}/main.lua" not in names or f"{folder}/ethos_lua_manifest.json" not in names:
-            raise ValueError(f"Incomplete package: {release_path}")
-        with archive.open(f"{folder}/{toolbar_name}") as image_file:
-            if Image.open(image_file).size != (784, 50):
-                raise ValueError(f"Incorrect toolbar dimensions: {release_path}")
+    write_release(theme_dir, RELEASES_ROOT / release_name)
 
 
 def load_font(size: int, bold: bool = False):
@@ -341,9 +333,8 @@ def generate_preview() -> None:
         draw.line((x + 60, y + 166, x + 145, y + 166), fill=active, width=2)
         draw.text((x + 175, y + 158), "Disabled", font=label_font, fill=disabled)
 
-    preview_path = PREVIEWS_ROOT / "cancer-awareness.png"
-    canvas.save(preview_path, optimize=True)
-    optimize_png(preview_path)
+    canvas.save(PREVIEWS_ROOT / "cancer-awareness.png", optimize=True)
+    optimize_png(PREVIEWS_ROOT / "cancer-awareness.png")
 
 
 def main() -> None:

@@ -3,15 +3,23 @@ from __future__ import annotations
 import colorsys
 import json
 import shutil
-import zipfile
 from pathlib import Path
 from PIL import Image, ImageDraw
 
-from png_optimize import optimize_png
-
-ROOT = Path(__file__).resolve().parents[1]
-THEMES_ROOT = ROOT / "themes"
-RELEASES_ROOT = ROOT / "releases"
+from theme_lib import (
+    RELEASES_ROOT,
+    SELECTOR_LUA,
+    THEMES_ROOT,
+    X18_SIZE,
+    X20_SIZE,
+    downscale_to_x18,
+    lua_color,
+    mix,
+    rgb,
+    save_png,
+    toolbar_call,
+    write_release,
+)
 
 # family, slug, display name, short key, focus color, active color, toolbar style
 THEMES = [
@@ -38,15 +46,6 @@ THEMES = [
     ("Two-Tone","ember-signal","Ember Signal","EmbSig","#FF8A00","#FF3B30","twotone"),
     ("Two-Tone","neon-fusion","Neon Fusion","NeoFus","#00D7FF","#FF3EA5","twotone"),
 ]
-
-
-def rgb(value: str) -> tuple[int, int, int]:
-    value = value.lstrip("#")
-    return tuple(int(value[i:i + 2], 16) for i in (0, 2, 4))
-
-
-def mix(a: tuple[int, int, int], b: tuple[int, int, int], amount: float) -> tuple[int, int, int]:
-    return tuple(round(a[i] * (1 - amount) + b[i] * amount) for i in range(3))
 
 
 def tint_dark(accent: tuple[int, int, int], level: float, saturation: float = 0.38) -> tuple[int, int, int]:
@@ -113,12 +112,8 @@ def palette(family: str, focus: tuple[int, int, int], active: tuple[int, int, in
                 safe_contrast=(7, 24, 12))
 
 
-def lua_color(c: tuple[int, int, int]) -> str:
-    return f"lcd.RGB(0x{c[0]:02X}, 0x{c[1]:02X}, 0x{c[2]:02X})"
-
-
-def toolbar(path: Path, style: str, page: tuple[int, int, int], primary: tuple[int, int, int], focus: tuple[int, int, int], active: tuple[int, int, int]) -> None:
-    w, h = 784, 50
+def toolbar(style: str, page: tuple[int, int, int], primary: tuple[int, int, int], focus: tuple[int, int, int], active: tuple[int, int, int]) -> Image.Image:
+    w, h = X20_SIZE
     image = Image.new("RGB", (w, h))
     draw = ImageDraw.Draw(image)
     for y in range(h):
@@ -168,8 +163,7 @@ def toolbar(path: Path, style: str, page: tuple[int, int, int], primary: tuple[i
             draw.line((x, 34, x + 24, 34), fill=focus)
             draw.line((x + 28, 37, x + 52, 37), fill=active)
     draw.line((0, h - 1, w - 1, h - 1), fill=mix(page, (0, 0, 0), .35))
-    image.save(path, optimize=True)
-    optimize_png(path)
+    return image
 
 
 def build(defn: tuple[str, str, str, str, str, str, str]) -> None:
@@ -182,8 +176,11 @@ def build(defn: tuple[str, str, str, str, str, str, str]) -> None:
         shutil.rmtree(theme_dir)
     theme_dir.mkdir(parents=True)
     RELEASES_ROOT.mkdir(parents=True, exist_ok=True)
-    toolbar_name = f"toolbar-{slug}.png"
-    toolbar(theme_dir / toolbar_name, style, p["page"], p["primary_bg"], focus, active)
+    large_name = f"toolbar-{slug}.png"
+    small_name = f"toolbar-{slug}-x18.png"
+    large_art = toolbar(style, p["page"], p["primary_bg"], focus, active)
+    save_png(large_art, theme_dir / large_name)
+    save_png(downscale_to_x18(large_art), theme_dir / small_name)
 
     roles = [
         ("PRIMARY_COLOR", p["primary"]), ("SECONDARY_BGCOLOR", p["secondary_bg"]),
@@ -198,7 +195,7 @@ def build(defn: tuple[str, str, str, str, str, str, str]) -> None:
     color_lines = [f"            {'COLOR_BLACK' if value is None else lua_color(value)}, -- {role}" for role, value in roles]
     lua = f'''-- {name}
 -- Lightweight standalone ETHOS theme.
-local function init()
+{SELECTOR_LUA}local function init()
     system.registerTheme({{
         key = "{key}",
         name = "{name}",
@@ -207,7 +204,7 @@ local function init()
         colors = {{
 {chr(10).join(color_lines)}
         }},
-        toolbarBackground = lcd.loadBitmap("{toolbar_name}"),
+        toolbarBackground = {toolbar_call(large_name, small_name)},
     }})
 end
 
@@ -219,7 +216,13 @@ return {{ init = init }}
         "name": name,
         "key": f"mbwallace1390-theme-{key}",
         "version": "1.0.0",
-        "releaseNotes": {"format": "markdown", "content": f"First stable {name} release from the {family} family."},
+        "releaseNotes": {
+            "format": "markdown",
+            "content": (
+                f"First stable {name} release from the {family} family. Automatically selects "
+                "464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios."
+            ),
+        },
         "folder": folder,
         "files": ["main.lua", "toolbar-*"],
     }
@@ -227,19 +230,12 @@ return {{ init = init }}
     (theme_dir / "README.md").write_text(
         f"# {name} v1.0.0\n\n**Family:** {family}\n\nA lightweight standalone FrSky ETHOS theme.\n\n"
         f"- Focus: `{p['focus_style']}`\n- Controls: {'rounded' if p['round'] else 'square'}\n- Internal key: `{key}`\n"
-        f"- Static 784x50 toolbar\n\nCopy `{folder}` into the transmitter `scripts` folder, restart, and select **{name}**.\n",
+        f"- Responsive 784x50 X20 / 464x50 X18 toolbar\n\nCopy `{folder}` into the transmitter `scripts` folder, restart, and select **{name}**.\n",
         encoding="utf-8",
         newline="\n",
     )
     release = RELEASES_ROOT / f"{'-'.join(word.capitalize() for word in slug.split('-'))}-v1.0.0.zip"
-    if release.exists():
-        release.unlink()
-    with zipfile.ZipFile(release, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
-        info = zipfile.ZipInfo(folder + "/")
-        info.external_attr = (0o40777 << 16) | 0x10
-        archive.writestr(info, b"")
-        for item in sorted(theme_dir.iterdir(), key=lambda x: x.name):
-            archive.write(item, f"{folder}/{item.name}")
+    write_release(theme_dir, release)
 
 
 if __name__ == "__main__":
