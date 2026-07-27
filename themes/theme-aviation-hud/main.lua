@@ -1,14 +1,14 @@
 -- Aviation HUD
--- Responsive ETHOS radio theme test for 480px and 800px displays.
--- Rotorflight and RF Suite files are not modified.
-local function init()
+-- Standalone ETHOS radio theme. Rotorflight and RF Suite files are not modified.
+local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    local toolbarFile = "toolbar-aviation-hud.png"
-
     if version and version.lcdWidth and version.lcdWidth <= 480 then
-        toolbarFile = "toolbar-aviation-hud-x18.png"
+        return smallFile
     end
+    return largeFile
+end
 
+local function init()
     system.registerTheme({
         key = "AvHUD",
         name = "Aviation HUD",
@@ -34,7 +34,7 @@ local function init()
             lcd.RGB(0x03, 0x10, 0x06), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x05, 0x0D, 0x08), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap(toolbarFile),
+        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-aviation-hud.png", "toolbar-aviation-hud-x18.png")),
     })
 end
 

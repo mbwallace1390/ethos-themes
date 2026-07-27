@@ -159,7 +159,11 @@ All themes can remain installed together. `main.luac` is intentionally omitted s
 
 ## Development
 
-- `tools/add_x18_support_all_themes.py` regenerates 464x50 X18 artwork, applies automatic display-size selection, validates all themes, and rebuilds the existing separate ZIPs.
+Every generator writes both toolbar sizes, the automatic display-size selection, palette-encoded artwork, and a reproducible ZIP, so regenerating a family never drifts from what is committed.
+
+- `tools/theme_lib.py` holds the shared packaging helpers every generator uses.
+- `tools/validate_catalog.py` checks the whole catalog read-only: artwork sizes and encoding, responsive toolbar selection, unique ETHOS keys, and release ZIPs that match their theme folders.
+- `tools/rebuild_releases.py` repackages every theme's current release ZIP from its source folder, leaving superseded archives untouched.
 - `tools/generate_cancer_awareness_themes.py` regenerates the 10 Cancer Awareness themes, separate ZIPs, and collection preview.
 - `tools/generate_custom_art_themes.py` regenerates the 12 custom-art themes, separate ZIPs, and four collection previews.
 - `tools/generate_readme_previews.py` regenerates the seven standalone-family README preview images from the actual theme source files.
