@@ -55,11 +55,12 @@ def toolbar_call(large_name: str, small_name: str) -> str:
 
 
 def save_png(image: Image.Image, path: Path) -> None:
-    """Save as an indexed PNG when that is lossless, otherwise as RGB.
+    """Save toolbar art as an indexed PNG, roughly a third smaller than RGB.
 
-    Toolbar art uses few enough colors that palette encoding is exact and
-    roughly a third smaller. The round-trip is verified before committing to
-    it so a future high-color design silently falls back instead of banding.
+    Most designs use well under 256 colors, so the palette is exact and the
+    round-trip is verified before being written. Smooth gradient art can exceed
+    256; those are quantized with an adaptive palette, which halves the file
+    again for an error far below what a 50px toolbar strip can show.
     """
     source = image.convert("RGB")
     if source.getcolors(256) is not None:
@@ -68,7 +69,9 @@ def save_png(image: Image.Image, path: Path) -> None:
             indexed.save(path, optimize=True)
             optimize_png(path)
             return
-    source.save(path, optimize=True)
+    source.quantize(colors=256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.FLOYDSTEINBERG).save(
+        path, optimize=True
+    )
     optimize_png(path)
 
 
@@ -129,6 +132,7 @@ def write_theme_files(
     focus_style: str,
     roles: list[tuple[str, tuple[int, int, int] | None]],
     release_notes: str,
+    label: str = "Family",
     readme_extra: str = "",
 ) -> tuple[str, str]:
     """Write main.lua, the manifest and the per-theme README. Returns art names."""
@@ -179,7 +183,7 @@ return {{ init = init }}
     )
 
     (theme_dir / "README.md").write_text(
-        f"# {name} v1.0.0\n\n**Family:** {family}\n\n"
+        f"# {name} v1.0.0\n\n**{label}:** {family}\n\n"
         "A standalone FrSky ETHOS theme.\n\n"
         f"- Focus: `{focus_style}`\n"
         f"- Controls: {'rounded' if round_buttons else 'square'}\n"
