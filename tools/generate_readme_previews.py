@@ -43,6 +43,10 @@ FAMILIES = {
         "Elements",
         ["summit", "aurora", "abyss", "prism"],
     ),
+    "texture": (
+        "Texture",
+        ["loom", "mosaic", "halftone", "bloom"],
+    ),
 }
 
 ROLE_RE = re.compile(
