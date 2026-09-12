@@ -2,13 +2,24 @@
 -- Lightweight RF Pro outline-focus color variant.
 local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
 local function init()
+    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
     system.registerTheme({
         key = "RFLime",
         name = "RF Lime Pro",
@@ -19,7 +30,7 @@ local function init()
             lcd.RGB(0x2A, 0x34, 0x13), -- SECONDARY_BGCOLOR
             lcd.RGB(0xA8, 0xF0, 0x00), -- HIGHLIGHT_COLOR
             lcd.RGB(0x17, 0x21, 0x08), -- HIGHLIGHT_CONTRASTING_COLOR
-            lcd.RGB(0x68, 0x74, 0x86), -- DISABLE_COLOR
+            lcd.RGB(0x6E, 0x7A, 0x8B), -- DISABLE_COLOR
             lcd.RGB(0x17, 0x21, 0x08), -- PRIMARY_BGCOLOR
             COLOR_BLACK,               -- OVERLAY_COLOR
             lcd.RGB(0xB7, 0xC5, 0xD8), -- SECONDARY_COLOR
@@ -34,7 +45,7 @@ local function init()
             lcd.RGB(0x08, 0x11, 0x0D), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x0D, 0x13, 0x04), -- TOPLCD_BGCOLOR (XE/S)
         },
-        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-rf-lime-pro.png", "toolbar-rf-lime-pro-x18.png")),
+        toolbarBackground = loadToolbar("toolbar-rf-lime-pro.png", "toolbar-rf-lime-pro-x18.png"),
     })
 end
 

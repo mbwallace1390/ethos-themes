@@ -7,17 +7,23 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 from png_optimize import optimize_png
+from palette_quality import polish_lua_source
 from theme_lib import (
-    contrasting,
+    ETHOS26_RELEASE_NOTES,
+    ETHOS26_SUPPORT,
+    INIT_GUARD_LUA,
     PREVIEWS_ROOT,
     RELEASES_ROOT,
     SELECTOR_LUA,
     THEMES_ROOT,
+    THEME_VERSION,
     X20_SIZE,
+    contrasting,
     downscale_to_x18,
     save_png,
     toolbar_call,
     write_release,
+    zip_install_instructions,
 )
 
 # slug, display name, ETHOS key, awareness label, ribbon color, active color,
@@ -219,7 +225,7 @@ def build_theme(theme) -> None:
 -- Standalone ETHOS cancer-awareness radio theme.
 -- Rotorflight and RF Suite files are not modified.
 {SELECTOR_LUA}local function init()
-    system.registerTheme({{
+{INIT_GUARD_LUA}    system.registerTheme({{
         key = "{key}",
         name = "{name}",
         roundButtons = false,
@@ -233,16 +239,17 @@ end
 
 return {{ init = init }}
 '''
-    (theme_dir / "main.lua").write_text(lua, encoding="utf-8", newline="\n")
+    (theme_dir / "main.lua").write_text(polish_lua_source(lua), encoding="utf-8", newline="\n")
 
     manifest = {
         "manifestVersion": 1,
         "name": name,
         "key": f"mbwallace1390-theme-{key}",
-        "version": "1.0.0",
+        "version": THEME_VERSION,
         "releaseNotes": {
             "format": "markdown",
             "content": (
+                f"{ETHOS26_RELEASE_NOTES} "
                 f"First stable {name} release for {awareness}. Includes original generic "
                 "awareness-ribbon toolbar artwork and changes only the ETHOS radio theme. "
                 "Automatically selects 464x50 artwork on standard X18 radios and 784x50 "
@@ -254,7 +261,11 @@ return {{ init = init }}
     }
     (theme_dir / "ethos_lua_manifest.json").write_text(json.dumps(manifest, indent=4) + "\n", encoding="utf-8", newline="\n")
 
-    readme = f"""# {name} v1.0.0
+    readme = f"""# {name} v{THEME_VERSION}
+
+{ETHOS26_SUPPORT}
+
+{zip_install_instructions(folder)}
 
 **Collection:** Cancer Awareness  
 **Theme:** {awareness}
@@ -267,75 +278,17 @@ A standalone FrSky ETHOS radio theme with original generic awareness-ribbon tool
 - Separate installable package
 - Does not modify Rotorflight or RF Suite Lua files
 
-Copy `{folder}` into the transmitter's `scripts` folder, restart, and select **{name}** under **System > General > Theme**.
+To install from repository sources, copy `{folder}` into the transmitter's `scripts` folder, restart, and select **{name}** under **System > General > Theme**.
 """
     (theme_dir / "README.md").write_text(readme, encoding="utf-8", newline="\n")
 
-    release_name = "-".join(word.capitalize() for word in slug.split("-")) + "-v1.0.0.zip"
+    release_name = "-".join(word.capitalize() for word in slug.split("-")) + f"-v{THEME_VERSION}.zip"
     write_release(theme_dir, RELEASES_ROOT / release_name)
 
 
-def load_font(size: int, bold: bool = False):
-    paths = [
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf",
-    ]
-    for path in paths:
-        try:
-            return ImageFont.truetype(path, size)
-        except OSError:
-            pass
-    return ImageFont.load_default()
-
-
-def generate_preview() -> None:
-    PREVIEWS_ROOT.mkdir(parents=True, exist_ok=True)
-    title_font = load_font(27, True)
-    name_font = load_font(15, True)
-    label_font = load_font(11)
-    small_font = load_font(12)
-
-    columns = 2
-    rows = (len(THEMES) + columns - 1) // columns
-    width = 760
-    height = 88 + rows * 206
-    canvas = Image.new("RGB", (width, height), (8, 11, 17))
-    draw = ImageDraw.Draw(canvas)
-    draw.text((30, 18), "Cancer Awareness Collection", font=title_font, fill=(244, 247, 251))
-    draw.text((30, 55), "Ten separate ETHOS themes with original ribbon artwork", font=small_font, fill=(175, 189, 207))
-
-    for index, theme in enumerate(THEMES):
-        slug, name, _, awareness, *_ = theme
-        colors = palette(theme)
-        x = 30 + (index % columns) * 370
-        y = 88 + (index // columns) * 206
-        card_w, card_h = 340, 188
-        page = colors["PAGE_BGCOLOR"]
-        panel = colors["PRIMARY_BGCOLOR"]
-        text = colors["PRIMARY_COLOR"]
-        ribbon = colors["HIGHLIGHT_COLOR"]
-        active = colors["ACTIVE_COLOR"]
-        border = colors["BUTTON_BORDER_COLOR"]
-        disabled = colors["DISABLE_COLOR"]
-
-        draw.rounded_rectangle((x, y, x + card_w, y + card_h), radius=11, fill=page, outline=border, width=2)
-        draw.text((x + 14, y + 10), name, font=name_font, fill=text)
-        draw.text((x + 14, y + 31), awareness, font=label_font, fill=disabled)
-
-        toolbar = Image.open(THEMES_ROOT / f"theme-{slug}" / f"toolbar-{slug}.png").convert("RGB")
-        toolbar = toolbar.resize((card_w - 28, 20), Image.Resampling.LANCZOS)
-        canvas.paste(toolbar, (x + 14, y + 54))
-
-        draw.rectangle((x + 14, y + 91, x + 148, y + 141), fill=panel, outline=ribbon, width=4)
-        draw.text((x + 47, y + 109), "Selected", font=label_font, fill=text)
-        draw.rectangle((x + 175, y + 91, x + card_w - 14, y + 141), fill=panel, outline=border, width=2)
-        draw.text((x + 218, y + 109), "Normal", font=label_font, fill=text)
-        draw.text((x + 14, y + 158), "Active", font=label_font, fill=active)
-        draw.line((x + 60, y + 166, x + 145, y + 166), fill=active, width=2)
-        draw.text((x + 175, y + 158), "Disabled", font=label_font, fill=disabled)
-
-    canvas.save(PREVIEWS_ROOT / "cancer-awareness.png", optimize=True)
-    optimize_png(PREVIEWS_ROOT / "cancer-awareness.png")
+def generate_preview():
+    from preview_lib import render_collection
+    render_collection("cancer-awareness", "Cancer Awareness", [t[0] for t in THEMES])
 
 
 def main() -> None:

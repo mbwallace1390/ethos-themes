@@ -6,20 +6,26 @@ import shutil
 from pathlib import Path
 from PIL import Image, ImageDraw
 
+from palette_quality import polish_lua_source
 from theme_lib import (
+    ETHOS26_RELEASE_NOTES,
+    ETHOS26_SUPPORT,
+    INIT_GUARD_LUA,
     RELEASES_ROOT,
     SELECTOR_LUA,
     THEMES_ROOT,
+    THEME_VERSION,
     X18_SIZE,
     X20_SIZE,
+    contrasting,
     downscale_to_x18,
     lua_color,
     mix,
-    contrasting,
     rgb,
     save_png,
     toolbar_call,
     write_release,
+    zip_install_instructions,
 )
 
 # family, slug, display name, short key, focus color, active color, toolbar style
@@ -197,7 +203,7 @@ def build(defn: tuple[str, str, str, str, str, str, str]) -> None:
     lua = f'''-- {name}
 -- Lightweight standalone ETHOS theme.
 {SELECTOR_LUA}local function init()
-    system.registerTheme({{
+{INIT_GUARD_LUA}    system.registerTheme({{
         key = "{key}",
         name = "{name}",
         roundButtons = {str(p["round"]).lower()},
@@ -211,15 +217,16 @@ end
 
 return {{ init = init }}
 '''
-    (theme_dir / "main.lua").write_text(lua, encoding="utf-8", newline="\n")
+    (theme_dir / "main.lua").write_text(polish_lua_source(lua), encoding="utf-8", newline="\n")
     manifest = {
         "manifestVersion": 1,
         "name": name,
         "key": f"mbwallace1390-theme-{key}",
-        "version": "1.0.0",
+        "version": THEME_VERSION,
         "releaseNotes": {
             "format": "markdown",
             "content": (
+                f"{ETHOS26_RELEASE_NOTES} "
                 f"First stable {name} release from the {family} family. Automatically selects "
                 "464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios."
             ),
@@ -229,13 +236,13 @@ return {{ init = init }}
     }
     (theme_dir / "ethos_lua_manifest.json").write_text(json.dumps(manifest, indent=4) + "\n", encoding="utf-8", newline="\n")
     (theme_dir / "README.md").write_text(
-        f"# {name} v1.0.0\n\n**Family:** {family}\n\nA lightweight standalone FrSky ETHOS theme.\n\n"
+        f"# {name} v{THEME_VERSION}\n\n{ETHOS26_SUPPORT}\n\n{zip_install_instructions(folder)}\n\n**Family:** {family}\n\nA lightweight standalone FrSky ETHOS theme.\n\n"
         f"- Focus: `{p['focus_style']}`\n- Controls: {'rounded' if p['round'] else 'square'}\n- Internal key: `{key}`\n"
-        f"- Responsive 784x50 X20 / 464x50 X18 toolbar\n\nCopy `{folder}` into the transmitter `scripts` folder, restart, and select **{name}**.\n",
+        f"- Responsive 784x50 X20 / 464x50 X18 toolbar\n\nTo install from repository sources, copy `{folder}` into the transmitter `scripts` folder, restart, and select **{name}**.\n",
         encoding="utf-8",
         newline="\n",
     )
-    release = RELEASES_ROOT / f"{'-'.join(word.capitalize() for word in slug.split('-'))}-v1.0.0.zip"
+    release = RELEASES_ROOT / f"{'-'.join(word.capitalize() for word in slug.split('-'))}-v{THEME_VERSION}.zip"
     write_release(theme_dir, release)
 
 

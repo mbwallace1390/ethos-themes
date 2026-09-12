@@ -2,13 +2,24 @@
 -- Lightweight outline-focus variant of RF Suite Blue.
 local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
 local function init()
+    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
     system.registerTheme({
         key = "RFPro",
         name = "RF Blue Pro",
@@ -27,7 +38,7 @@ local function init()
             lcd.RGB(0x08, 0x0D, 0x16), -- PAGE_BGCOLOR
             lcd.RGB(0xFF, 0x5A, 0x5F), -- ERROR_COLOR
             lcd.RGB(0x00, 0xA8, 0xFF), -- ACTIVE_COLOR
-            lcd.RGB(0x82, 0x90, 0xA6), -- INACTIVE_COLOR
+            lcd.RGB(0x83, 0x91, 0xA6), -- INACTIVE_COLOR
             lcd.RGB(0x00, 0xA8, 0xFF), -- BUTTON_BORDER_ACTIVE_COLOR
             lcd.RGB(0x39, 0x46, 0x57), -- BUTTON_BORDER_COLOR
             lcd.RGB(0xFF, 0xC8, 0x57), -- WARNING_COLOR
@@ -35,7 +46,7 @@ local function init()
             lcd.RGB(0x08, 0x0D, 0x16), -- TOPLCD_BGCOLOR (XE/S)
         },
         --toolbarLogo = "none",
-        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-rfblue-pro.png", "toolbar-rfblue-pro-x18.png")),
+        toolbarBackground = loadToolbar("toolbar-rfblue-pro.png", "toolbar-rfblue-pro-x18.png"),
     })
 end
 

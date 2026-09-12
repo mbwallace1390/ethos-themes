@@ -2,13 +2,24 @@
 -- Standalone ETHOS radio theme. Rotorflight and RF Suite files are not modified.
 local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
 local function init()
+    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
     system.registerTheme({
         key = "RotorCm",
         name = "Rotor Command",
@@ -26,15 +37,15 @@ local function init()
             lcd.RGB(0x65, 0xE6, 0x8D), -- SAFE_COLOR
             lcd.RGB(0x06, 0x15, 0x16), -- PAGE_BGCOLOR
             lcd.RGB(0xFF, 0x50, 0x58), -- ERROR_COLOR
-            lcd.RGB(0xFF, 0x66, 0x4D), -- ACTIVE_COLOR
-            lcd.RGB(0x71, 0x97, 0x98), -- INACTIVE_COLOR
+            lcd.RGB(0xFF, 0x67, 0x4E), -- ACTIVE_COLOR
+            lcd.RGB(0x7B, 0x9F, 0x9F), -- INACTIVE_COLOR
             lcd.RGB(0xFF, 0x66, 0x4D), -- BUTTON_BORDER_ACTIVE_COLOR
             lcd.RGB(0x31, 0x5C, 0x5E), -- BUTTON_BORDER_COLOR
             lcd.RGB(0xFF, 0xD1, 0x66), -- WARNING_COLOR
             lcd.RGB(0x07, 0x1A, 0x0C), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x06, 0x15, 0x16), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-rotor-command.png", "toolbar-rotor-command-x18.png")),
+        toolbarBackground = loadToolbar("toolbar-rotor-command.png", "toolbar-rotor-command-x18.png"),
     })
 end
 

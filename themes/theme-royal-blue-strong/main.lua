@@ -3,13 +3,24 @@
 -- Rotorflight and RF Suite files are not modified.
 local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
 local function init()
+    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
     system.registerTheme({
         key = "RoyBlue",
         name = "Royal Blue Strong",
@@ -20,7 +31,7 @@ local function init()
             lcd.RGB(0x1A, 0x31, 0x56), -- SECONDARY_BGCOLOR
             lcd.RGB(0x27, 0x5D, 0xCE), -- HIGHLIGHT_COLOR
             lcd.RGB(0xFF, 0xFF, 0xFF), -- HIGHLIGHT_CONTRASTING_COLOR
-            lcd.RGB(0x68, 0x71, 0x82), -- DISABLE_COLOR
+            lcd.RGB(0x71, 0x7A, 0x8A), -- DISABLE_COLOR
             lcd.RGB(0x11, 0x1F, 0x38), -- PRIMARY_BGCOLOR
             COLOR_BLACK, -- OVERLAY_COLOR
             lcd.RGB(0x98, 0xB2, 0xE6), -- SECONDARY_COLOR
@@ -28,14 +39,14 @@ local function init()
             lcd.RGB(0x08, 0x0E, 0x1A), -- PAGE_BGCOLOR
             lcd.RGB(0xFF, 0x4E, 0x58), -- ERROR_COLOR
             lcd.RGB(0xA9, 0xC8, 0xFF), -- ACTIVE_COLOR
-            lcd.RGB(0x75, 0x7E, 0x8D), -- INACTIVE_COLOR
+            lcd.RGB(0x91, 0x99, 0xA4), -- INACTIVE_COLOR
             lcd.RGB(0xA9, 0xC8, 0xFF), -- BUTTON_BORDER_ACTIVE_COLOR
             lcd.RGB(0x31, 0x54, 0x8A), -- BUTTON_BORDER_COLOR
             lcd.RGB(0xFF, 0xC7, 0x48), -- WARNING_COLOR
             lcd.RGB(0x07, 0x18, 0x0C), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x08, 0x0E, 0x1A), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-royal-blue-strong.png", "toolbar-royal-blue-strong-x18.png")),
+        toolbarBackground = loadToolbar("toolbar-royal-blue-strong.png", "toolbar-royal-blue-strong-x18.png"),
     })
 end
 

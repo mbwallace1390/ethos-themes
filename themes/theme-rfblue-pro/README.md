@@ -1,4 +1,8 @@
-# RF Blue Pro v1.0.0
+# RF Blue Pro v1.2.0
+
+Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
+
+Install the ZIP with ETHOS Suite's local ZIP installer. For manual ZIP installation, create `scripts/theme-rfblue-pro/` on the transmitter and extract the ZIP contents into that folder.
 
 RF Blue Pro is a lightweight FrSky ETHOS theme for Rotorflight RF Suite.
 
@@ -10,6 +14,6 @@ Features:
 - Internal theme key RFPro
 - Installs beside RF Suite Blue
 
-Install by copying the complete theme-rfblue-pro folder into the transmitter scripts folder, restarting, and selecting RF Blue Pro under System > General > Theme.
+To install from repository sources, copy the complete theme-rfblue-pro folder into the transmitter scripts folder, restart, and select RF Blue Pro under System > General > Theme.
 
 main.luac is intentionally omitted so ETHOS creates a fresh copy.

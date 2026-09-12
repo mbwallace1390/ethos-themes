@@ -28,8 +28,8 @@ jobs:
       - run: python tools/generate_rf_pro_preview.py
       - name: Commit generated previews
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "Michael Wallace"
+          git config user.email "mbwallace1390@gmail.com"
           git add previews
           if git diff --cached --quiet; then
             echo "README previews already up to date"

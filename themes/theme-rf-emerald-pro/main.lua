@@ -2,13 +2,24 @@
 -- Lightweight RF Pro outline-focus color variant.
 local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
 local function init()
+    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
     system.registerTheme({
         key = "RFEmer",
         name = "RF Emerald Pro",
@@ -19,7 +30,7 @@ local function init()
             lcd.RGB(0x16, 0x30, 0x2B), -- SECONDARY_BGCOLOR
             lcd.RGB(0x00, 0xD6, 0x8F), -- HIGHLIGHT_COLOR
             lcd.RGB(0x0D, 0x1D, 0x1A), -- HIGHLIGHT_CONTRASTING_COLOR
-            lcd.RGB(0x68, 0x74, 0x86), -- DISABLE_COLOR
+            lcd.RGB(0x69, 0x75, 0x86), -- DISABLE_COLOR
             lcd.RGB(0x0D, 0x1D, 0x1A), -- PRIMARY_BGCOLOR
             COLOR_BLACK,               -- OVERLAY_COLOR
             lcd.RGB(0xB7, 0xC5, 0xD8), -- SECONDARY_COLOR
@@ -27,14 +38,14 @@ local function init()
             lcd.RGB(0x07, 0x11, 0x0F), -- PAGE_BGCOLOR
             lcd.RGB(0xFF, 0x5A, 0x5F), -- ERROR_COLOR
             lcd.RGB(0x00, 0xD6, 0x8F), -- ACTIVE_COLOR
-            lcd.RGB(0x68, 0x97, 0x89), -- INACTIVE_COLOR
+            lcd.RGB(0x6D, 0x9B, 0x8D), -- INACTIVE_COLOR
             lcd.RGB(0x00, 0xD6, 0x8F), -- BUTTON_BORDER_ACTIVE_COLOR
             lcd.RGB(0x2C, 0x56, 0x4A), -- BUTTON_BORDER_COLOR
             lcd.RGB(0xFF, 0xC8, 0x57), -- WARNING_COLOR
             lcd.RGB(0x08, 0x11, 0x0D), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x07, 0x11, 0x0F), -- TOPLCD_BGCOLOR (XE/S)
         },
-        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-rf-emerald-pro.png", "toolbar-rf-emerald-pro-x18.png")),
+        toolbarBackground = loadToolbar("toolbar-rf-emerald-pro.png", "toolbar-rf-emerald-pro-x18.png"),
     })
 end
 

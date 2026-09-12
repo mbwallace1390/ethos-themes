@@ -2,13 +2,24 @@
 -- Standalone ETHOS radio theme. Rotorflight and RF Suite files are not modified.
 local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
 local function init()
+    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
     system.registerTheme({
         key = "MidBpt",
         name = "Midnight Blueprint",
@@ -27,14 +38,14 @@ local function init()
             lcd.RGB(0x07, 0x17, 0x25), -- PAGE_BGCOLOR
             lcd.RGB(0xFF, 0x5B, 0x68), -- ERROR_COLOR
             lcd.RGB(0xF4, 0xF7, 0xFA), -- ACTIVE_COLOR
-            lcd.RGB(0x78, 0x98, 0xAD), -- INACTIVE_COLOR
+            lcd.RGB(0x81, 0x9F, 0xB3), -- INACTIVE_COLOR
             lcd.RGB(0xF4, 0xF7, 0xFA), -- BUTTON_BORDER_ACTIVE_COLOR
             lcd.RGB(0x34, 0x5C, 0x77), -- BUTTON_BORDER_COLOR
             lcd.RGB(0xFF, 0xD0, 0x6A), -- WARNING_COLOR
             lcd.RGB(0x07, 0x1A, 0x10), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x07, 0x17, 0x25), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-midnight-blueprint.png", "toolbar-midnight-blueprint-x18.png")),
+        toolbarBackground = loadToolbar("toolbar-midnight-blueprint.png", "toolbar-midnight-blueprint-x18.png"),
     })
 end
 

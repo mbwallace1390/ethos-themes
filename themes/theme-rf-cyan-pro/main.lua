@@ -2,13 +2,24 @@
 -- Lightweight RF Pro outline-focus color variant.
 local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
 local function init()
+    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
     system.registerTheme({
         key = "RFCyan",
         name = "RF Cyan Pro",
@@ -34,7 +45,7 @@ local function init()
             lcd.RGB(0x08, 0x11, 0x0D), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x05, 0x0F, 0x14), -- TOPLCD_BGCOLOR (XE/S)
         },
-        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-rf-cyan-pro.png", "toolbar-rf-cyan-pro-x18.png")),
+        toolbarBackground = loadToolbar("toolbar-rf-cyan-pro.png", "toolbar-rf-cyan-pro-x18.png"),
     })
 end
 

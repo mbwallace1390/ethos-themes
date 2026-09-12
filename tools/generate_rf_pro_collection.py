@@ -6,16 +6,22 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
+from palette_quality import polish_lua_source
 from theme_lib import (
+    ETHOS26_RELEASE_NOTES,
+    ETHOS26_SUPPORT,
+    INIT_GUARD_LUA,
     RELEASES_ROOT,
     SELECTOR_LUA,
     THEMES_ROOT,
+    THEME_VERSION,
     X20_SIZE,
     contrasting,
     downscale_to_x18,
     save_png,
     toolbar_call,
     write_release,
+    zip_install_instructions,
 )
 
 THEMES = [
@@ -77,7 +83,7 @@ def build_theme(theme: dict[str, object]) -> None:
     main_lua = f'''-- {name}
 -- Lightweight RF Pro outline-focus color variant.
 {SELECTOR_LUA}local function init()
-    system.registerTheme({{
+{INIT_GUARD_LUA}    system.registerTheme({{
         key = "{key}",
         name = "{name}",
         roundButtons = false,
@@ -110,16 +116,17 @@ return {{
     init = init
 }}
 '''
-    (theme_dir / "main.lua").write_text(main_lua, encoding="utf-8", newline="\n")
+    (theme_dir / "main.lua").write_text(polish_lua_source(main_lua), encoding="utf-8", newline="\n")
 
     manifest = {
         "manifestVersion": 1,
         "name": name,
         "key": theme["manifest_key"],
-        "version": "1.0.0",
+        "version": THEME_VERSION,
         "releaseNotes": {
             "format": "markdown",
             "content": (
+                f"{ETHOS26_RELEASE_NOTES} "
                 f"First stable {name} release using the proven RF Pro outline-focus layout, "
                 "square controls, and responsive X18/X20 toolbar. Automatically selects 464x50 "
                 "artwork on standard X18 radios and 784x50 artwork on 800px radios."
@@ -130,7 +137,11 @@ return {{
     }
     (theme_dir / "ethos_lua_manifest.json").write_text(json.dumps(manifest, indent=4) + "\n", encoding="utf-8", newline="\n")
 
-    readme = f'''# {name} v1.0.0
+    readme = f'''# {name} v{THEME_VERSION}
+
+{ETHOS26_SUPPORT}
+
+{zip_install_instructions(folder)}
 
 A lightweight FrSky ETHOS theme based on the proven RF Blue Pro design.
 
@@ -141,13 +152,13 @@ A lightweight FrSky ETHOS theme based on the proven RF Blue Pro design.
 - ETHOS-safe internal key `{key}`
 - Installs beside every other RF Pro theme
 
-Copy the complete `{folder}` folder into the transmitter's `scripts` folder, restart, and select **{name}** under **System > General > Theme**.
+To install from repository sources, copy the complete `{folder}` folder into the transmitter's `scripts` folder, restart, and select **{name}** under **System > General > Theme**.
 
 `main.luac` is intentionally omitted so ETHOS creates a fresh compiled copy.
 '''
     (theme_dir / "README.md").write_text(readme, encoding="utf-8", newline="\n")
 
-    write_release(theme_dir, RELEASES_ROOT / f"RF-{slug.title()}-Pro-v1.0.0.zip")
+    write_release(theme_dir, RELEASES_ROOT / f"RF-{slug.title()}-Pro-v{THEME_VERSION}.zip")
 
 
 if __name__ == "__main__":

@@ -1,4 +1,8 @@
-# Ice Instrument v1.0.0
+# Ice Instrument v1.2.0
+
+Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
+
+Install the ZIP with ETHOS Suite's local ZIP installer. For manual ZIP installation, create `scripts/theme-ice-instrument/` on the transmitter and extract the ZIP contents into that folder.
 
 **Family:** Retro Instrument
 
@@ -9,4 +13,4 @@ A lightweight standalone FrSky ETHOS theme.
 - Internal key: `IceIns`
 - Responsive 784x50 X20 / 464x50 X18 toolbar
 
-Copy `theme-ice-instrument` into the transmitter `scripts` folder, restart, and select **Ice Instrument**.
+To install from repository sources, copy `theme-ice-instrument` into the transmitter `scripts` folder, restart, and select **Ice Instrument**.

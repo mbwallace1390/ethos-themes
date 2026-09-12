@@ -1,4 +1,8 @@
-# Purple Hope v1.0.0
+# Purple Hope v1.2.0
+
+Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
+
+Install the ZIP with ETHOS Suite's local ZIP installer. For manual ZIP installation, create `scripts/theme-purple-hope/` on the transmitter and extract the ZIP contents into that folder.
 
 **Collection:** Cancer Awareness  
 **Theme:** Pancreatic Cancer Awareness
@@ -11,4 +15,4 @@ A standalone FrSky ETHOS radio theme with original generic awareness-ribbon tool
 - Separate installable package
 - Does not modify Rotorflight or RF Suite Lua files
 
-Copy `theme-purple-hope` into the transmitter's `scripts` folder, restart, and select **Purple Hope** under **System > General > Theme**.
+To install from repository sources, copy `theme-purple-hope` into the transmitter's `scripts` folder, restart, and select **Purple Hope** under **System > General > Theme**.

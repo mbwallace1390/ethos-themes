@@ -3,13 +3,24 @@
 -- Rotorflight and RF Suite files are not modified.
 local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
 local function init()
+    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
     system.registerTheme({
         key = "OrgWar",
         name = "Orange Warrior",
@@ -20,7 +31,7 @@ local function init()
             lcd.RGB(0x51, 0x2B, 0x10), -- SECONDARY_BGCOLOR
             lcd.RGB(0xFF, 0x8A, 0x2A), -- HIGHLIGHT_COLOR
             lcd.RGB(0x0C, 0x0A, 0x0D), -- HIGHLIGHT_CONTRASTING_COLOR
-            lcd.RGB(0x7E, 0x6F, 0x65), -- DISABLE_COLOR
+            lcd.RGB(0x88, 0x7B, 0x71), -- DISABLE_COLOR
             lcd.RGB(0x35, 0x1C, 0x0A), -- PRIMARY_BGCOLOR
             COLOR_BLACK, -- OVERLAY_COLOR
             lcd.RGB(0xFA, 0xC6, 0x9C), -- SECONDARY_COLOR
@@ -28,14 +39,14 @@ local function init()
             lcd.RGB(0x1A, 0x0E, 0x05), -- PAGE_BGCOLOR
             lcd.RGB(0xFF, 0x4E, 0x58), -- ERROR_COLOR
             lcd.RGB(0xFF, 0xD2, 0xA8), -- ACTIVE_COLOR
-            lcd.RGB(0x89, 0x7C, 0x74), -- INACTIVE_COLOR
+            lcd.RGB(0xA4, 0x9B, 0x94), -- INACTIVE_COLOR
             lcd.RGB(0xFF, 0xD2, 0xA8), -- BUTTON_BORDER_ACTIVE_COLOR
             lcd.RGB(0x84, 0x49, 0x1C), -- BUTTON_BORDER_COLOR
             lcd.RGB(0xFF, 0xC7, 0x48), -- WARNING_COLOR
             lcd.RGB(0x07, 0x18, 0x0C), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x1A, 0x0E, 0x05), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-orange-warrior.png", "toolbar-orange-warrior-x18.png")),
+        toolbarBackground = loadToolbar("toolbar-orange-warrior.png", "toolbar-orange-warrior-x18.png"),
     })
 end
 

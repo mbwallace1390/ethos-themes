@@ -2,13 +2,24 @@
 -- Lightweight RF Pro outline-focus color variant.
 local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
 local function init()
+    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
     system.registerTheme({
         key = "RFTeal",
         name = "RF Teal Pro",
@@ -27,14 +38,14 @@ local function init()
             lcd.RGB(0x05, 0x11, 0x11), -- PAGE_BGCOLOR
             lcd.RGB(0xFF, 0x5A, 0x5F), -- ERROR_COLOR
             lcd.RGB(0x00, 0xC8, 0xC0), -- ACTIVE_COLOR
-            lcd.RGB(0x65, 0x96, 0x93), -- INACTIVE_COLOR
+            lcd.RGB(0x6A, 0x9A, 0x97), -- INACTIVE_COLOR
             lcd.RGB(0x00, 0xC8, 0xC0), -- BUTTON_BORDER_ACTIVE_COLOR
             lcd.RGB(0x26, 0x54, 0x52), -- BUTTON_BORDER_COLOR
             lcd.RGB(0xFF, 0xC8, 0x57), -- WARNING_COLOR
             lcd.RGB(0x08, 0x11, 0x0D), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x05, 0x11, 0x11), -- TOPLCD_BGCOLOR (XE/S)
         },
-        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-rf-teal-pro.png", "toolbar-rf-teal-pro-x18.png")),
+        toolbarBackground = loadToolbar("toolbar-rf-teal-pro.png", "toolbar-rf-teal-pro-x18.png"),
     })
 end
 

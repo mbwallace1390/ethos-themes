@@ -1,6 +1,6 @@
 """Check every invariant the theme catalog is supposed to hold.
 
-Safe to run at any time — it only reads. Run it after regenerating themes to
+Safe to run at any time â€” it only reads. Run it after regenerating themes to
 confirm nothing drifted: artwork sizes and encoding, responsive toolbar
 selection, unique ETHOS keys, and release ZIPs that actually match the theme
 folders they ship.
@@ -8,6 +8,7 @@ folders they ship.
 
 from __future__ import annotations
 
+from fnmatch import fnmatchcase
 import json
 import re
 import sys
@@ -81,6 +82,16 @@ def check_theme(theme_dir: Path, problems: list[str]) -> tuple[str | None, str |
                 fail(f"manifest folder {manifest.get('folder')!r} does not match directory")
             if name_match and manifest.get("name") != name_match.group(1):
                 fail("manifest name does not match main.lua name")
+            files = manifest.get("files")
+            if (not isinstance(files, list) or not files
+                    or any(not isinstance(pattern, str) or not pattern for pattern in files)):
+                fail("manifest files must be a nonempty list of file patterns")
+            else:
+                for asset in ("main.lua", large[0].name, small[0].name):
+                    if not any(fnmatchcase(asset, pattern) for pattern in files):
+                        fail(f"manifest files does not install {asset}")
+                if any(fnmatchcase("main.luac", pattern) for pattern in files):
+                    fail("manifest files must not install main.luac")
     return key, manifest_key
 
 
@@ -104,7 +115,8 @@ def check_releases(problems: list[str]) -> None:
     deliberate snapshots of older artwork, so only the release matching the
     manifest version is compared against the working files.
     """
-    packaged: dict[str, list[Path]] = {}
+    packaged: set[str] = set()
+    themes = {theme_dir.name: theme_dir for theme_dir in theme_dirs()}
     for release in sorted(RELEASES_ROOT.glob("*.zip")):
         try:
             with zipfile.ZipFile(release) as archive:
@@ -112,32 +124,63 @@ def check_releases(problems: list[str]) -> None:
                     problems.append(f"{release.name}: corrupt archive")
                     continue
                 names = archive.namelist()
-                roots = {n.split("/", 1)[0] for n in names if "/" in n}
-                folders = [r for r in roots if (THEMES_ROOT / r).is_dir()]
-                if len(folders) != 1:
-                    continue
-                folder = folders[0]
-                packaged.setdefault(folder, []).append(release)
-
+                root_manifest = "ethos_lua_manifest.json" in names
+                if root_manifest:
+                    try:
+                        manifest = json.loads(archive.read("ethos_lua_manifest.json"))
+                    except (json.JSONDecodeError, UnicodeDecodeError) as error:
+                        problems.append(f"{release.name}: unreadable root manifest: {error}")
+                        continue
+                    folder = manifest.get("folder") if isinstance(manifest, dict) else None
+                    if not isinstance(folder, str) or folder not in themes:
+                        problems.append(f"{release.name}: root manifest folder {folder!r} is not a catalog theme")
+                        continue
+                else:
+                    # Only use legacy nesting to identify frozen older releases.
+                    roots = {n.split("/", 1)[0] for n in names if "/" in n}
+                    folders = [root for root in roots if root in themes]
+                    if len(folders) != 1:
+                        problems.append(f"{release.name}: missing ethos_lua_manifest.json at ZIP root")
+                        continue
+                    folder = folders[0]
                 version_match = VERSION_RE.search(release.name)
                 expected_version = current_version(THEMES_ROOT / folder)
                 if version_match and expected_version and version_match.group(1) != expected_version:
                     continue  # superseded archive, intentionally frozen
+                if not version_match or not expected_version:
+                    problems.append(f"{release.name}: cannot establish the current manifest version")
+                    continue
+                if not root_manifest:
+                    problems.append(f"{release.name}: missing ethos_lua_manifest.json at ZIP root; nested theme folders cannot be installed by ETHOS Suite")
+                    continue
+                packaged.add(folder)
 
-                for name in names:
-                    if name.endswith("/"):
-                        continue
-                    on_disk = THEMES_ROOT / name
-                    if not on_disk.exists():
-                        problems.append(f"{release.name}: ships {name} which is not in the theme folder")
-                    elif archive.read(name) != on_disk.read_bytes():
+                # Compare both directions: a readable ZIP can still omit its Lua,
+                # manifest or one toolbar, leaving an incomplete install.
+                expected_files = {
+                    path.name
+                    for path in (THEMES_ROOT / folder).iterdir()
+                    if path.is_file() and path.name != "main.luac"
+                }
+                file_names = [name for name in names if not name.endswith("/")]
+                actual_files = set(file_names)
+                if len(file_names) != len(actual_files):
+                    problems.append(f"{release.name}: duplicate file members")
+                for name in sorted(expected_files - actual_files):
+                    problems.append(f"{release.name}: missing {name}")
+                for name in sorted(actual_files - expected_files):
+                    problems.append(f"{release.name}: unexpected file {name}")
+                for name in sorted(expected_files & actual_files):
+                    on_disk = THEMES_ROOT / folder / name
+                    if archive.read(name) != on_disk.read_bytes():
                         problems.append(f"{release.name}: {name} is stale relative to the theme folder")
         except zipfile.BadZipFile:
             problems.append(f"{release.name}: not a valid ZIP")
 
     for theme_dir in theme_dirs():
         if theme_dir.name not in packaged:
-            problems.append(f"{theme_dir.name}: no release ZIP ships this theme")
+            version = current_version(theme_dir)
+            problems.append(f"{theme_dir.name}: no current release ZIP ships version {version!r}")
 
 
 def check_readme_links(problems: list[str]) -> None:
@@ -170,11 +213,11 @@ def main() -> int:
     check_readme_links(problems)
 
     if problems:
-        print(f"FAILED — {len(problems)} problem(s) across {len(themes)} themes:")
+        print(f"FAILED â€” {len(problems)} problem(s) across {len(themes)} themes:")
         for problem in problems:
             print(f"  - {problem}")
         return 1
-    print(f"OK — {len(themes)} themes, {len(list(RELEASES_ROOT.glob('*.zip')))} releases, all invariants hold")
+    print(f"OK â€” {len(themes)} themes, {len(list(RELEASES_ROOT.glob('*.zip')))} releases, all invariants hold")
     return 0
 
 

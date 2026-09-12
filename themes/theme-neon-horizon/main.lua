@@ -2,13 +2,24 @@
 -- Standalone ETHOS radio theme. Rotorflight and RF Suite files are not modified.
 local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
 local function init()
+    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
     system.registerTheme({
         key = "NeoHor",
         name = "Neon Horizon",
@@ -27,14 +38,14 @@ local function init()
             lcd.RGB(0x0B, 0x07, 0x16), -- PAGE_BGCOLOR
             lcd.RGB(0xFF, 0x4D, 0x6D), -- ERROR_COLOR
             lcd.RGB(0x34, 0xD8, 0xFF), -- ACTIVE_COLOR
-            lcd.RGB(0x8B, 0x73, 0xA0), -- INACTIVE_COLOR
+            lcd.RGB(0x98, 0x82, 0xAA), -- INACTIVE_COLOR
             lcd.RGB(0x34, 0xD8, 0xFF), -- BUTTON_BORDER_ACTIVE_COLOR
             lcd.RGB(0x58, 0x36, 0x6F), -- BUTTON_BORDER_COLOR
             lcd.RGB(0xFF, 0xD1, 0x66), -- WARNING_COLOR
             lcd.RGB(0x07, 0x1A, 0x11), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x0B, 0x07, 0x16), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-neon-horizon.png", "toolbar-neon-horizon-x18.png")),
+        toolbarBackground = loadToolbar("toolbar-neon-horizon.png", "toolbar-neon-horizon-x18.png"),
     })
 end
 

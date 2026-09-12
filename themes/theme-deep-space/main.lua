@@ -2,13 +2,24 @@
 -- Standalone ETHOS radio theme. Rotorflight and RF Suite files are not modified.
 local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
 local function init()
+    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
     system.registerTheme({
         key = "DSpace",
         name = "Deep Space",
@@ -27,14 +38,14 @@ local function init()
             lcd.RGB(0x08, 0x06, 0x0F), -- PAGE_BGCOLOR
             lcd.RGB(0xFF, 0x53, 0x70), -- ERROR_COLOR
             lcd.RGB(0x4E, 0xC9, 0xFF), -- ACTIVE_COLOR
-            lcd.RGB(0x81, 0x74, 0x9A), -- INACTIVE_COLOR
+            lcd.RGB(0x8D, 0x82, 0xA4), -- INACTIVE_COLOR
             lcd.RGB(0x4E, 0xC9, 0xFF), -- BUTTON_BORDER_ACTIVE_COLOR
             lcd.RGB(0x47, 0x37, 0x63), -- BUTTON_BORDER_COLOR
             lcd.RGB(0xFF, 0xD1, 0x66), -- WARNING_COLOR
             lcd.RGB(0x07, 0x1A, 0x10), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x08, 0x06, 0x0F), -- TOPLCD_BGCOLOR
         },
-        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-deep-space.png", "toolbar-deep-space-x18.png")),
+        toolbarBackground = loadToolbar("toolbar-deep-space.png", "toolbar-deep-space-x18.png"),
     })
 end
 

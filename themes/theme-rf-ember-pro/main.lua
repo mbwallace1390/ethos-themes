@@ -2,13 +2,24 @@
 -- Lightweight RF Pro outline-focus color variant.
 local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
 local function init()
+    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
     system.registerTheme({
         key = "RFEmbr",
         name = "RF Ember Pro",
@@ -27,14 +38,14 @@ local function init()
             lcd.RGB(0x14, 0x0A, 0x05), -- PAGE_BGCOLOR
             lcd.RGB(0xFF, 0x5A, 0x5F), -- ERROR_COLOR
             lcd.RGB(0xFF, 0x6A, 0x00), -- ACTIVE_COLOR
-            lcd.RGB(0xA6, 0x7F, 0x66), -- INACTIVE_COLOR
+            lcd.RGB(0xA9, 0x84, 0x6B), -- INACTIVE_COLOR
             lcd.RGB(0xFF, 0x6A, 0x00), -- BUTTON_BORDER_ACTIVE_COLOR
             lcd.RGB(0x63, 0x3C, 0x22), -- BUTTON_BORDER_COLOR
             lcd.RGB(0xFF, 0xC8, 0x57), -- WARNING_COLOR
             lcd.RGB(0x08, 0x11, 0x0D), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x14, 0x0A, 0x05), -- TOPLCD_BGCOLOR (XE/S)
         },
-        toolbarBackground = lcd.loadBitmap(selectToolbar("toolbar-rf-ember-pro.png", "toolbar-rf-ember-pro-x18.png")),
+        toolbarBackground = loadToolbar("toolbar-rf-ember-pro.png", "toolbar-rf-ember-pro-x18.png"),
     })
 end
 

@@ -1,0 +1,15 @@
+{
+    "manifestVersion": 1,
+    "name": "America 250",
+    "key": "mbwallace1390-theme-USA250",
+    "version": "1.2.0",
+    "releaseNotes": {
+        "format": "markdown",
+        "content": "Readability update: improved foreground contrast and refreshed catalog previews. ETHOS 26.1 compatibility update, checked against the 26.1.2 theme API. Suite local ZIP layout corrected with the manifest and files at archive root. Unsupported firmware skips registration; optional toolbar load failures during initialization fall back to the theme colors. Requires ETHOS 26.1.0 or newer. Radio validation is still required. First America 250 release: navy, ivory, red and gold; 13-star medallion and 1776-2026 toolbar artwork. Automatically selects 464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios."
+    },
+    "folder": "theme-america250",
+    "files": [
+        "main.lua",
+        "toolbar-*"
+    ]
+}

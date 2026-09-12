@@ -1,4 +1,8 @@
-# Soft Mint v1.0.0
+# Soft Mint v1.2.0
+
+Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
+
+Install the ZIP with ETHOS Suite's local ZIP installer. For manual ZIP installation, create `scripts/theme-soft-mint/` on the transmitter and extract the ZIP contents into that folder.
 
 **Family:** Soft
 
@@ -9,4 +13,4 @@ A lightweight standalone FrSky ETHOS theme.
 - Internal key: `SMint`
 - Responsive 784x50 X20 / 464x50 X18 toolbar
 
-Copy `theme-soft-mint` into the transmitter `scripts` folder, restart, and select **Soft Mint**.
+To install from repository sources, copy `theme-soft-mint` into the transmitter `scripts` folder, restart, and select **Soft Mint**.

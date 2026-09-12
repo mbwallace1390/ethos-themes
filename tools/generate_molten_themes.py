@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw
 from theme_lib import (
     RELEASES_ROOT,
     THEMES_ROOT,
+    THEME_VERSION,
     X18_SIZE,
     X20_SIZE,
     mix,
@@ -101,7 +102,7 @@ def build(defn: tuple[str, str, str, str, str, int]) -> None:
     save_png(toolbar(X20_SIZE[0], p["page"], p["primary_bg"], focus, active, seed), theme_dir / large_name)
     save_png(toolbar(X18_SIZE[0], p["page"], p["primary_bg"], focus, active, seed), theme_dir / small_name)
 
-    release = RELEASES_ROOT / f"{'-'.join(word.capitalize() for word in slug.split('-'))}-v1.0.0.zip"
+    release = RELEASES_ROOT / f"{'-'.join(word.capitalize() for word in slug.split('-'))}-v{THEME_VERSION}.zip"
     write_release(theme_dir, release)
 
 

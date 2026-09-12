@@ -1,3 +1,15 @@
-RF Suite Blue v1.0.3
+ETHOS Themes v1.2.0 - ETHOS 26.1.0 or newer
 
-Install the ZIP through ETHOS Suite, or copy the theme-rfsuite-blue folder into the transmitter scripts directory. Restart the transmitter and select RF Suite Blue under System > General > Theme.
+Suite: Lua Library > Install from local .zip, select a v1.2.0 theme ZIP.
+Restart the transmitter and select the theme under System > General > Theme.
+
+Manual: create scripts/<theme-folder>/ and extract the ZIP contents there.
+Example: scripts/theme-carbon/main.lua, with manifest and both toolbar PNGs
+beside it. Do not extract loose files directly into scripts.
+
+When updating, remove the old main.luac from that theme folder so ETHOS
+recompiles the new source. Keep the theme folder name and internal key.
+
+The repository's complete source theme folders can also be copied into scripts.
+Legacy v1.0.x ZIPs contain an outer theme folder and are manual-install snapshots.
+See ../ETHOS26.md for compatibility, rollback, sources, and validation limits.

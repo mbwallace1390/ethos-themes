@@ -16,11 +16,25 @@ from pathlib import Path
 from PIL import Image
 
 from png_optimize import optimize_png
+from palette_quality import polish_lua_source
 
 ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 RELEASES_ROOT = ROOT / "releases"
 PREVIEWS_ROOT = ROOT / "previews"
+THEME_VERSION = "1.2.0"
+ETHOS26_SUPPORT = (
+    "Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. "
+    "Radio validation is still required."
+)
+ETHOS26_RELEASE_NOTES = (
+    "Readability update: improved foreground contrast and refreshed catalog previews. "
+    "ETHOS 26.1 compatibility update, checked against the 26.1.2 theme API. "
+    "Suite local ZIP layout corrected with the manifest and files at archive root. "
+    "Unsupported firmware skips registration; optional toolbar load failures "
+    "during initialization fall back to the theme colors. "
+    "Requires ETHOS 26.1.0 or newer. Radio validation is still required."
+)
 
 X20_SIZE = (784, 50)
 X18_SIZE = (464, 50)
@@ -28,12 +42,25 @@ X18_SIZE = (464, 50)
 # Radios at or below 480px load the small artwork; everything else the large.
 SELECTOR_LUA = """local function selectToolbar(largeFile, smallFile)
     local version = system.getVersion()
-    if version and version.lcdWidth and version.lcdWidth <= 480 then
+    if version and type(version.lcdWidth) == "number" and version.lcdWidth <= 480 then
         return smallFile
     end
     return largeFile
 end
 
+local function loadToolbar(largeFile, smallFile)
+    -- Optional artwork must not prevent registration when it cannot be loaded.
+    local ok, bitmap = pcall(lcd.loadBitmap, selectToolbar(largeFile, smallFile))
+    if ok and bitmap then
+        return bitmap
+    end
+    return nil
+end
+
+"""
+
+INIT_GUARD_LUA = """    -- Skip unsupported firmware before creating colors or loading artwork.
+    if type(system.registerTheme) ~= "function" then return end
 """
 
 
@@ -55,19 +82,26 @@ def contrasting(
     light: tuple[int, int, int] = (244, 246, 250),
     dark: tuple[int, int, int] = (12, 12, 16),
 ) -> tuple[int, int, int]:
-    """Pick readable text for a control filled with ``color``.
+    """Choose the family's initial light/dark text preference.
 
-    Uses perceived luminance rather than a plain channel sum, which would call
-    a mid-teal and a bright amber equally light despite reading very
-    differently behind text. The cutoff sits where white text starts to fail on
-    saturated cyans and limes but still holds on crimson and violet.
+    This legacy luminance heuristic preserves the family design inputs. The
+    final Lua writer uses polish_lua_source to enforce the actual sRGB contrast
+    targets, adjusting this suggestion only if it is below the chosen target.
     """
     luminance = 0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2]
     return dark if luminance > 135 else light
 
 
 def toolbar_call(large_name: str, small_name: str) -> str:
-    return f'lcd.loadBitmap(selectToolbar("{large_name}", "{small_name}"))'
+    return f'loadToolbar("{large_name}", "{small_name}")'
+
+
+def zip_install_instructions(folder: str) -> str:
+    return (
+        "Install the ZIP with ETHOS Suite's local ZIP installer. For manual ZIP "
+        f"installation, create `scripts/{folder}/` on the transmitter and extract "
+        "the ZIP contents into that folder."
+    )
 
 
 def save_png(image: Image.Image, path: Path) -> None:
@@ -162,7 +196,7 @@ def write_theme_files(
     lua = f"""-- {name}
 -- {header}
 {SELECTOR_LUA}local function init()
-    system.registerTheme({{
+{INIT_GUARD_LUA}    system.registerTheme({{
         key = "{key}",
         name = "{name}",
         roundButtons = {str(round_buttons).lower()},
@@ -176,7 +210,7 @@ end
 
 return {{ init = init }}
 """
-    (theme_dir / "main.lua").write_text(lua, encoding="utf-8", newline="\n")
+    (theme_dir / "main.lua").write_text(polish_lua_source(lua), encoding="utf-8", newline="\n")
 
     compatibility = (
         "Automatically selects 464x50 artwork on standard X18 radios "
@@ -189,8 +223,8 @@ return {{ init = init }}
         "manifestVersion": 1,
         "name": name,
         "key": f"mbwallace1390-theme-{key}",
-        "version": "1.0.0",
-        "releaseNotes": {"format": "markdown", "content": f"{notes} {compatibility}".strip()},
+        "version": THEME_VERSION,
+        "releaseNotes": {"format": "markdown", "content": f"{ETHOS26_RELEASE_NOTES} {notes} {compatibility}".strip()},
         "folder": theme_dir.name,
         "files": ["main.lua", "toolbar-*"],
     }
@@ -199,14 +233,15 @@ return {{ init = init }}
     )
 
     (theme_dir / "README.md").write_text(
-        f"# {name} v1.0.0\n\n**{label}:** {family}\n\n"
+        f"# {name} v{THEME_VERSION}\n\n{ETHOS26_SUPPORT}\n\n"
+        f"{zip_install_instructions(theme_dir.name)}\n\n**{label}:** {family}\n\n"
         "A standalone FrSky ETHOS theme.\n\n"
         f"- Focus: `{focus_style}`\n"
         f"- Controls: {'rounded' if round_buttons else 'square'}\n"
         f"- Internal key: `{key}`\n"
         f"- Automatically selects 784x50 artwork on 800px radios and 464x50 artwork on standard X18 radios\n"
         f"{readme_extra}"
-        f"\nCopy `{theme_dir.name}` into the transmitter `scripts` folder, restart, "
+        f"\nTo install from repository sources, copy `{theme_dir.name}` into the transmitter `scripts` folder, restart, "
         f"and select **{name}** under **System > General > Theme**.\n",
         encoding="utf-8",
         newline="\n",
@@ -220,19 +255,22 @@ RELEASE_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 
 
 def write_release(theme_dir: Path, release: Path) -> None:
-    """Package a theme folder reproducibly and verify the archive is usable."""
-    folder = theme_dir.name
+    """Build a Suite-compatible ZIP with its manifest and files at the root.
+
+    Suite reads ``folder`` from the root manifest to choose the radio install
+    directory; it does not strip a wrapper folder from the ZIP.
+    """
+    manifest = json.loads((theme_dir / "ethos_lua_manifest.json").read_text(encoding="utf-8"))
+    if manifest.get("folder") != theme_dir.name:
+        raise ValueError(f"Manifest folder does not match {theme_dir}")
     RELEASES_ROOT.mkdir(parents=True, exist_ok=True)
     if release.exists():
         release.unlink()
 
     with zipfile.ZipFile(release, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
-        directory = zipfile.ZipInfo(folder + "/", RELEASE_TIMESTAMP)
-        directory.external_attr = (0o40777 << 16) | 0x10
-        archive.writestr(directory, b"")
         for item in sorted(theme_dir.iterdir(), key=lambda candidate: candidate.name):
             if item.is_file() and item.name != "main.luac":
-                info = zipfile.ZipInfo(f"{folder}/{item.name}", RELEASE_TIMESTAMP)
+                info = zipfile.ZipInfo(item.name, RELEASE_TIMESTAMP)
                 info.compress_type = zipfile.ZIP_DEFLATED
                 info.external_attr = (0o100644 << 16)
                 archive.writestr(info, item.read_bytes())
@@ -241,9 +279,11 @@ def write_release(theme_dir: Path, release: Path) -> None:
         if archive.testzip() is not None:
             raise ValueError(f"Corrupt release ZIP: {release}")
         names = set(archive.namelist())
-        if f"{folder}/main.luac" in names:
+        if "main.luac" in names:
             raise ValueError(f"main.luac must not be packaged: {release}")
-        source = archive.read(f"{folder}/main.lua").decode("utf-8")
+        if "ethos_lua_manifest.json" not in names:
+            raise ValueError(f"Suite requires a root manifest: {release}")
+        source = archive.read("main.lua").decode("utf-8")
         if "lcdWidth" not in source:
             raise ValueError(f"Responsive toolbar selection missing from {release}")
         for expected, size in (("-x18.png", X18_SIZE), (".png", X20_SIZE)):
