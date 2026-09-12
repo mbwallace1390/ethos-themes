@@ -1,5 +1,9 @@
 # ETHOS Themes
 
+## Radio compatibility
+
+Every current theme download automatically selects the correct toolbar artwork: **784x50** on 800px radios such as the X20 Pro and X18RS, or **464x50** on standard 480px X18 radios. One ZIP works on both display sizes. Rotorflight and RF Suite Lua files are not modified.
+
 Custom FrSky ETHOS themes focused on improving Rotorflight RF Suite and the wider ETHOS interface.
 
 **Current packages: America 250 v1.2.1; other themes v1.2.0, for ETHOS 26.1.0 and newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
@@ -13,10 +17,6 @@ The **v1.2.0 readability update** improves foreground contrast and refreshes eve
 <a href="previews/america250.png"><img src="previews/america250.png" alt="America 250 theme preview: stars, stripes, navy panels, and gold selection accents" width="760"></a>
 
 **[Download America 250](releases/America-250-v1.2.1.zip)** · [Theme source and installation](themes/theme-america250)
-
-## Radio compatibility
-
-Every current theme download automatically selects the correct toolbar artwork: **784x50** on 800px radios such as the X20 Pro and X18RS, or **464x50** on standard 480px X18 radios. One ZIP works on both display sizes. Rotorflight and RF Suite Lua files are not modified.
 
 ## Cancer Awareness collection
 
