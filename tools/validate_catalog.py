@@ -22,6 +22,52 @@ from theme_lib import RELEASES_ROOT, ROOT, THEMES_ROOT, X18_SIZE, X20_SIZE
 KEY_RE = re.compile(r'key\s*=\s*"([^"]+)"')
 NAME_RE = re.compile(r'name\s*=\s*"([^"]+)"')
 MAX_KEY_LENGTH = 7
+MANIFEST_KEY_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}")
+FOLDER_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}")
+MANIFEST_VERSION_RE = re.compile(r"[0-9]+\.[0-9]+\.[0-9]+")
+
+
+def manifest_errors(manifest: object) -> list[str]:
+    """Validate FrSky's 26.1.2 local Lua package V1 schema, before using values.
+
+    Source: lua/frsky/ethos_lua_manifest.md in the official 26.1.2 release.
+    File selectors retain the documented single-level and recursive globs.
+    """
+    if not isinstance(manifest, dict):
+        return ["manifest must be a JSON object"]
+    errors: list[str] = []
+    if type(manifest.get("manifestVersion")) is not int or manifest["manifestVersion"] != 1:
+        errors.append("manifest manifestVersion must be the integer 1")
+    name = manifest.get("name")
+    if not isinstance(name, str) or not 1 <= len(name) <= 128:
+        errors.append("manifest name must be a string of 1-128 characters")
+    for field, pattern in (("key", MANIFEST_KEY_RE), ("version", MANIFEST_VERSION_RE),
+                           ("folder", FOLDER_RE)):
+        value = manifest.get(field)
+        if not isinstance(value, str) or pattern.fullmatch(value) is None:
+            errors.append(f"manifest {field} has an invalid or missing value")
+    files = manifest.get("files")
+    if (not isinstance(files, list) or not files
+            or any(not isinstance(pattern, str) or not pattern for pattern in files)):
+        errors.append("manifest files must be a nonempty list of file patterns")
+    else:
+        for pattern in files:
+            if ("\\" in pattern or re.match(r"^[A-Za-z]:", pattern)
+                    or any(segment in ("", "..") for segment in pattern.split("/"))):
+                errors.append(f"manifest files selector {pattern!r} must be relative, use '/', and omit empty or '..' segments")
+    if "introduction" in manifest:
+        value = manifest["introduction"]
+        if not isinstance(value, str) or len(value) > 1024:
+            errors.append("manifest introduction must be a string of at most 1024 characters")
+    if "releaseNotes" in manifest:
+        notes = manifest["releaseNotes"]
+        if isinstance(notes, dict):
+            if notes.get("format") not in ("markdown", "text"):
+                errors.append("manifest releaseNotes format must be 'markdown' or 'text'")
+            notes = notes.get("content")
+        if not isinstance(notes, str) or len(notes) > 32000:
+            errors.append("manifest releaseNotes content must be a string of at most 32000 characters")
+    return errors
 
 
 def theme_dirs() -> list[Path]:
@@ -36,7 +82,11 @@ def check_theme(theme_dir: Path, problems: list[str]) -> tuple[str | None, str |
         if not (theme_dir / required).exists():
             fail(f"missing {required}")
 
-    source = (theme_dir / "main.lua").read_text(encoding="utf-8")
+    try:
+        source = (theme_dir / "main.lua").read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as error:
+        fail(f"unreadable main.lua: {error}")
+        source = ""
     if "main.luac" in [p.name for p in theme_dir.iterdir()]:
         fail("main.luac must not be committed")
 
@@ -54,48 +104,63 @@ def check_theme(theme_dir: Path, problems: list[str]) -> tuple[str | None, str |
     small = list(theme_dir.glob("toolbar-*-x18.png"))
     if len(large) != 1 or len(small) != 1:
         fail(f"expected one large and one x18 toolbar, found {len(large)}/{len(small)}")
-        return key, None
-
-    for path, expected in ((large[0], X20_SIZE), (small[0], X18_SIZE)):
-        with Image.open(path) as image:
-            if image.size != expected:
-                fail(f"{path.name} is {image.size}, expected {expected}")
-            if image.mode != "P":
-                fail(f"{path.name} is {image.mode}, expected palette-encoded 'P'")
+    toolbar_sizes = {path.name: size for paths, size in ((large, X20_SIZE), (small, X18_SIZE))
+                     for path in paths}
 
     if "system.getVersion()" not in source or "lcdWidth" not in source:
         fail("main.lua does not select artwork by display width")
-    for asset in (large[0].name, small[0].name):
+    for asset in toolbar_sizes:
         if asset not in source:
             fail(f"main.lua never references {asset}")
     # Optional bitmap overrides must be present and installed just like the toolbar.
     referenced_images = set(re.findall(r'"([^"\n]+\.png)"', source))
-    for asset in referenced_images:
-        if not (theme_dir / asset).is_file():
+    for asset in sorted(set(toolbar_sizes) | referenced_images):
+        path = theme_dir / asset
+        if not path.is_file():
             fail(f"main.lua references missing image {asset}")
+            continue
+        try:
+            with Image.open(path) as image:
+                if asset in toolbar_sizes:
+                    expected = toolbar_sizes[asset]
+                    if image.size != expected:
+                        fail(f"{asset} is {image.size}, expected {expected}")
+                    if image.mode != "P":
+                        fail(f"{asset} is {image.mode}, expected palette-encoded 'P'")
+                image.verify()
+            # Verification checks PNG chunks; decoding also catches a damaged
+            # compressed pixel stream even when its chunk checksum is valid.
+            with Image.open(path) as image:
+                image.load()
+        except (OSError, ValueError, SyntaxError, Image.DecompressionBombError) as error:
+            fail(f"unreadable image {asset}: {error}")
 
     manifest_key = None
     manifest_path = theme_dir / "ethos_lua_manifest.json"
     if manifest_path.exists():
         try:
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as error:
+        except (OSError, UnicodeError, json.JSONDecodeError) as error:
             fail(f"unreadable manifest: {error}")
         else:
-            manifest_key = manifest.get("key")
+            for error in manifest_errors(manifest):
+                fail(error)
+            if not isinstance(manifest, dict):
+                return key, None
+            candidate_key = manifest.get("key")
+            if isinstance(candidate_key, str) and MANIFEST_KEY_RE.fullmatch(candidate_key):
+                manifest_key = candidate_key
             if manifest.get("folder") != theme_dir.name:
                 fail(f"manifest folder {manifest.get('folder')!r} does not match directory")
             if name_match and manifest.get("name") != name_match.group(1):
                 fail("manifest name does not match main.lua name")
             files = manifest.get("files")
-            if (not isinstance(files, list) or not files
-                    or any(not isinstance(pattern, str) or not pattern for pattern in files)):
-                fail("manifest files must be a nonempty list of file patterns")
-            else:
-                for asset in sorted({"main.lua", large[0].name, small[0].name} | referenced_images):
-                    if not any(fnmatchcase(asset, pattern) for pattern in files):
+            if (isinstance(files, list) and files
+                    and all(isinstance(pattern, str) and pattern for pattern in files)):
+                for asset in sorted({"main.lua"} | set(toolbar_sizes) | referenced_images):
+                    if not any(fnmatchcase(asset.lower(), pattern.lower()) for pattern in files):
                         fail(f"manifest files does not install {asset}")
-                if any(fnmatchcase("main.luac", pattern) for pattern in files):
+                if any(fnmatchcase("main.luac", pattern.lower()) for pattern in files):
                     fail("manifest files must not install main.luac")
     return key, manifest_key
 
@@ -108,9 +173,11 @@ def current_version(theme_dir: Path) -> str | None:
     if not manifest.exists():
         return None
     try:
-        return json.loads(manifest.read_text(encoding="utf-8")).get("version")
-    except json.JSONDecodeError:
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
         return None
+    version = data.get("version") if isinstance(data, dict) else None
+    return version if isinstance(version, str) and MANIFEST_VERSION_RE.fullmatch(version) else None
 
 
 def check_releases(problems: list[str]) -> None:
@@ -158,6 +225,8 @@ def check_releases(problems: list[str]) -> None:
                 if not root_manifest:
                     problems.append(f"{release.name}: missing ethos_lua_manifest.json at ZIP root; nested theme folders cannot be installed by ETHOS Suite")
                     continue
+                for error in manifest_errors(manifest):
+                    problems.append(f"{release.name}: {error}")
                 packaged.add(folder)
 
                 # Compare both directions: a readable ZIP can still omit its Lua,

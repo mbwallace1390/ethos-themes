@@ -1,0 +1,54 @@
+name: Generate ETHOS theme artifacts
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: tools/requirements-dev.txt
+      - name: Install generation and validation dependencies
+        run: python -m pip install -r tools/requirements-dev.txt
+      - name: Check preview fonts
+        run: |
+          python -c "from pathlib import Path; fonts = ['segoeui.ttf', 'seguisb.ttf']; missing = [name for name in fonts if not (Path('C:/Windows/Fonts') / name).is_file()]; assert not missing, f'Missing preview fonts: {missing}'"
+      - name: Generate every theme family
+        run: |
+          python tools/generate_standalone_themes.py
+          python tools/generate_rf_pro_collection.py
+          python tools/generate_custom_art_themes.py
+          python tools/generate_cancer_awareness_themes.py
+          python tools/generate_molten_themes.py
+          python tools/generate_elements_themes.py
+          python tools/generate_texture_themes.py
+          python tools/generate_america250_theme.py
+      - name: Refresh all previews and current packages
+        run: |
+          python tools/generate_all_previews.py
+          python tools/rebuild_releases.py
+      - name: Validate generated artifacts
+        run: |
+          python -m unittest discover -s tools -p "test_*.py" -v
+          python tools/validate_catalog.py
+      - name: Upload generated artifacts for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: ethos-themes-generated-${{ github.run_id }}
+          path: |
+            themes/
+            previews/
+            releases/
+          if-no-files-found: error
+          retention-days: 7
