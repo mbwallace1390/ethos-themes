@@ -184,10 +184,24 @@ def write_theme_files(
     release_notes: str,
     label: str = "Family",
     readme_extra: str = "",
+    version: str = THEME_VERSION,
+    hide_toolbar_logo: bool = False,
 ) -> tuple[str, str]:
     """Write main.lua, the manifest and the per-theme README. Returns art names."""
     large_name = f"toolbar-{slug}.png"
     small_name = f"toolbar-{slug}-x18.png"
+    logo_name = "logo-transparent.png"
+    logo_init = ""
+    logo_option = ""
+    if hide_toolbar_logo:
+        # ETHOS accepts a bitmap override; transparent pixels leave the header visible.
+        Image.new("RGBA", (1, 1), (0, 0, 0, 0)).save(theme_dir / logo_name, optimize=True)
+        logo_init = (
+            "    -- Replace the default ETHOS logo so it cannot cover the header text.\n"
+            f'    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "{logo_name}")\n'
+            "    if not logoOk then toolbarLogo = nil end\n"
+        )
+        logo_option = "        toolbarLogo = toolbarLogo,\n"
 
     color_lines = [
         f"            {'COLOR_BLACK' if value is None else lua_color(value)}, -- {role}"
@@ -196,7 +210,7 @@ def write_theme_files(
     lua = f"""-- {name}
 -- {header}
 {SELECTOR_LUA}local function init()
-{INIT_GUARD_LUA}    system.registerTheme({{
+{INIT_GUARD_LUA}{logo_init}    system.registerTheme({{
         key = "{key}",
         name = "{name}",
         roundButtons = {str(round_buttons).lower()},
@@ -204,7 +218,7 @@ def write_theme_files(
         colors = {{
 {chr(10).join(color_lines)}
         }},
-        toolbarBackground = {toolbar_call(large_name, small_name)},
+{logo_option}        toolbarBackground = {toolbar_call(large_name, small_name)},
     }})
 end
 
@@ -223,17 +237,17 @@ return {{ init = init }}
         "manifestVersion": 1,
         "name": name,
         "key": f"mbwallace1390-theme-{key}",
-        "version": THEME_VERSION,
+        "version": version,
         "releaseNotes": {"format": "markdown", "content": f"{ETHOS26_RELEASE_NOTES} {notes} {compatibility}".strip()},
         "folder": theme_dir.name,
-        "files": ["main.lua", "toolbar-*"],
+        "files": ["main.lua", "toolbar-*"] + ([logo_name] if hide_toolbar_logo else []),
     }
     (theme_dir / "ethos_lua_manifest.json").write_text(
         json.dumps(manifest, indent=4) + "\n", encoding="utf-8", newline="\n"
     )
 
     (theme_dir / "README.md").write_text(
-        f"# {name} v{THEME_VERSION}\n\n{ETHOS26_SUPPORT}\n\n"
+        f"# {name} v{version}\n\n{ETHOS26_SUPPORT}\n\n"
         f"{zip_install_instructions(theme_dir.name)}\n\n**{label}:** {family}\n\n"
         "A standalone FrSky ETHOS theme.\n\n"
         f"- Focus: `{focus_style}`\n"
@@ -289,7 +303,8 @@ def write_release(theme_dir: Path, release: Path) -> None:
         for expected, size in (("-x18.png", X18_SIZE), (".png", X20_SIZE)):
             matches = [
                 item for item in names
-                if item.endswith(expected) and (expected == "-x18.png" or not item.endswith("-x18.png"))
+                if item.startswith("toolbar-") and item.endswith(expected)
+                and (expected == "-x18.png" or not item.endswith("-x18.png"))
             ]
             if not matches:
                 raise ValueError(f"Missing {size[0]}x{size[1]} artwork in {release}")

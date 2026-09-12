@@ -2,17 +2,17 @@
 
 Custom FrSky ETHOS themes focused on improving Rotorflight RF Suite and the wider ETHOS interface.
 
-**Current packages: v1.2.0, for ETHOS 26.1.0 and newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
+**Current packages: America 250 v1.2.1; other themes v1.2.0, for ETHOS 26.1.0 and newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
 
 The **v1.2.0 readability update** improves foreground contrast and refreshes every collection preview. [See changes and validation](VISUAL_UPGRADE.md).
 
 ## Featured: America 250
 
-**America 250 v1.2.0** — commemorating 1776–2026 with midnight navy, ivory stars, flag-red stripes, and gold focus accents. Original toolbar artwork includes a 13-star medallion, anniversary dates, and a bold 250 emblem, drawn separately for both display sizes.
+**America 250 v1.2.1** — commemorating 1776–2026 with midnight navy, ivory stars, flag-red stripes, and gold focus accents. Original toolbar artwork includes a 13-star medallion, anniversary dates, and a bold 250 emblem, drawn separately for both display sizes. The default ETHOS header logo is hidden so the inscription stays visible.
 
 <a href="previews/america250.png"><img src="previews/america250.png" alt="America 250 theme preview: stars, stripes, navy panels, and gold selection accents" width="760"></a>
 
-**[Download America 250](releases/America-250-v1.2.0.zip)** · [Theme source and installation](themes/theme-america250)
+**[Download America 250](releases/America-250-v1.2.1.zip)** · [Theme source and installation](themes/theme-america250)
 
 ## Radio compatibility
 
@@ -186,7 +186,7 @@ All RF Pro themes use dark square controls, outline focus, clear inactive and di
 
 ## Installation
 
-1. Download the desired v1.2.0 ZIP and use **Lua Library > Install from local .zip** in Suite. For manual installation, create its named theme folder inside `scripts` and extract the ZIP contents into it (for example, `scripts/theme-carbon/main.lua`). You can also copy the complete source theme folder into `scripts`.
+1. Download the desired theme's latest ZIP and use **Lua Library > Install from local .zip** in Suite. For manual installation, create its named theme folder inside `scripts` and extract the ZIP contents into it (for example, `scripts/theme-carbon/main.lua`). You can also copy the complete source theme folder into `scripts`.
 2. Restart the transmitter.
 3. Open **System > General > Theme**.
 4. Select the desired theme.

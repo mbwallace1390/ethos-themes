@@ -141,6 +141,16 @@ class ManifestInstallTests(unittest.TestCase):
             with self.subTest(files=files):
                 self.assertTrue(any("main.luac" in item for item in self.problems(files)))
 
+    def test_custom_logo_must_exist_and_be_installed(self) -> None:
+        source = self.theme / "main.lua"
+        source.write_text(source.read_text() + '\n-- optional bitmap: "logo-transparent.png"\n')
+        problems = self.problems(["main.lua", "toolbar-*"])
+        self.assertTrue(any("references missing image logo-transparent.png" in item for item in problems))
+        Image.new("RGBA", (1, 1), (0, 0, 0, 0)).save(self.theme / "logo-transparent.png")
+        self.assertTrue(any("does not install logo-transparent.png" in item
+                            for item in self.problems(["main.lua", "toolbar-*"])))
+        self.assertEqual(self.problems(["main.lua", "toolbar-*", "logo-transparent.png"]), [])
+
     def test_install_patterns_must_be_a_nonempty_string_list(self) -> None:
         for files in (None, [], "main.lua", [None], [""]):
             with self.subTest(files=files):

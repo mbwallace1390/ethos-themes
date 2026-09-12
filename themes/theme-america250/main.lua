@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Replace the default ETHOS logo so it cannot cover the header text.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-transparent.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "USA250",
         name = "America 250",
@@ -45,6 +48,7 @@ local function init()
             lcd.RGB(0x08, 0x1C, 0x12), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x04, 0x0E, 0x1F), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-america250.png", "toolbar-america250-x18.png"),
     })
 end

@@ -24,7 +24,7 @@ Then rerun the checks. They cover 67 themes, both 480px and 800px artwork choice
 ## ETHOS 26 installation
 
 - Use ETHOS 26.1.0 or newer; record the exact build (API reference: 26.1.2).
-- Install a v1.2.0 ZIP through Suite's local ZIP installer; confirm it is recognized and targets `scripts/<theme-folder>`.
+- Install the current ZIP through Suite's local ZIP installer; confirm it is recognized and targets `scripts/<theme-folder>` (America 250 v1.2.1, other themes v1.2.0).
 - Check that manual extraction into that same folder also gives `scripts/<theme-folder>/main.lua` with both toolbar images beside it.
 - Remove that theme folder's previous `main.luac` when updating; restart and confirm the theme remains selectable.
 - Check **System > Information** for Lua errors after restart and after selecting the theme.
@@ -32,6 +32,7 @@ Then rerun the checks. They cover 67 themes, both 480px and 800px artwork choice
 ## ETHOS interface
 
 - Theme appears in **System â†’ General â†’ Theme**.
+- America 250: the header inscription stays visible without the default ETHOS logo over it; verify both display widths and confirm `logo-transparent.png` was installed.
 - Selected menu entries use the intended highlight color.
 - Text remains readable on highlighted controls.
 - Disabled controls remain visibly different from enabled controls.
@@ -49,4 +50,4 @@ Then rerun the checks. They cover 67 themes, both 480px and 800px artwork choice
 
 Record the tested ETHOS version and transmitter model in the theme's README before release.
 
-The v1.2.0 theme catalog has desktop API/package checks only. Real-radio acceptance, Suite installer UI acceptance, and screen readability must be recorded separately. Check both a standard 480px X18 and an 800px transmitter if claiming both device layouts are verified.
+The catalog has desktop API/package checks. America 250 v1.2.1 also passed bitmap decoding and source registration in the official X20 26.1.2 WebSimulator; this was not a visual simulator test. Real-radio acceptance, Suite installer UI acceptance, and screen readability must be recorded separately. Check both a standard 480px X18 and an 800px transmitter if claiming both device layouts are verified.

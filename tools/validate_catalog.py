@@ -68,6 +68,11 @@ def check_theme(theme_dir: Path, problems: list[str]) -> tuple[str | None, str |
     for asset in (large[0].name, small[0].name):
         if asset not in source:
             fail(f"main.lua never references {asset}")
+    # Optional bitmap overrides must be present and installed just like the toolbar.
+    referenced_images = set(re.findall(r'"([^"\n]+\.png)"', source))
+    for asset in referenced_images:
+        if not (theme_dir / asset).is_file():
+            fail(f"main.lua references missing image {asset}")
 
     manifest_key = None
     manifest_path = theme_dir / "ethos_lua_manifest.json"
@@ -87,7 +92,7 @@ def check_theme(theme_dir: Path, problems: list[str]) -> tuple[str | None, str |
                     or any(not isinstance(pattern, str) or not pattern for pattern in files)):
                 fail("manifest files must be a nonempty list of file patterns")
             else:
-                for asset in ("main.lua", large[0].name, small[0].name):
+                for asset in sorted({"main.lua", large[0].name, small[0].name} | referenced_images):
                     if not any(fnmatchcase(asset, pattern) for pattern in files):
                         fail(f"manifest files does not install {asset}")
                 if any(fnmatchcase("main.luac", pattern) for pattern in files):

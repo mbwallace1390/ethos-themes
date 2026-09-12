@@ -1,6 +1,8 @@
 # Releases
 
-## Current catalog: v1.2.0
+## Current catalog
+
+America 250 is now [v1.2.1](America-250-v1.2.1.zip), which hides the default ETHOS logo over its header inscription. The other 66 themes remain v1.2.0; their toolbar artwork contains no text.
 
 All 67 themes now target ETHOS 26.1.0 and newer, with API checks against 26.1.2. Choose a theme from the [main catalog](../README.md) for its individual ZIP.
 

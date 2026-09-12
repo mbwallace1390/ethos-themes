@@ -1,6 +1,7 @@
-ETHOS Themes v1.2.0 - ETHOS 26.1.0 or newer
+ETHOS Themes - ETHOS 26.1.0 or newer
 
-Suite: Lua Library > Install from local .zip, select a v1.2.0 theme ZIP.
+Suite: Lua Library > Install from local .zip, select the latest theme ZIP.
+America 250: v1.2.1 (header logo fix). Other themes: v1.2.0.
 Restart the transmitter and select the theme under System > General > Theme.
 
 Manual: create scripts/<theme-folder>/ and extract the ZIP contents there.

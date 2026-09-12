@@ -8,7 +8,7 @@ import math
 from PIL import Image, ImageDraw, ImageFont
 from generate_readme_previews import parse_theme
 from theme_lib import (
-    PREVIEWS_ROOT, RELEASES_ROOT, THEMES_ROOT, THEME_VERSION,
+    PREVIEWS_ROOT, RELEASES_ROOT, THEMES_ROOT,
     X18_SIZE, X20_SIZE, mix, save_png, write_release, write_theme_files,
 )
 
@@ -17,6 +17,7 @@ NAVY, PANEL = (4, 14, 31), (8, 24, 47)
 IVORY, RED, GOLD = (240, 231, 207), (184, 48, 49), (216, 170, 78)
 BLUE = (127, 169, 210)
 SLUG = "america250"
+VERSION = "1.2.1"
 
 # Fixed five-column glyphs keep radio art crisp and independent of host fonts.
 GLYPHS = {
@@ -159,12 +160,14 @@ def main():
         label="Collection", slug=SLUG,
         header="America 250 anniversary theme. Native ETHOS radio theme; no background tasks.",
         round_buttons=False, focus_style="outline", roles=palette(),
-        release_notes="First America 250 release: navy, ivory, red and gold; 13-star medallion and 1776-2026 toolbar artwork.",
-        readme_extra="- Original commemorative artwork, drawn natively for both display sizes\n",
+        version=VERSION, hide_toolbar_logo=True,
+        release_notes="Header fix: a transparent bitmap replaces the default ETHOS logo so America 250 stays readable. Navy, ivory, red and gold; 13-star medallion and 1776-2026 toolbar artwork.",
+        readme_extra=("- Original commemorative artwork, drawn natively for both display sizes\n"
+                      "- Default ETHOS header logo replaced with a transparent bitmap to keep the inscription visible\n"),
     )
     for width, name in ((X20_SIZE[0], large), (X18_SIZE[0], small)):
         save_png(toolbar(width), theme_dir / name)
-    write_release(theme_dir, RELEASES_ROOT / f"America-250-v{THEME_VERSION}.zip")
+    write_release(theme_dir, RELEASES_ROOT / f"America-250-v{VERSION}.zip")
     preview()
     print("Generated America 250: native X18/X20 artwork, Suite ZIP, and featured preview")
 

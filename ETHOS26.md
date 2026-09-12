@@ -4,6 +4,12 @@ All 67 current themes target **ETHOS 26.1.0 and newer** on the existing 480px an
 
 The current v1.2.0 catalog also includes [readability and preview improvements](VISUAL_UPGRADE.md).
 
+## America 250 header fix: v1.2.1
+
+On the user's transmitter, the default ETHOS logo covered the America 250 inscription. This patch sets `toolbarLogo` to a packaged, fully transparent 1x1 PNG loaded once during initialization. ETHOS documents bitmap logo overrides and PNG transparency in its [26.1.2 Lua reference](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/download/26.1.2/lua-doc.zip). A failed logo load still allows the palette and toolbar background to register.
+
+All 134 toolbar images were reviewed at both native sizes. America 250 is the only theme with header text; the other 66 themes retain their existing logo behavior. Its palette, artwork, name, and runtime key are unchanged. The generator and Suite manifest include the transparent logo asset so regeneration and installation preserve the fix.
+
 ## What changed in theme package v1.1.0
 
 - Corrected the ZIP layout for **Lua Library > Install from local .zip**: the manifest, `main.lua`, and toolbar images now sit at the archive root. Suite reads the manifest's `folder` to choose the destination under `scripts`. Older archives wrapped everything in that folder, which does not meet the current local-package specification. [FrSky package specification](https://github.com/FrSkyRC/ETHOS-Feedback-Community/blob/26.1.2/lua/frsky/ethos_lua_manifest.md)
@@ -14,13 +20,13 @@ The current v1.2.0 catalog also includes [readability and preview improvements](
 
 ## Install or update
 
-1. Download the theme's **v1.2.0** ZIP from the main catalog.
+1. Download the theme's latest ZIP from the main catalog: **America 250 v1.2.1**, or **v1.2.0** for the other themes.
 2. In Suite, use **Lua Library > Install from local .zip**, then select that ZIP.
 3. Restart the transmitter and select the theme under **System > General > Theme**.
 
 For manual installation, create the theme's named folder inside `scripts` and extract the ZIP **contents into that folder**. For Carbon, the result must be `scripts/theme-carbon/main.lua`, with the manifest and both toolbar PNGs beside it. Do not extract the loose files directly into `scripts`. Remove an old `main.luac` from that same theme folder when updating, so the firmware can compile the new source. Copying the complete source folder from this repository into `scripts` also works.
 
-The manual install location and theme selection follow FrSky's [theme instructions](https://github.com/FrSkyRC/ETHOS-Feedback-Community/blob/26.1.2/lua/themes/README.md). Old, folder-wrapped ZIPs are retained for manual installation only; use v1.2.0 for the current Suite workflow.
+The manual install location and theme selection follow FrSky's [theme instructions](https://github.com/FrSkyRC/ETHOS-Feedback-Community/blob/26.1.2/lua/themes/README.md). Old, folder-wrapped ZIPs are retained for manual installation only; use the current catalog links for the Suite workflow.
 
 To roll back a theme, copy its previous complete folder back under `scripts`, remove that folder's compiled `main.luac`, and restart. This does not roll back transmitter firmware.
 
@@ -30,4 +36,4 @@ The checks execute all themes with documented API stubs in Lua 5.2 and 5.4, cove
 
 `lcd.loadBitmap` defaults to lazy loading. The protected call only covers initialization; it cannot catch a later firmware decoding error. PNG structure and dimensions are checked on the desktop. These API facts were checked in the [26.1.2 Lua reference](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/download/26.1.2/lua-doc.zip).
 
-These are desktop checks, not a physical-radio or official-simulator test. Complete [TESTING.md](TESTING.md) on the target transmitter before treating the release as radio-validated. Rotorflight and RF Suite source files are not part of this repository update.
+The America 250 v1.2.1 source and all three PNGs additionally passed native bitmap decoding and theme registration in the [official X20 26.1.2 WebSimulator](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/download/26.1.2/X20-FCC-WebSimulator.zip), without Lua errors. This check did not visually inspect the simulator screen or the physical radio. Complete [TESTING.md](TESTING.md) on the target transmitter before treating the fix as radio-validated. Rotorflight and RF Suite source files are not part of this repository update.
