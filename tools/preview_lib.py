@@ -98,8 +98,12 @@ def draw_card(canvas, theme, x, y):
         draw.ellipse((left, y + 341, left + 12, y + 353), fill=c[role])
 
 
-def render_collection(slug, title, theme_slugs):
+def render_collection(slug, title, theme_slugs, *, display_names=None):
     themes = [parse_theme(name) for name in theme_slugs]
+    # Catalog labels can differ from legacy package names without renaming installs.
+    for theme_slug, theme in zip(theme_slugs, themes):
+        if display_names and theme_slug in display_names:
+            theme["name"] = display_names[theme_slug]
     rows = (len(themes) + 1) // 2
     height = 160 + rows * 394
     canvas = Image.new("RGB", (1200, height), (7, 12, 21))

@@ -1,10 +1,10 @@
-# ETHOS Themes
+# ETHOS 26 Themes
 
 ## Radio compatibility
 
-Every current theme download automatically selects the correct toolbar artwork: **784x50** on 800px radios such as the X20 Pro and X18RS, or **464x50** on standard 480px X18 radios. One ZIP works on both display sizes. Rotorflight and RF Suite Lua files are not modified.
+Every current theme download automatically selects the correct toolbar artwork: **784x50** on 800px radios such as the X20 Pro and X18RS, or **464x50** on standard 480px X18 radios. One ZIP works on both display sizes.
 
-Custom FrSky ETHOS themes focused on improving Rotorflight RF Suite and the wider ETHOS interface.
+Standalone themes for FrSky ETHOS 26, with custom colors, controls, and toolbar artwork for the radio interface.
 
 **Current packages: America 250 v1.2.1; other themes v1.2.0, for ETHOS 26.1.0 and newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
 
@@ -20,7 +20,7 @@ The **v1.2.0 readability update** improves foreground contrast and refreshes eve
 
 ## Cancer Awareness collection
 
-These 10 themes use original generic awareness-ribbon artwork and matching color palettes. Every theme remains a separate download with its own folder, short ETHOS key, source link, and ZIP. No Rotorflight or RF Suite Lua files are modified.
+These 10 themes use original generic awareness-ribbon artwork and matching color palettes. Every theme remains a separate download with its own folder, short ETHOS key, source link, and ZIP.
 
 <a href="previews/cancer-awareness.png"><img src="previews/cancer-awareness.png" alt="Cancer Awareness theme previews" width="760"></a>
 
@@ -37,7 +37,7 @@ These 10 themes use original generic awareness-ribbon artwork and matching color
 
 ## Custom-art collections
 
-These 12 themes add detailed toolbar artwork while remaining normal standalone ETHOS radio themes. Every theme has its own folder, short key, source link, and separate ZIP download. No Rotorflight or RF Suite Lua files are modified.
+These 12 themes add detailed toolbar artwork while remaining normal standalone ETHOS radio themes. Every theme has its own folder, short key, source link, and separate ZIP download.
 
 ### Flight Systems
 
@@ -157,28 +157,28 @@ These themes use six genuinely different visual styles rather than only changing
 - **Molten Sulfur v1.2.0** — glowing lava-crack toolbar with an acid yellow-green fissure — [Download](releases/Molten-Sulfur-v1.2.0.zip) — [Source](themes/theme-molten-sulfur)
 - **Molten Verdigris v1.2.0** — glowing lava-crack toolbar with a cooled teal-green fissure — [Download](releases/Molten-Verdigris-v1.2.0.zip) — [Source](themes/theme-molten-verdigris)
 
-## RF Pro color collection
+## Pro color collection
 
-All RF Pro themes use dark square controls, outline focus, clear inactive and disabled states, and responsive 784x50/464x50 toolbar artwork. Every theme has a separate short ETHOS-safe key, so they can remain installed together.
+All Pro themes use dark square controls, outline focus, clear inactive and disabled states, and responsive 784x50/464x50 toolbar artwork. Every theme has a separate short ETHOS-safe key, so they can remain installed together.
 
-<a href="previews/rf-pro.png"><img src="previews/rf-pro.png" alt="RF Pro color collection previews" width="760"></a>
+<a href="previews/rf-pro.png"><img src="previews/rf-pro.png" alt="Pro color collection previews" width="760"></a>
 
-- **RF Blue Pro v1.2.0** — [Download](releases/RF-Blue-Pro-v1.2.0.zip) — [Source](themes/theme-rfblue-pro)
-- **RF Violet Pro v1.2.0** — [Download](releases/RF-Violet-Pro-v1.2.0.zip) — [Source](themes/theme-rf-violet-pro)
-- **RF Emerald Pro v1.2.0** — [Download](releases/RF-Emerald-Pro-v1.2.0.zip) — [Source](themes/theme-rf-emerald-pro)
-- **RF Ember Pro v1.2.0** — [Download](releases/RF-Ember-Pro-v1.2.0.zip) — [Source](themes/theme-rf-ember-pro)
-- **RF Magenta Pro v1.2.0** — [Download](releases/RF-Magenta-Pro-v1.2.0.zip) — [Source](themes/theme-rf-magenta-pro)
-- **RF Cyan Pro v1.2.0** — [Download](releases/RF-Cyan-Pro-v1.2.0.zip) — [Source](themes/theme-rf-cyan-pro)
-- **RF Crimson Pro v1.2.0** — [Download](releases/RF-Crimson-Pro-v1.2.0.zip) — [Source](themes/theme-rf-crimson-pro)
-- **RF Gold Pro v1.2.0** — [Download](releases/RF-Gold-Pro-v1.2.0.zip) — [Source](themes/theme-rf-gold-pro)
-- **RF Teal Pro v1.2.0** — [Download](releases/RF-Teal-Pro-v1.2.0.zip) — [Source](themes/theme-rf-teal-pro)
-- **RF Lime Pro v1.2.0** — [Download](releases/RF-Lime-Pro-v1.2.0.zip) — [Source](themes/theme-rf-lime-pro)
+- **Blue Pro v1.2.0** — [Download](releases/RF-Blue-Pro-v1.2.0.zip) — [Source](themes/theme-rfblue-pro)
+- **Violet Pro v1.2.0** — [Download](releases/RF-Violet-Pro-v1.2.0.zip) — [Source](themes/theme-rf-violet-pro)
+- **Emerald Pro v1.2.0** — [Download](releases/RF-Emerald-Pro-v1.2.0.zip) — [Source](themes/theme-rf-emerald-pro)
+- **Ember Pro v1.2.0** — [Download](releases/RF-Ember-Pro-v1.2.0.zip) — [Source](themes/theme-rf-ember-pro)
+- **Magenta Pro v1.2.0** — [Download](releases/RF-Magenta-Pro-v1.2.0.zip) — [Source](themes/theme-rf-magenta-pro)
+- **Cyan Pro v1.2.0** — [Download](releases/RF-Cyan-Pro-v1.2.0.zip) — [Source](themes/theme-rf-cyan-pro)
+- **Crimson Pro v1.2.0** — [Download](releases/RF-Crimson-Pro-v1.2.0.zip) — [Source](themes/theme-rf-crimson-pro)
+- **Gold Pro v1.2.0** — [Download](releases/RF-Gold-Pro-v1.2.0.zip) — [Source](themes/theme-rf-gold-pro)
+- **Teal Pro v1.2.0** — [Download](releases/RF-Teal-Pro-v1.2.0.zip) — [Source](themes/theme-rf-teal-pro)
+- **Lime Pro v1.2.0** — [Download](releases/RF-Lime-Pro-v1.2.0.zip) — [Source](themes/theme-rf-lime-pro)
 
 ## Classic theme
 
-<a href="previews/classic.png"><img src="previews/classic.png" alt="RF Suite Blue theme preview" width="760"></a>
+<a href="previews/classic.png"><img src="previews/classic.png" alt="Classic Blue theme preview" width="760"></a>
 
-**RF Suite Blue v1.2.0** keeps rounded controls and solid blue selected controls.
+**Classic Blue v1.2.0** keeps rounded controls and solid blue selected controls.
 
 - [View source](themes/theme-rfsuite-blue)
 - [Download current responsive release v1.2.0](releases/RF-Suite-Blue-v1.2.0.zip)
@@ -186,7 +186,7 @@ All RF Pro themes use dark square controls, outline focus, clear inactive and di
 
 ## Installation
 
-1. Download the desired theme's latest ZIP and use **Lua Library > Install from local .zip** in Suite. For manual installation, create its named theme folder inside `scripts` and extract the ZIP contents into it (for example, `scripts/theme-carbon/main.lua`). You can also copy the complete source theme folder into `scripts`.
+1. Download the desired theme's latest ZIP and use **Lua Library > Install from local .zip** in ETHOS Suite. For manual installation, create its named theme folder inside `scripts` and extract the ZIP contents into it (for example, `scripts/theme-carbon/main.lua`). You can also copy the complete source theme folder into `scripts`.
 2. Restart the transmitter.
 3. Open **System > General > Theme**.
 4. Select the desired theme.
@@ -199,16 +199,16 @@ Every generator writes both toolbar sizes, the automatic display-size selection,
 
 - `tools/theme_lib.py` holds the shared packaging helpers every generator uses.
 - `tools/generate_all_previews.py` refreshes all catalog images from the current Lua palettes and toolbar files, including America 250 and Classic. It does not regenerate the radio artwork.
-- `tools/generate_america250_theme.py` regenerates America 250, both native-size toolbar images, its Suite-compatible ZIP, and the featured preview.
+- `tools/generate_america250_theme.py` regenerates America 250, both native-size toolbar images, its ETHOS Suite-compatible ZIP, and the featured preview.
 - `tools/test_ethos26.py` executes all themes against the documented ETHOS 26 API using Lua runtimes and API stubs. See [test commands](TESTING.md#automated-checks).
 - `tools/validate_catalog.py` checks the whole catalog read-only: artwork sizes and encoding, responsive toolbar selection, unique ETHOS keys, and release ZIPs that match their theme folders.
 - `tools/rebuild_releases.py` repackages every theme's current release ZIP from its source folder, leaving superseded archives untouched.
 - `tools/generate_cancer_awareness_themes.py` regenerates the 10 Cancer Awareness themes, separate ZIPs, and collection preview.
 - `tools/generate_custom_art_themes.py` regenerates the 12 custom-art themes, separate ZIPs, and four collection previews.
 - `tools/generate_readme_previews.py` regenerates the nine standalone-family README preview images from the actual theme source files.
-- `tools/generate_rf_pro_preview.py` regenerates the RF Pro collection preview from the actual RF Pro source files.
+- The [Pro preview generator](tools/generate_rf_pro_preview.py) regenerates the Pro collection preview from its theme source files.
 - `tools/generate_standalone_themes.py` regenerates the 22 standalone themes and their separate ZIPs.
-- `tools/generate_rf_pro_collection.py` regenerates the RF Pro color variants and their separate ZIPs.
+- The [Pro theme generator](tools/generate_rf_pro_collection.py) regenerates the Pro color variants and their separate ZIPs.
 - `tools/generate_molten_themes.py` regenerates the 3 Molten themes, their responsive X18/X20 toolbar artwork, and their separate ZIPs.
 - `tools/generate_elements_themes.py` regenerates the 4 Elements themes, their natively rendered X18/X20 toolbar artwork, and their separate ZIPs.
 - `tools/generate_texture_themes.py` regenerates the 4 Texture themes, their natively rendered X18/X20 toolbar artwork, and their separate ZIPs.
