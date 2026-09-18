@@ -1,5 +1,7 @@
 # Theme readability update: v1.2.0
 
+This records the original 67-theme v1.2.0 update. Later additions and package versions are listed in the [current catalog](README.md).
+
 America 250 leads the preview catalog. All 67 themes have source-driven previews. The 66 collection cards now have larger layouts with selected, normal, active, disabled, highlight-text, and safe-state examples. RF Suite Blue also has its own preview. The commemorative America 250 image retains its dedicated layout.
 
 ## Radio appearance
@@ -30,4 +32,4 @@ All 134 toolbar images remain indexed PNGs, totaling 120,735 bytes. Tested recom
 
 ## Packages and validation
 
-All 67 current Suite packages are v1.2.0. Earlier archives remain available. The automated checks cover palette targets, both display widths, Lua 5.2/5.4 initialization, bitmap failure handling, complete manifests, and exact archive/source contents. See [TESTING.md](TESTING.md) for commands and the remaining physical-radio checks.
+The update released all 67 Suite packages at v1.2.0. Earlier archives remain available. The automated checks cover palette targets, both display widths, Lua 5.2/5.4 initialization, bitmap failure handling, complete manifests, and exact archive/source contents. See [TESTING.md](TESTING.md) for commands and the remaining physical-radio checks.

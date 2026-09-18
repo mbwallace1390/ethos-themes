@@ -1,14 +1,14 @@
 # ETHOS 26 compatibility
 
-All 67 current themes target **ETHOS 26.1.0 and newer** on the existing 480px and 800px display layouts. Their API was checked against **26.1.2**, released September 10, 2026. FrSky describes that release as being for early adopters. [Official release](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/tag/26.1.2)
+All 68 current themes target **ETHOS 26.1.0 and newer** on the existing 480px and 800px display layouts. Their API was checked against **26.1.2**, released September 10, 2026. FrSky describes that release as being for early adopters. [Official release](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/tag/26.1.2)
 
-The current v1.2.0 catalog also includes [readability and preview improvements](VISUAL_UPGRADE.md).
+The v1.2.0 collection includes [readability and preview improvements](VISUAL_UPGRADE.md). Ink & Halo joins the catalog at v1.0.0 with the same contrast checks, responsive artwork, and native registration behavior.
 
 ## America 250 header fix: v1.2.1
 
 On the user's transmitter, the default ETHOS logo covered the America 250 inscription. This patch sets `toolbarLogo` to a packaged, fully transparent 1x1 PNG loaded once during initialization. ETHOS documents bitmap logo overrides and PNG transparency in its [26.1.2 Lua reference](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/download/26.1.2/lua-doc.zip). A failed logo load still allows the palette and toolbar background to register.
 
-All 134 toolbar images were reviewed at both native sizes. America 250 is the only theme with header text; the other 66 themes retain their existing logo behavior. Its palette, artwork, name, and runtime key are unchanged. The generator and Suite manifest include the transparent logo asset so regeneration and installation preserve the fix.
+In the original 67-theme review, all 134 toolbar images were checked at both native sizes. America 250 was the only theme with header text; the other 66 themes retained their existing logo behavior. Its palette, artwork, name, and runtime key were unchanged. Ink & Halo now uses the same transparent logo override for its header inscription. Both generators and Suite manifests include the logo asset so regeneration and installation preserve the text.
 
 ## What changed in theme package v1.1.0
 
@@ -20,7 +20,7 @@ All 134 toolbar images were reviewed at both native sizes. America 250 is the on
 
 ## Install or update
 
-1. Download the theme's latest ZIP from the main catalog: **America 250 v1.2.1**, or **v1.2.0** for the other themes.
+1. Download the theme's latest ZIP from the main catalog: **America 250 v1.2.1**, **Ink & Halo v1.0.0**, or **v1.2.0** for the remaining themes.
 2. In Suite, use **Lua Library > Install from local .zip**, then select that ZIP.
 3. Restart the transmitter and select the theme under **System > General > Theme**.
 

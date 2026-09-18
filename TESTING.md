@@ -23,12 +23,12 @@ python tools/rebuild_releases.py
 python tools/generate_all_previews.py
 ```
 
-Then rerun the checks. They cover 67 themes, both 480px and 800px artwork choices, full PNG decoding, required manifest fields, all 18 color roles, Lua 5.2/5.4 parsing and initialization, unsupported firmware, failed bitmap initialization, and complete current ZIP contents. Historical ZIPs are retained as snapshots. These tests use API stubs and do not run the actual ETHOS firmware.
+Then rerun the checks. They cover 68 themes, both 480px and 800px artwork choices, full PNG decoding, required manifest fields, all 18 color roles, Lua 5.2/5.4 parsing and initialization, unsupported firmware, failed bitmap initialization, and complete current ZIP contents. Historical ZIPs are retained as snapshots. These tests use API stubs and do not run the actual ETHOS firmware.
 
 ## ETHOS 26 installation
 
 - Use ETHOS 26.1.0 or newer; record the exact build (API reference: 26.1.2).
-- Install the current ZIP through ETHOS Suite's local ZIP installer; confirm it is recognized and targets `scripts/<theme-folder>` (America 250 v1.2.1, other themes v1.2.0).
+- Install the current ZIP through ETHOS Suite's local ZIP installer; confirm it is recognized and targets `scripts/<theme-folder>` (America 250 v1.2.1, Ink & Halo v1.0.0, remaining themes v1.2.0).
 - Check that manual extraction into that same folder also gives `scripts/<theme-folder>/main.lua` with both toolbar images beside it.
 - Remove that theme folder's previous `main.luac` when updating; restart and confirm the theme remains selectable.
 - Check **System > Information** for Lua errors after restart and after selecting the theme.
@@ -36,7 +36,8 @@ Then rerun the checks. They cover 67 themes, both 480px and 800px artwork choice
 ## ETHOS interface
 
 - Theme appears in **System > General > Theme**.
-- America 250: the header inscription stays visible without the default ETHOS logo over it; verify both display widths and confirm `logo-transparent.png` was installed.
+- America 250 and Ink & Halo: the header inscription stays visible without the default ETHOS logo over it; verify both display widths and confirm `logo-transparent.png` was installed.
+- Ink & Halo: verify the halo does not obscure native toolbar indicators, rounded controls retain readable outlines, and the dark panels remain readable at the radio's normal brightness.
 - Selected menu entries use the intended highlight color.
 - Text remains readable on highlighted controls.
 - Disabled controls remain visibly different from enabled controls.

@@ -6,7 +6,7 @@ Every current theme download automatically selects the correct toolbar artwork: 
 
 Standalone themes for FrSky ETHOS 26, with custom colors, controls, and toolbar artwork for the radio interface.
 
-**Current packages: America 250 v1.2.1; other themes v1.2.0, for ETHOS 26.1.0 and newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
+**Current packages: America 250 v1.2.1; Ink & Halo v1.0.0; remaining themes v1.2.0, for ETHOS 26.1.0 and newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
 
 The **v1.2.0 readability update** improves foreground contrast and refreshes every collection preview. [See changes and validation](VISUAL_UPGRADE.md).
 
@@ -17,6 +17,14 @@ The **v1.2.0 readability update** improves foreground contrast and refreshes eve
 <a href="previews/america250.png"><img src="previews/america250.png" alt="America 250 theme preview: stars, stripes, navy panels, and gold selection accents" width="760"></a>
 
 **[Download America 250](releases/America-250-v1.2.1.zip)** · [Theme source and installation](themes/theme-america250)
+
+## Ink & Halo
+
+**Ink & Halo v1.0.0** — dark ink panels, soft-white text, pale-blue focus outlines, and a luminous halo across the header. Rounded controls retain ETHOS's native layout and icons. The artwork is drawn separately for both display sizes, and a transparent logo override keeps the centered inscription visible. The glow is part of the static toolbar image; the theme adds no background tasks.
+
+<a href="previews/ink-halo.png"><img src="previews/ink-halo.png" alt="Ink and Halo theme preview: near-black panels, white text, pale-blue outlines, and a luminous header arc" width="760"></a>
+
+**[Download Ink & Halo](releases/Ink-and-Halo-v1.0.0.zip)** · [Theme source and installation](themes/theme-ink-halo)
 
 ## Cancer Awareness collection
 
@@ -198,8 +206,9 @@ All themes can remain installed together. `main.luac` is intentionally omitted; 
 Every generator writes both toolbar sizes, the automatic display-size selection, palette-encoded artwork, and a reproducible ZIP, so regenerating a family never drifts from what is committed.
 
 - `tools/theme_lib.py` holds the shared packaging helpers every generator uses.
-- `tools/generate_all_previews.py` refreshes all catalog images from the current Lua palettes and toolbar files, including America 250 and Classic. It does not regenerate the radio artwork.
+- `tools/generate_all_previews.py` refreshes all catalog images from the current Lua palettes and toolbar files, including America 250, Ink & Halo, and Classic. It does not regenerate the radio artwork.
 - `tools/generate_america250_theme.py` regenerates America 250, both native-size toolbar images, its ETHOS Suite-compatible ZIP, and the featured preview.
+- `tools/generate_ink_halo_theme.py` regenerates Ink & Halo, its halo artwork at both native sizes, transparent logo override, ETHOS Suite-compatible ZIP, and preview.
 - `tools/test_ethos26.py` executes all themes against the documented ETHOS 26 API using Lua runtimes and API stubs. See [test commands](TESTING.md#automated-checks).
 - `tools/validate_catalog.py` checks the whole catalog read-only: artwork sizes and encoding, responsive toolbar selection, unique ETHOS keys, and release ZIPs that match their theme folders.
 - `tools/rebuild_releases.py` repackages every theme's current release ZIP from its source folder, leaving superseded archives untouched.

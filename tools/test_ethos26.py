@@ -30,6 +30,7 @@ ROLES = (
 )
 THEMES = sorted(THEMES_ROOT.glob("*/main.lua"))
 RUNTIMES = (Lua52, Lua54)
+HEADER_TEXT_THEMES = {"theme-america250", "theme-ink-halo"}
 
 STUB = r'''
 local function unexpected(_, name)
@@ -107,7 +108,7 @@ class Ethos26Tests(unittest.TestCase):
                                                 f"{path.parent.name}: {role} on {surface}")
 
     def test_catalog_registration_and_display_sizes(self):
-        self.assertEqual(len(THEMES), 67)
+        self.assertEqual(len(THEMES), 68)
         allowed = {"key", "name", "roundButtons", "focusStyle", "colors", "toolbarBackground"}
         for runtime in RUNTIMES:
             for path in THEMES:
@@ -120,7 +121,7 @@ class Ethos26Tests(unittest.TestCase):
                         state = execute(source, runtime, width)
                         theme = state.registered
                         self.assertEqual(state.registrations, 1)
-                        has_header_text = path.parent.name == "theme-america250"
+                        has_header_text = path.parent.name in HEADER_TEXT_THEMES
                         expected = allowed | ({"toolbarLogo"} if has_header_text else set())
                         self.assertEqual(set(theme.keys()), expected)
                         self.assertEqual(theme.name, manifest["name"])
@@ -150,34 +151,37 @@ class Ethos26Tests(unittest.TestCase):
                         self.assertEqual(state.registrations, 1)
                         self.assertEqual(len(state.registered.colors), 18)
                         self.assertIsNone(state.registered.toolbarBackground)
-                        self.assertEqual(state.bitmapCalls, 2 if path.parent.name == "theme-america250" else 1)
+                        self.assertEqual(state.bitmapCalls, 2 if path.parent.name in HEADER_TEXT_THEMES else 1)
 
     def test_header_text_has_a_fully_transparent_logo_override(self):
-        path = THEMES_ROOT / "theme-america250" / "main.lua"
-        manifest = json.loads(path.with_name("ethos_lua_manifest.json").read_text())
-        for runtime in RUNTIMES:
-            for width in (480, 800):
-                with self.subTest(lua=runtime.__module__, width=width):
-                    state = execute(path.read_text(), runtime, width)
-                    self.assertIsNotNone(state.registered.toolbarLogo,
-                                         "A missing override leaves ETHOS over the header inscription")
-                    logo = state.registered.toolbarLogo.path
-                    self.assertTrue(any(fnmatchcase(logo, pattern) for pattern in manifest["files"]))
-                    with Image.open(path.with_name(logo)) as image:
-                        self.assertEqual(image.size, (1, 1))
-                        self.assertEqual(image.convert("RGBA").getchannel("A").getextrema(), (0, 0))
+        for folder in sorted(HEADER_TEXT_THEMES):
+            path = THEMES_ROOT / folder / "main.lua"
+            manifest = json.loads(path.with_name("ethos_lua_manifest.json").read_text())
+            for runtime in RUNTIMES:
+                for width in (480, 800):
+                    with self.subTest(theme=folder, lua=runtime.__module__, width=width):
+                        state = execute(path.read_text(), runtime, width)
+                        self.assertIsNotNone(state.registered.toolbarLogo,
+                                             "A missing override leaves ETHOS over the header inscription")
+                        logo = state.registered.toolbarLogo.path
+                        self.assertTrue(any(fnmatchcase(logo, pattern) for pattern in manifest["files"]))
+                        with Image.open(path.with_name(logo)) as image:
+                            self.assertEqual(image.size, (1, 1))
+                            self.assertEqual(image.convert("RGBA").getchannel("A").getextrema(), (0, 0))
 
     def test_logo_load_failure_preserves_background_and_palette(self):
-        path = THEMES_ROOT / "theme-america250" / "main.lua"
-        for runtime in RUNTIMES:
-            for mode in ("logo-error", "logo-nil"):
-                with self.subTest(lua=runtime.__module__, mode=mode):
-                    state = execute(path.read_text(), runtime, bitmap_mode=mode)
-                    self.assertEqual(state.registrations, 1)
-                    self.assertEqual(len(state.registered.colors), 18)
-                    self.assertIsNotNone(state.registered.toolbarBackground)
-                    self.assertIsNone(state.registered.toolbarLogo)
-                    self.assertEqual(state.bitmapCalls, 2)
+        for folder in sorted(HEADER_TEXT_THEMES):
+            path = THEMES_ROOT / folder / "main.lua"
+            for runtime in RUNTIMES:
+                for width in (480, 800):
+                    for mode in ("logo-error", "logo-nil"):
+                        with self.subTest(theme=folder, lua=runtime.__module__, width=width, mode=mode):
+                            state = execute(path.read_text(), runtime, width, bitmap_mode=mode)
+                            self.assertEqual(state.registrations, 1)
+                            self.assertEqual(len(state.registered.colors), 18)
+                            self.assertIsNotNone(state.registered.toolbarBackground)
+                            self.assertIsNone(state.registered.toolbarLogo)
+                            self.assertEqual(state.bitmapCalls, 2)
 
     def test_unsupported_firmware_skips_registration(self):
         for runtime in RUNTIMES:
@@ -204,7 +208,7 @@ class Ethos26Tests(unittest.TestCase):
                         state = execute(source, width=width)
                         self.assertEqual(state.registered.name, manifest["name"])
                         self.assertIn(state.registered.toolbarBackground.path, archive.namelist())
-                        if manifest["folder"] == "theme-america250":
+                        if manifest["folder"] in HEADER_TEXT_THEMES:
                             self.assertIsNotNone(state.registered.toolbarLogo)
                             self.assertIn(state.registered.toolbarLogo.path, archive.namelist())
         self.assertEqual(checked, {p.parent.name for p in THEMES})

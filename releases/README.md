@@ -2,9 +2,9 @@
 
 ## Current catalog
 
-America 250 is now [v1.2.1](America-250-v1.2.1.zip), which hides the default ETHOS logo over its header inscription. The other 66 themes remain v1.2.0; their toolbar artwork contains no text.
+America 250 is now [v1.2.1](America-250-v1.2.1.zip), which hides the default ETHOS logo over its header inscription. [Ink & Halo v1.0.0](Ink-and-Halo-v1.0.0.zip) adds ink-black panels, pale-blue outlines, and a luminous halo header with the same logo override. The remaining 66 themes stay at v1.2.0; their toolbar artwork contains no text.
 
-All 67 themes now target ETHOS 26.1.0 and newer, with API checks against 26.1.2. Choose a theme from the [main catalog](../README.md) for its individual ZIP.
+All 68 themes target ETHOS 26.1.0 and newer, with API checks against 26.1.2. Choose a theme from the [main catalog](../README.md) for its individual ZIP.
 
 Current ZIPs use the root manifest layout required by **Lua Library > Install from local .zip**. For manual installation, extract the contents into `scripts/<theme-folder>/`. See [compatibility and installation](../ETHOS26.md).
 
