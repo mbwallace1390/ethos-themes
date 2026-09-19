@@ -1,4 +1,4 @@
-# RF Suite Blue v1.2.2
+# RF Suite Blue v1.2.3
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -15,7 +15,7 @@ A dark FrSky ETHOS theme that replaces the yellow selected-control highlight wit
 - Omits `main.luac` so ETHOS compiles a fresh copy during startup.
 
 - Palette-matched ETHOS header logo with a transparent background
-- Artwork sits on either side of a clear logo area at both native widths
+- Continuous toolbar styling with the accent band below the lettering at both native widths
 
 ## Installation
 

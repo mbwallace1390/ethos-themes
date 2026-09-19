@@ -21,7 +21,6 @@ from theme_lib import (
     THEME_VERSION,
     X18_SIZE,
     X20_SIZE,
-    compose_toolbar_sides,
     save_png,
     toolbar_call,
     write_release,
@@ -104,101 +103,101 @@ def camo(draw, width, height, colors, seed):
             draw.polygon([(x, y+h//2),(x+w//3,y),(x+w,y+h//3),(x+2*w//3,y+h),(x+w//8,y+3*h//4)], fill=fill)
 
 
-def artwork(draw, style, width, height, page, panel, accent, active, side=0):
+def artwork(draw, style, width, height, page, panel, accent, active):
     gradient(draw, width, height, page, panel)
-    center = width // 2
+    # Focal objects sit beside the wordmark; the full-width materials beneath
+    # them stay continuous instead of turning into a separate center panel.
+    center = (width - 160) // 4
+    right_center = width - center
 
     if style == "hud":
-        draw.line((0, 36, width-1, 36), fill=mix(page, accent, .8))
+        draw.line((0, 42, width-1, 42), fill=mix(page, accent, .8))
         for x in range(14, width, 28):
-            draw.line((x, 37, x, 45 if x % 112 == 14 else 41), fill=mix(page, accent, .72))
-        if side == 0:
-            draw.ellipse((center-12, 10, center+12, 34), outline=accent)
-            draw.line((center-22,22,center-5,22), fill=accent)
-            draw.line((center+5,22,center+22,22), fill=accent)
-            draw.line((center,4,center,16), fill=active)
-        else:
-            for y, half_width in ((10, 15), (18, 24), (26, 15)):
-                draw.line((center-half_width,y,center+half_width,y), fill=accent)
+            draw.line((x, 43, x, 48 if x % 112 == 14 else 46), fill=mix(page, accent, .72))
+        draw.ellipse((center-12, 10, center+12, 34), outline=accent)
+        draw.line((center-22,22,center-5,22), fill=accent)
+        draw.line((center+5,22,center+22,22), fill=accent)
+        draw.line((center,4,center,16), fill=active)
+        for y, half_width in ((10, 15), (18, 24), (26, 15)):
+            draw.line((right_center-half_width,y,right_center+half_width,y), fill=accent)
     elif style == "blueprint":
         for x in range(0, width, 16):
             draw.line((x,0,x,height-1), fill=mix(page, accent, .28 if x % 64 == 0 else .13))
         for y in range(0, height, 10):
             draw.line((0,y,width-1,y), fill=mix(page, accent, .26 if y % 20 == 0 else .12))
-        if side == 0:
-            half_width = min(51, center - 16)
-            draw.rectangle((center-half_width,8,center+half_width,34), outline=mix(page,accent,.8))
-        else:
-            draw.arc((center-40,3,center+40,45),190,350,fill=active)
+        half_width = min(51, center - 16)
+        draw.rectangle((center-half_width,8,center+half_width,34), outline=mix(page,accent,.8))
+        draw.arc((right_center-40,3,right_center+40,45),190,350,fill=active)
     elif style == "rotor":
-        draw.line((0,36,width-1,36), fill=mix(page,accent,.7))
-        if side == 0:
-            rotor_half_width = min(66, center - 12)
-            draw.line((center-rotor_half_width,17,center+rotor_half_width,17), fill=accent, width=2)
-            draw.ellipse((center-4,13,center+4,21), fill=active)
-            draw.line((center,21,center,32), fill=accent, width=2)
-            draw.polygon([(center-20,31),(center+23,31),(center+11,21),(center-10,21)], outline=accent)
-            draw.line((center+22,27,center+47,22), fill=accent, width=2)
-        else:
-            for x in range(16, width - 12, 24):
-                draw.line((x,29,x,35), fill=mix(page,accent,.7))
+        draw.line((0,42,width-1,42), fill=mix(page,accent,.7))
+        rotor_half_width = min(66, center - 12)
+        draw.line((center-rotor_half_width,17,center+rotor_half_width,17), fill=accent, width=2)
+        draw.ellipse((center-4,13,center+4,21), fill=active)
+        draw.line((center,21,center,32), fill=accent, width=2)
+        draw.polygon([(center-20,31),(center+23,31),(center+11,21),(center-10,21)], outline=accent)
+        draw.line((center+22,27,center+47,22), fill=accent, width=2)
+        for x in range(right_center - 52, width - 12, 24):
+            draw.line((x,35,x,41), fill=mix(page,accent,.7))
     elif style == "woodland":
         camo(draw,width,height,[color("1A2214"),color("344126"),color("55603A"),color("24291C")],101)
-        draw.line((0,39,width-1,39), fill=accent, width=2)
+        draw.line((0,43,width-1,43), fill=accent, width=2)
     elif style == "arctic":
         camo(draw,width,height,[color("E8EEF1"),color("BECBD2"),color("93A7B3"),color("D7E2E7")],202)
-        draw.line((0,39,width-1,39), fill=accent, width=2)
+        draw.line((0,43,width-1,43), fill=accent, width=2)
     elif style == "desert":
         camo(draw,width,height,[color("E5D2AD"),color("C3A777"),color("9E7A4B"),color("D8BE91")],303)
-        draw.line((0,39,width-1,39), fill=accent, width=2)
+        draw.line((0,43,width-1,43), fill=accent, width=2)
     elif style == "space":
-        rng = random.Random(143 + side)
+        rng = random.Random(143)
         for _ in range(max(18, width // 6)):
             x, y = rng.randrange(width), rng.randrange(height)
             bright = rng.choice((.3,.45,.65,.9))
             radius = 2 if bright > .8 else 1
+            if bright >= .65 and abs(x - width / 2) < 76 and 10 <= y <= 39:
+                # Relocate bright stars above/below the wordmark; keep the faint
+                # star field continuous instead of clearing its center.
+                y = 4 + y % 4 if (x + y) % 2 else 43 + y % 4
             draw.ellipse((x,y,x+radius,y+radius), fill=mix(page,(255,255,255),bright))
-        radius = 19 if side == 0 else 22
-        planet = accent if side == 0 else active
-        draw.ellipse((center-radius,24-radius,center+radius,24+radius),
-                     fill=mix(page,planet,.08), outline=mix(page,planet,.4))
+        for planet_x, radius, planet in ((center, 19, accent), (right_center, 22, active)):
+            draw.ellipse((planet_x-radius,24-radius,planet_x+radius,24+radius),
+                         fill=mix(page,planet,.08), outline=mix(page,planet,.4))
     elif style == "lunar":
         surface = mix(panel, accent, .12)
         draw.rectangle((0,27,width-1,height-1), fill=surface)
-        rng = random.Random(2049 + side)
+        rng = random.Random(2049)
         for _ in range(max(10, width // 15)):
             x, y, radius = rng.randrange(width), rng.randrange(27,height), rng.randint(2,8)
             draw.ellipse((x-radius,y-radius//2,x+radius,y+radius//2), outline=mix(surface,page,.35))
-        if side == 0:
-            draw.arc((center-21,2,center+21,44),0,180,fill=accent,width=2)
-        draw.line((0,26,width-1,26), fill=active)
+        draw.arc((center-21,2,center+21,44),0,180,fill=accent,width=2)
+        draw.line((0,44,width-1,44), fill=active)
     elif style == "horizon":
-        horizon = 29
+        horizon = 42
         draw.line((0,horizon,width-1,horizon), fill=active, width=2)
-        if side == 0:
-            draw.ellipse((center-28,4,center+28,48), fill=mix(page,accent,.25), outline=accent, width=2)
-            for y in range(8,29,5): draw.line((center-25,y,center+25,y), fill=mix(page,accent,.45))
+        draw.ellipse((center-28,4,center+28,40), fill=mix(page,accent,.25), outline=accent, width=2)
+        for y in range(8,29,5): draw.line((center-25,y,center+25,y), fill=mix(page,accent,.45))
         for x in range(0,width,52): draw.line((center,horizon,x,height-1), fill=mix(page,active,.38))
-        for y in (34,39,44,48): draw.line((0,y,width-1,y), fill=mix(page,active,.35))
+        for y in (45,48): draw.line((0,y,width-1,y), fill=mix(page,active,.35))
     elif style == "circuit":
         rng = random.Random(880)
-        for row in range(4):
-            y, x = 8 + row*11, -10
+        # Continuous traces run above and below the lettering, with no center cut.
+        for y in (5, 9, 43, 47):
+            x = -10
             while x < width:
-                length, jog = rng.randint(18,54), rng.choice((-5,0,5))
+                length, jog = rng.randint(18,54), rng.choice((-1,0,1))
                 draw.line((x,y,x+length,y), fill=mix(page,accent,.72))
                 draw.line((x+length,y,x+length+6,y+jog), fill=mix(page,accent,.72))
                 if rng.random() > .55: draw.ellipse((x+length-2,y-2,x+length+2,y+2), fill=active)
                 x += length + 12
     elif style == "racing":
-        square, y0 = 10, 30
+        square, y0 = 4, 42
         for y in range(y0,height,square):
             for x in range(0,width,square):
                 draw.rectangle((x,y,x+square-1,y+square-1), fill=active if ((x//square)+(y-y0)//square)%2==0 else page)
-        for offset in (0,16,32):
-            x = center - 16 + offset
-            draw.polygon([(x,0),(x+14,0),(x-22,30),(x-36,30)], fill=accent)
-        draw.line((0,28,width-1,28), fill=accent, width=2)
+        for stripe_center in (center, right_center):
+            for offset in (0,16,32):
+                x = stripe_center - 16 + offset
+                draw.polygon([(x,0),(x+14,0),(x-22,30),(x-36,30)], fill=accent)
+        draw.line((0,41,width-1,41), fill=accent)
     elif style == "hex":
         radius = 10
         vstep = int(math.sqrt(3)*radius)
@@ -207,7 +206,7 @@ def artwork(draw, style, width, height, page, panel, accent, active, side=0):
             for x in range(-radius+offset,width+radius,radius*3):
                 points = [(x+radius*math.cos(math.radians(a)),y+radius*math.sin(math.radians(a))) for a in range(0,360,60)]
                 draw.polygon(points, outline=mix(page,accent if (x//30+row)%5==0 else active,.4))
-        draw.line((0,38,width-1,38), fill=accent, width=2)
+        draw.line((0,43,width-1,43), fill=accent, width=2)
 
 
 def make_toolbar(theme, width=X20_SIZE[0]):
@@ -216,16 +215,7 @@ def make_toolbar(theme, width=X20_SIZE[0]):
     height = X20_SIZE[1]
     image = Image.new("RGB", (width,height), page)
     draw = ImageDraw.Draw(image)
-    gradient(draw, width, height, page, panel)
-
-    def render_panel(panel_width, panel_height, side):
-        flank = Image.new("RGB", (panel_width, panel_height), page)
-        artwork(ImageDraw.Draw(flank), style, panel_width, panel_height,
-                page, panel, accent, active, side)
-        return flank
-
-    image = compose_toolbar_sides(image, render_panel)
-    draw = ImageDraw.Draw(image)
+    artwork(draw, style, width, height, page, panel, accent, active)
     draw.line((0,height-1,width-1,height-1), fill=mix(page,(0,0,0),.35))
     return image
 

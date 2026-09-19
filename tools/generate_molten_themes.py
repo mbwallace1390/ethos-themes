@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import random
 import shutil
 from pathlib import Path
@@ -11,7 +12,6 @@ from theme_lib import (
     THEME_VERSION,
     X18_SIZE,
     X20_SIZE,
-    compose_toolbar_sides,
     mix,
     rgb,
     save_png,
@@ -45,39 +45,32 @@ def palette(focus: tuple[int, int, int], active: tuple[int, int, int]) -> dict[s
 def toolbar(width: int, page: tuple[int, int, int], primary_bg: tuple[int, int, int],
             focus: tuple[int, int, int], active: tuple[int, int, int], seed: int) -> Image.Image:
     height = X20_SIZE[1]
-
-    def background(panel_width, panel_height):
-        image = Image.new("RGB", (panel_width, panel_height))
-        draw = ImageDraw.Draw(image)
-        for y in range(panel_height):
-            draw.line((0, y, panel_width - 1, y),
-                      fill=mix(page, primary_bg, y / (panel_height - 1)))
-        draw.line((0, panel_height - 1, panel_width - 1, panel_height - 1),
-                  fill=mix(page, (0, 0, 0), .35))
-        return image
-
-    def render_panel(panel_width, panel_height, side_index):
-        image = background(panel_width, panel_height)
-        draw = ImageDraw.Draw(image)
-        rng = random.Random(seed + side_index * 1009)
-        points = []
-        y = 25
-        # Separate native-width fissures frame the clear logo area on both sides.
-        for x in range(0, panel_width + 14, 14):
-            y = max(17, min(34, y + rng.randint(-4, 4)))
-            points.append((min(x, panel_width - 1), y))
-        draw.line(points, fill=mix(primary_bg, focus, .28), width=5)
-        draw.line(points, fill=focus, width=2)
-
-        for _ in range(panel_width // 22):
-            x, yy = rng.randint(0, panel_width - 1), rng.randint(0, panel_height - 1)
-            brightness = rng.choice((.35, .55, .75, .95))
-            draw.point((x, yy), fill=mix(page, active, brightness))
-        draw.line((0, panel_height - 1, panel_width - 1, panel_height - 1),
-                  fill=mix(page, (0, 0, 0), .35))
-        return image
-
-    return compose_toolbar_sides(background(width, height), render_panel)
+    image = Image.new("RGB", (width, height))
+    draw = ImageDraw.Draw(image)
+    for y in range(height):
+        draw.line((0, y, width - 1, y), fill=mix(page, primary_bg, y / (height - 1)))
+    rng = random.Random(seed)
+    points = []
+    y = 25
+    center = (width - 1) / 2
+    for x in range(0, width + 14, 14):
+        x = min(x, width - 1)
+        y = max(17, min(34, y + rng.randint(-4, 4)))
+        amount = max(0.0, min(1.0, (144 - abs(x - center)) / 64))
+        bend = amount * amount * (3 - 2 * amount)
+        # One continuous crack curves below the letters; its glow starts at y41.
+        lower = 44 + math.sin((x - center) / 21) * 0.6
+        points.append((x, y * (1 - bend) + lower * bend))
+    draw.line(points, fill=mix(primary_bg, focus, .28), width=5)
+    draw.line(points, fill=focus, width=2)
+    for _ in range(width // 22):
+        x, yy = rng.randint(0, width - 1), rng.randint(0, height - 1)
+        if abs(x - center) < 76 and 10 <= yy <= 40:
+            yy = rng.choice((5, 46))
+        brightness = rng.choice((.35, .55, .75, .95))
+        draw.point((x, yy), fill=mix(page, active, brightness))
+    draw.line((0, height - 1, width - 1, height - 1), fill=mix(page, (0, 0, 0), .35))
+    return image
 
 
 def build(defn: tuple[str, str, str, str, str, int]) -> None:

@@ -18,7 +18,6 @@ from theme_lib import (
     THEME_VERSION,
     X18_SIZE,
     X20_SIZE,
-    compose_toolbar_sides,
     contrasting,
     save_png,
     toolbar_call,
@@ -43,7 +42,8 @@ def rgb_lua(color: tuple[int, int, int]) -> str:
     return f"lcd.RGB(0x{color[0]:02X}, 0x{color[1]:02X}, 0x{color[2]:02X})"
 
 
-def _toolbar_panel(accent, page_bg, primary_bg, width):
+def make_toolbar(accent, page_bg, primary_bg, width=X20_SIZE[0]):
+    """Draw an unbroken accent band beneath the transparent logo."""
     height = X20_SIZE[1]
     image = Image.new("RGB", (width, height))
     draw = ImageDraw.Draw(image)
@@ -54,7 +54,7 @@ def _toolbar_panel(accent, page_bg, primary_bg, width):
         draw.line((0, y, width - 1, y), fill=color)
 
     for offset, strength in [(-3, 0.08), (-2, 0.16), (-1, 0.34), (0, 0.92), (1, 0.28), (2, 0.10)]:
-        y = 35 + offset
+        y = 44 + offset
         base = image.getpixel((0, y))
         color = tuple(round(base[i] * (1 - strength) + accent[i] * strength) for i in range(3))
         draw.line((0, y, width - 1, y), fill=color)
@@ -62,18 +62,6 @@ def _toolbar_panel(accent, page_bg, primary_bg, width):
     edge = tuple(max(value - 2, 0) for value in page_bg)
     draw.line((0, height - 1, width - 1, height - 1), fill=edge)
     return image
-
-
-def make_toolbar(accent, page_bg, primary_bg, width=X20_SIZE[0]):
-    """Keep the accent band on the flanks so it cannot pass behind the logo."""
-    base = Image.new("RGB", (width, X20_SIZE[1]))
-    draw = ImageDraw.Draw(base)
-    for y in range(base.height):
-        color = tuple(round(page_bg[i] * (1 - y / 49) + primary_bg[i] * y / 49) for i in range(3))
-        draw.line((0, y, width - 1, y), fill=color)
-    result = compose_toolbar_sides(base, lambda w, h, side: _toolbar_panel(accent, page_bg, primary_bg, w))
-    ImageDraw.Draw(result).line((0, 49, width - 1, 49), fill=tuple(max(value - 2, 0) for value in page_bg))
-    return result
 
 
 def build_theme(theme: dict[str, object]) -> None:

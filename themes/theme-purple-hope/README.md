@@ -1,4 +1,4 @@
-# Purple Hope v1.2.2
+# Purple Hope v1.2.3
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -15,6 +15,6 @@ A standalone FrSky ETHOS radio theme with original generic awareness-ribbon tool
 - Separate installable package
 - Does not modify Rotorflight or RF Suite Lua files
 - Palette-matched ETHOS header logo with a transparent background
-- Artwork is drawn on either side of a clear logo area at both native widths
+- Continuous toolbar styling with prominent artwork arranged around the lettering at both native widths
 
 To install from repository sources, copy `theme-purple-hope` into the transmitter's `scripts` folder, restart, and select **Purple Hope** under **System > General > Theme**.

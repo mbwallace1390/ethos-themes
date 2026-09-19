@@ -1,4 +1,4 @@
-# OLED Green v1.2.2
+# OLED Green v1.2.3
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -13,6 +13,6 @@ A lightweight standalone FrSky ETHOS theme.
 - Internal key: `OLGrn`
 - Responsive 784x50 X20 / 464x50 X18 toolbar
 - Palette-matched ETHOS header logo with a transparent background
-- Artwork is drawn on either side of a clear logo area at both native widths
+- Continuous toolbar styling with prominent artwork arranged around the lettering at both native widths
 
 To install from repository sources, copy `theme-oled-green` into the transmitter `scripts` folder, restart, and select **OLED Green**.

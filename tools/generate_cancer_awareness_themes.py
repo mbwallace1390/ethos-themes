@@ -21,7 +21,6 @@ from theme_lib import (
     X18_SIZE,
     X20_SIZE,
     contrasting,
-    compose_toolbar_sides,
     save_png,
     toolbar_call,
     write_release,
@@ -103,23 +102,9 @@ def draw_ribbon(draw: ImageDraw.ImageDraw, cx: int, top: int, ribbon: tuple[int,
     draw.line(right_loop + [right_loop[0]], fill=dark, width=max(1, round(scale)))
 
 
-def draw_panel(theme, width, height, side) -> Image.Image:
+def draw_motifs(draw, theme, start, end):
     slug, _, _, _, ribbon_hex, active_hex, page_hex, primary_hex, _, _, style = theme
     ribbon, active, page, primary = map(rgb, (ribbon_hex, active_hex, page_hex, primary_hex))
-    image = Image.new("RGB", (width, height), page)
-    draw = ImageDraw.Draw(image)
-
-    for y in range(height):
-        draw.line((0, y, width - 1, y), fill=mix(page, primary, y / (height - 1)))
-
-    # The ribbon remains singular on the left. Motifs are drawn at their native
-    # size within each flank, with room before the shared inner-edge fade.
-    draw.line((0, 39, width - 1, 39), fill=mix(page, ribbon, 0.82), width=2)
-    if side == 0:
-        draw_ribbon(draw, 32, 7, ribbon, 1.05)
-    start = 78 if side == 0 else 18
-    end = width - 10
-
     if style == "hearts":
         for x in range(start, end - 22 + 1, 92):
             draw.arc((x, 12, x + 12, 24), 190, 355, fill=mix(page, ribbon, .58), width=2)
@@ -169,22 +154,39 @@ def draw_panel(theme, width, height, side) -> Image.Image:
             draw.arc((x + 14, 11, x + 38, 33), 270, 100, fill=mix(page, active, .48), width=2)
             draw.line((x + 18, 16, x + 18, 35), fill=mix(page, ribbon, .52))
 
-    draw.line((0, height - 1, width - 1, height - 1), fill=mix(page, (0, 0, 0), .38))
-    return image
-
-
 def draw_toolbar(theme, width=X20_SIZE[0]) -> Image.Image:
-    """Lay out the ribbon and decorative motifs around a clear logo center."""
-    page, primary = rgb(theme[6]), rgb(theme[7])
+    """Keep one continuous gradient and ribbon rail beneath flank symbols."""
+    ribbon, page, primary = rgb(theme[4]), rgb(theme[6]), rgb(theme[7])
     height = X20_SIZE[1]
     image = Image.new("RGB", (width, height), page)
     draw = ImageDraw.Draw(image)
     for y in range(height):
         draw.line((0, y, width - 1, y), fill=mix(page, primary, y / (height - 1)))
+    # The unbroken rail sits below the wordmark; no background is cleared or
+    # pasted over. Distinct symbols are laid out beside the centered lettering.
+    draw.line((0, 43, width - 1, 43), fill=mix(page, ribbon, 0.82), width=2)
+    draw_ribbon(draw, 32, 7, ribbon, 1.05)
+    logo_left = (width - 128) // 2
+    logo_right = logo_left + 128
+    if theme[-1] == "waves":
+        active = rgb(theme[5])
+        upper, lower = [], []
+        for x in range(78, width - 10):
+            phase = math.sin((x - 78) / 24)
+            # Smoothly route both unbroken waves below the letters, retaining
+            # a slight ripple through the center instead of cutting the path.
+            distance = abs(x - (width - 1) / 2)
+            weight = min(1.0, max(0.0, (118 - distance) / 40))
+            weight = weight * weight * (3 - 2 * weight)
+            upper.append((x, round((23 + 5 * phase) * (1 - weight) + (42 + phase) * weight)))
+            lower.append((x, round((30 + 5 * phase) * (1 - weight) + (47 + phase) * weight)))
+        draw.line(upper, fill=mix(page, ribbon, .68), width=2)
+        draw.line(lower, fill=mix(page, active, .35), width=1)
+    else:
+        draw_motifs(draw, theme, 78, logo_left - 12)
+        draw_motifs(draw, theme, logo_right + 18, width - 10)
     draw.line((0, height - 1, width - 1, height - 1), fill=mix(page, (0, 0, 0), .38))
-    return compose_toolbar_sides(
-        image, lambda panel_width, panel_height, side: draw_panel(theme, panel_width, panel_height, side)
-    )
+    return image
 
 
 def palette(theme):

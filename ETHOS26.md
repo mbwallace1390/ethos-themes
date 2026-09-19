@@ -2,15 +2,21 @@
 
 All 68 current themes target **ETHOS 26.1.0 and newer** on the existing 480px and 800px display layouts. Their API was checked against **26.1.2**, released September 10, 2026. FrSky describes that release as being for early adopters. [Official release](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/tag/26.1.2)
 
-The v1.2.0 collection introduced [readability and preview improvements](VISUAL_UPGRADE.md). Current collection packages are v1.2.2; Ink & Halo is v1.0.2 and uses the same contrast checks, responsive artwork, and native registration behavior. America 250 remains v1.2.1.
+The v1.2.0 collection introduced [readability and preview improvements](VISUAL_UPGRADE.md). Current collection packages are v1.2.3; Ink & Halo is v1.0.2 and uses the same contrast checks, responsive artwork, and native registration behavior. America 250 remains v1.2.1.
+
+## Continuous header artwork: v1.2.3
+
+The 66 collection themes use continuous backgrounds and textures across each native toolbar width. Fine material detail remains visible through the transparent ETHOS logo; a flat rectangle no longer replaces the artwork at the center. Accent rails run below the wordmark, connected decorative paths bend around its lettering, and prominent illustrations sit beside it.
+
+The design preserves each theme's palette, logo colors, controls, name, and runtime key. Only the static artwork layout changes; the radio still loads the background and logo during initialization without a recurring drawing task. Ink & Halo remains v1.0.2, and America 250 remains v1.2.1.
+
+The updated previews illustrate these layouts using the shipped assets. Inspect both 480px and 800px layouts for continuous materials and lines, complete motifs, and readable logo lettering using [the testing checklist](TESTING.md). Desktop artwork checks do not establish firmware placement or physical-radio acceptance. Earlier ZIPs, including v1.2.2, remain frozen snapshots.
 
 ## Header artwork clearance: v1.2.2 and v1.0.2
 
-The 66 collection themes draw their motifs in left and right panels at each native toolbar size. A clear 160px center leaves space around the 128x26 ETHOS logo, so artwork no longer sits behind its letters. The design keeps each theme's palette, logo colors, controls, name, and runtime key. Only the static artwork layout changes; the radio still loads the background and logo during initialization without a recurring drawing task.
+Collection v1.2.2 moved motifs into left and right panels with a clear 160px center around the ETHOS logo. Version 1.2.3 supersedes that layout to restore continuous backgrounds and decorative paths; the v1.2.2 archives remain unchanged.
 
-Ink & Halo v1.0.2 raises and widens its halo arc to leave a clear gap behind and around the baked-in wordmark at both display sizes. Its palette and transparent logo override are preserved. America 250's v1.2.1 artwork and hidden default logo are unchanged.
-
-The updated previews illustrate these layouts using the shipped assets. Confirm the logo and artwork separation on both 480px and 800px radios using [the testing checklist](TESTING.md); desktop artwork checks do not establish firmware placement or physical-radio acceptance. Earlier ZIPs remain frozen snapshots.
+Ink & Halo v1.0.2 raised and widened its halo arc to leave a clear gap behind and around the baked-in wordmark at both display sizes. Its palette and transparent logo override were preserved, and this remains its current release. America 250's v1.2.1 artwork and hidden default logo remain unchanged.
 
 ## Collection logo update: v1.2.1
 
@@ -40,7 +46,7 @@ Startup and About/Info branding remain unchanged. The [ETHOS 26.1.2 native-theme
 
 ## Install or update
 
-1. Download the theme's latest ZIP from the main catalog: **66 collection themes v1.2.2**, **Ink & Halo v1.0.2**, or **America 250 v1.2.1**.
+1. Download the theme's latest ZIP from the main catalog: **66 collection themes v1.2.3**, **Ink & Halo v1.0.2**, or **America 250 v1.2.1**.
 2. In Suite, use **Lua Library > Install from local .zip**, then select that ZIP.
 3. Restart the transmitter and select the theme under **System > General > Theme**.
 

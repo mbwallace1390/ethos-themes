@@ -1,4 +1,4 @@
-# RF Gold Pro v1.2.2
+# RF Gold Pro v1.2.3
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -13,7 +13,7 @@ A lightweight FrSky ETHOS theme based on the proven RF Blue Pro design.
 - ETHOS-safe internal key `RFGold`
 - Installs beside every other RF Pro theme
 - Palette-matched ETHOS header logo with a transparent background
-- Artwork is drawn on either side of a clear logo area at both native widths
+- Continuous toolbar styling with prominent artwork arranged around the lettering at both native widths
 
 To install from repository sources, copy the complete `theme-rf-gold-pro` folder into the transmitter's `scripts` folder, restart, and select **RF Gold Pro** under **System > General > Theme**.
 

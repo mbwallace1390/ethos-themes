@@ -19,7 +19,6 @@ from theme_lib import (
     X18_SIZE,
     X20_SIZE,
     contrasting,
-    compose_toolbar_sides,
     lua_color,
     mix,
     rgb,
@@ -120,7 +119,8 @@ def palette(family: str, focus: tuple[int, int, int], active: tuple[int, int, in
                 safe_contrast=(7, 24, 12))
 
 
-def _toolbar_panel(style, page, primary, focus, active, width):
+def toolbar(style, page, primary, focus, active, width=X20_SIZE[0]):
+    """Keep material continuous; place bright accents below the logo letters."""
     w, h = width, X20_SIZE[1]
     image = Image.new("RGB", (w, h))
     draw = ImageDraw.Draw(image)
@@ -129,67 +129,49 @@ def _toolbar_panel(style, page, primary, focus, active, width):
     if style == "scanline":
         for y in range(2, h, 4):
             draw.line((0, y, w - 1, y), fill=mix(page, focus, .05))
-        draw.line((0, 35, w - 1, 35), fill=mix(primary, focus, .78))
+        draw.line((0, 42, w - 1, 42), fill=mix(primary, focus, .78))
         for x in range(20, w, 48):
-            draw.line((x, 37, x, 43), fill=mix(primary, focus, .38))
+            draw.line((x, 44, x, 48), fill=mix(primary, focus, .38))
     elif style == "instrument":
-        draw.line((0, 34, w - 1, 34), fill=mix(primary, focus, .72))
+        draw.line((0, 41, w - 1, 41), fill=mix(primary, focus, .72))
         for x in range(12, w, 32):
-            draw.line((x, 36, x, 43 if (x // 32) % 4 == 0 else 40), fill=mix(primary, focus, .55))
+            draw.line((x, 43, x, 48 if (x // 32) % 4 == 0 else 46), fill=mix(primary, focus, .55))
     elif style == "soft":
         for off, strength in [(-4, .06), (-3, .10), (-2, .16), (-1, .25), (0, .42), (1, .20), (2, .10)]:
-            y = 35 + off
+            y = 44 + off
             draw.line((0, y, w - 1, y), fill=mix(image.getpixel((0, y)), focus, strength))
     elif style == "oled":
         draw.rectangle((0, 0, w - 1, h - 1), fill=page)
-        draw.line((0, 36, w - 1, 36), fill=mix(page, focus, .92))
-        draw.line((0, 37, w - 1, 37), fill=mix(page, focus, .20))
+        draw.line((0, 43, w - 1, 43), fill=mix(page, focus, .92))
+        draw.line((0, 44, w - 1, 44), fill=mix(page, focus, .20))
     elif style == "daylight":
         top = mix(page, (255, 255, 255), .55)
         for y in range(h):
             draw.line((0, y, w - 1, y), fill=mix(top, primary, y / (h - 1) * .30))
-        draw.line((0, 36, w - 1, 36), fill=focus)
-        draw.line((0, 37, w - 1, 37), fill=mix(primary, focus, .25))
+        draw.line((0, 43, w - 1, 43), fill=focus)
+        draw.line((0, 44, w - 1, 44), fill=mix(primary, focus, .25))
     elif style == "carbon":
         for y in range(0, h, 4):
             for x in range(0, w, 8):
                 amount = .045 if ((x // 8) + (y // 4)) % 2 else .015
                 draw.rectangle((x, y, x + 7, y + 3), fill=mix(primary, (255, 255, 255), amount))
-        draw.line((0, 36, w - 1, 36), fill=focus)
+        draw.line((0, 43, w - 1, 43), fill=focus)
     elif style == "brushed":
         for y in range(h):
             draw.line((0, y, w - 1, y), fill=mix(image.getpixel((0, y)), (255, 255, 255), .035 if y % 3 == 0 else .012))
-        draw.line((0, 36, w - 1, 36), fill=mix(primary, focus, .78))
+        draw.line((0, 43, w - 1, 43), fill=mix(primary, focus, .78))
     elif style == "hazard":
-        draw.rectangle((0, 34, w - 1, 43), fill=(18, 18, 14))
+        draw.rectangle((0, 41, w - 1, 48), fill=(18, 18, 14))
         for x in range(-20, w + 20, 44):
-            draw.polygon([(x, 43), (x + 10, 43), (x + 28, 34), (x + 18, 34)], fill=focus)
+            draw.polygon([(x, 48), (x + 10, 48), (x + 24, 41), (x + 14, 41)], fill=focus)
     elif style == "twotone":
-        draw.line((0, 34, w - 1, 34), fill=mix(primary, focus, .92))
-        draw.line((0, 37, w - 1, 37), fill=mix(primary, active, .92))
+        draw.line((0, 42, w - 1, 42), fill=mix(primary, focus, .92))
+        draw.line((0, 46, w - 1, 46), fill=mix(primary, active, .92))
         for x in range(0, w, 56):
-            draw.line((x, 34, x + 24, 34), fill=focus)
-            draw.line((x + 28, 37, x + 52, 37), fill=active)
+            draw.line((x, 42, x + 24, 42), fill=focus)
+            draw.line((x + 28, 46, x + 52, 46), fill=active)
     draw.line((0, h - 1, w - 1, h - 1), fill=mix(page, (0, 0, 0), .35))
     return image
-
-
-def toolbar(style, page, primary, focus, active, width=X20_SIZE[0]):
-    """Draw textures and accent lines beside the logo at the native width."""
-    base = Image.new("RGB", (width, X20_SIZE[1]), page)
-    draw = ImageDraw.Draw(base)
-    for y in range(base.height):
-        if style == "oled":
-            background = page
-        elif style == "daylight":
-            background = mix(mix(page, (255, 255, 255), .55), primary, y / 49 * .30)
-        else:
-            background = mix(page, primary, y / 49)
-        draw.line((0, y, width - 1, y), fill=background)
-    result = compose_toolbar_sides(base, lambda w, h, side: _toolbar_panel(
-        style, page, primary, focus, active, w))
-    ImageDraw.Draw(result).line((0, 49, width - 1, 49), fill=mix(page, (0, 0, 0), .35))
-    return result
 
 
 def build(defn: tuple[str, str, str, str, str, str, str]) -> None:

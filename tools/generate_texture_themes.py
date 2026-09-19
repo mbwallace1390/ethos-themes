@@ -23,7 +23,6 @@ from theme_lib import (
     THEME_VERSION,
     X18_SIZE,
     X20_SIZE,
-    compose_toolbar_sides,
     contrasting,
     mix,
     rgb,
@@ -136,6 +135,11 @@ def bloom(image, draw, w, h, page, panel, accent, active, rng):
     for _ in range(max(8, w // 26)):
         radius = rng.randint(7, 18)
         centre_x, centre_y = rng.randrange(w), rng.randint(4, h - 6)
+        # Move complete bright orbs aside rather than blanking part of their glow.
+        clearance = 72 + radius
+        if abs(centre_x - (w - 1) / 2) < clearance:
+            outer_x = rng.randint(radius, int((w - 1) / 2 - clearance))
+            centre_x = outer_x if centre_x < w / 2 else w - 1 - outer_x
         span = radius * 2
         patch = Image.new("L", (span, span), 0)
         pixels = patch.load()
@@ -159,28 +163,24 @@ STYLES = {"weave": weave, "mosaic": mosaic, "halftone": halftone, "bloom": bloom
 
 def toolbar(width, style, page, panel, accent, active, seed) -> Image.Image:
     height = X20_SIZE[1]
-
-    def background(panel_width, panel_height):
-        image = Image.new("RGB", (panel_width, panel_height), page)
-        draw = ImageDraw.Draw(image)
-        for y in range(panel_height):
-            draw.line((0, y, panel_width - 1, y),
-                      fill=mix(page, panel, (y / (panel_height - 1)) * 0.85))
-        draw.line((0, panel_height - 1, panel_width - 1, panel_height - 1),
-                  fill=mix(page, (0, 0, 0), 0.35))
-        return image
-
-    def render_panel(panel_width, panel_height, side_index):
-        image = background(panel_width, panel_height)
-        draw = ImageDraw.Draw(image)
-        # Rebuild the texture at its final size so weave and dots stay pixel aligned.
-        STYLES[style](image, draw, panel_width, panel_height, page, panel, accent, active,
-                      random.Random(seed + side_index * 1009))
-        draw.line((0, panel_height - 1, panel_width - 1, panel_height - 1),
-                  fill=mix(page, (0, 0, 0), 0.35))
-        return image
-
-    return compose_toolbar_sides(background(width, height), render_panel)
+    image = Image.new("RGB", (width, height), page)
+    draw = ImageDraw.Draw(image)
+    for y in range(height):
+        draw.line((0, y, width - 1, y), fill=mix(page, panel, (y / (height - 1)) * 0.85))
+    base = image.copy()
+    STYLES[style](image, draw, width, height, page, panel, accent, active, random.Random(seed))
+    if style != "bloom":
+        pixels, background = image.load(), base.load()
+        # A soft oval reduces contrast beneath the letters, retaining at least
+        # 60% of every strand, cell and dot instead of cutting a rectangular gap.
+        for y in range(height):
+            for x in range(width):
+                distance = ((x - (width - 1) / 2) / 110) ** 2 + ((y - 26) / 24) ** 2
+                quieten = max(0.0, 1 - distance) ** 2 * 0.40
+                if quieten:
+                    pixels[x, y] = mix(pixels[x, y], background[x, y], quieten)
+    draw.line((0, height - 1, width - 1, height - 1), fill=mix(page, (0, 0, 0), 0.35))
+    return image
 
 
 def palette(accent, active, page, panel):

@@ -23,7 +23,6 @@ from theme_lib import (
     THEME_VERSION,
     X18_SIZE,
     X20_SIZE,
-    compose_toolbar_sides,
     contrasting,
     mix,
     rgb,
@@ -43,6 +42,13 @@ THEMES = [
 SPECTRUM = ["#FF4D5E", "#FF9A3D", "#FFD24A", "#5FE08B", "#3DC9FF", "#8A6CFF"]
 
 
+def wordmark_bend(x, width):
+    """Ease bright geometry around the lettering without covering the artwork."""
+    distance = abs(x - (width - 1) / 2)
+    amount = max(0.0, min(1.0, (120 - distance) / 44))
+    return amount * amount * (3 - 2 * amount)
+
+
 def contour(draw, w, h, page, panel, accent, active, rng):
     """Stacked elevation lines, kept clear of the bar edges."""
     for level in range(6):
@@ -51,6 +57,10 @@ def contour(draw, w, h, page, panel, accent, active, rng):
         for x in range(0, w + 4, 4):
             t = x / w
             y = 10 + level * 5.2 + 2.6 * math.sin(t * 6.2 + level * 0.35) + 1.4 * math.sin(t * 15.5 + level * 0.8)
+            # Upper/lower contour lines flow around the letters as a single field.
+            destination = 3 + level * 3 if level < 3 else 43 + (level - 3) * 2
+            bend = wordmark_bend(x, w)
+            y = y * (1 - bend) + destination * bend
             points.append((x, y))
         draw.line(points, fill=mix(panel, accent, strength), width=1)
 
@@ -73,6 +83,10 @@ def aurora(draw, w, h, page, panel, accent, active, rng):
         wave = math.sin(t * 9.0 + 0.7) * 0.5 + math.sin(t * 21.0 + 2.1) * 0.28 + math.sin(t * 4.3) * 0.5
         top = 7 + wave * 5.5
         bottom = top + 17 + 9 * math.sin(t * 13.0 + 1.2)
+        # The curtain rises over the wordmark instead of stopping at a blank gap.
+        bend = wordmark_bend(x, w)
+        top = top * (1 - bend) + (1 + wave * 0.5) * bend
+        bottom = bottom * (1 - bend) + (9 + wave * 0.5) * bend
         hue = mix(accent, active, (math.sin(t * 12.5 + 0.4) + 1) / 2)
         # A high-frequency term breaks the band into the vertical striations
         # that make an aurora read as curtains rather than a smear.
@@ -84,7 +98,10 @@ def aurora(draw, w, h, page, panel, accent, active, rng):
             draw.point((x, y), fill=mix(page, hue, min(intensity * fade * 1.25, 0.95)))
 
     for _ in range(w // 26):
-        draw.point((rng.randrange(w), rng.randrange(0, 14)), fill=mix(page, (255, 255, 255), rng.choice((0.3, 0.5, 0.75))))
+        x, y = rng.randrange(w), rng.randrange(0, 14)
+        if abs(x - (w - 1) / 2) < 76:
+            y = min(y, 9)
+        draw.point((x, y), fill=mix(page, (255, 255, 255), rng.choice((0.3, 0.5, 0.75))))
 
 
 def sonar(draw, w, h, page, panel, accent, active, rng):
@@ -92,14 +109,22 @@ def sonar(draw, w, h, page, panel, accent, active, rng):
     cx, cy = w // 2, h + 5
     for index, radius in enumerate(range(9, 132, 10)):
         brightness = max(0.06, 0.62 - radius / 165)
-        draw.arc(
-            (cx - radius * 2.4, cy - radius, cx + radius * 2.4, cy + radius),
-            192, 348,
-            fill=mix(page, accent if index % 3 else active, brightness),
-        )
+        points = []
+        # Keep each ring continuous while its bright crest clears the lettering.
+        destination = 9 if cy - radius < 27 else 43
+        for degrees in range(192, 349):
+            angle = math.radians(degrees)
+            x = cx + radius * 2.4 * math.cos(angle)
+            y = cy + radius * math.sin(angle)
+            bend = wordmark_bend(x, w)
+            points.append((x, y * (1 - bend) + destination * bend))
+        draw.line(points, fill=mix(page, accent if index % 3 else active, brightness))
     for _ in range(w // 60):
         x = rng.randrange(w)
-        draw.point((x, rng.randint(8, h - 12)), fill=mix(page, active, 0.85))
+        y = rng.randint(8, h - 12)
+        if abs(x - (w - 1) / 2) < 76:
+            y = 8 if y < 25 else 43
+        draw.point((x, y), fill=mix(page, active, 0.85))
     draw.line((0, h - 6, w - 1, h - 6), fill=mix(page, accent, 0.30))
 
 
@@ -110,15 +135,21 @@ def prism(draw, w, h, page, panel, accent, active, rng):
 
     bands = len(SPECTRUM)
     for index, value in enumerate(SPECTRUM):
-        color = rgb(value)
         spread = (index - (bands - 1) / 2) / bands
-        top = oy + spread * h * 0.95 - 3
-        bottom = top + h / bands + 2
-        draw.polygon([(ox, oy), (w, top), (w, bottom)], fill=mix(page, color, 0.42))
-
-    for index, value in enumerate(SPECTRUM):
-        spread = (index - (bands - 1) / 2) / bands
-        draw.line((ox, oy, w, oy + spread * h * 0.95), fill=mix(page, rgb(value), 0.85))
+        top, bottom, centerline = [], [], []
+        # The spectrum splits around the wordmark, then resumes its original fan.
+        destination = 3 + index * 3 if index < 3 else 43 + (index - 3) * 2
+        for x in range(ox, w + 4, 4):
+            amount = (x - ox) / (w - ox)
+            y = oy + spread * h * 0.95 * amount
+            bend = wordmark_bend(x, w)
+            y = y * (1 - bend) + destination * bend
+            thickness = (3 + amount * 2) * (1 - bend) + bend
+            top.append((x, y - thickness))
+            bottom.append((x, y + thickness))
+            centerline.append((x, y))
+        draw.polygon(top + list(reversed(bottom)), fill=mix(page, rgb(value), 0.42))
+        draw.line(centerline, fill=mix(page, rgb(value), 0.85))
     draw.ellipse((ox - 3, oy - 3, ox + 3, oy + 3), fill=mix(page, (255, 255, 255), 0.8))
 
 
@@ -127,32 +158,13 @@ STYLES = {"contour": contour, "aurora": aurora, "sonar": sonar, "prism": prism}
 
 def toolbar(width, style, page, panel, accent, active, seed) -> Image.Image:
     height = X20_SIZE[1]
-
-    def background(panel_width, panel_height):
-        image = Image.new("RGB", (panel_width, panel_height), page)
-        draw = ImageDraw.Draw(image)
-        for y in range(panel_height):
-            draw.line((0, y, panel_width - 1, y),
-                      fill=mix(page, panel, (y / (panel_height - 1)) * 0.85))
-        draw.line((0, panel_height - 1, panel_width - 1, panel_height - 1),
-                  fill=mix(page, (0, 0, 0), 0.35))
-        return image
-
-    def render_panel(panel_width, panel_height, side_index):
-        image = background(panel_width, panel_height)
-        draw = ImageDraw.Draw(image)
-        # Each flank gets complete native-size motifs and a stable random stream.
-        STYLES[style](draw, panel_width, panel_height, page, panel, accent, active,
-                      random.Random(seed + side_index * 1009))
-        if style == "prism" and side_index == 0:
-            # Both white beams enter beside the logo and fan outward to the edges.
-            image = image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
-        draw = ImageDraw.Draw(image)
-        draw.line((0, panel_height - 1, panel_width - 1, panel_height - 1),
-                  fill=mix(page, (0, 0, 0), 0.35))
-        return image
-
-    return compose_toolbar_sides(background(width, height), render_panel)
+    image = Image.new("RGB", (width, height), page)
+    draw = ImageDraw.Draw(image)
+    for y in range(height):
+        draw.line((0, y, width - 1, y), fill=mix(page, panel, (y / (height - 1)) * 0.85))
+    STYLES[style](draw, width, height, page, panel, accent, active, random.Random(seed))
+    draw.line((0, height - 1, width - 1, height - 1), fill=mix(page, (0, 0, 0), 0.35))
+    return image
 
 
 def palette(accent, active, page, panel):
