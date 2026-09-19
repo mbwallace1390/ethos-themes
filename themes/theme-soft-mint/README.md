@@ -1,4 +1,4 @@
-# Soft Mint v1.2.1
+# Soft Mint v1.2.2
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -13,5 +13,6 @@ A lightweight standalone FrSky ETHOS theme.
 - Internal key: `SMint`
 - Responsive 784x50 X20 / 464x50 X18 toolbar
 - Palette-matched ETHOS header logo with a transparent background
+- Artwork is drawn on either side of a clear logo area at both native widths
 
 To install from repository sources, copy `theme-soft-mint` into the transmitter `scripts` folder, restart, and select **Soft Mint**.

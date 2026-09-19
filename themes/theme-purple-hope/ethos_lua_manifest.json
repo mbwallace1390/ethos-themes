@@ -2,10 +2,10 @@
     "manifestVersion": 1,
     "name": "Purple Hope",
     "key": "mbwallace1390-theme-PurHope",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "releaseNotes": {
         "format": "markdown",
-        "content": "Readability update: improved foreground contrast and refreshed catalog previews. ETHOS 26.1 compatibility update, checked against the 26.1.2 theme API. Suite local ZIP layout corrected with the manifest and files at archive root. Unsupported firmware skips registration; optional toolbar load failures during initialization fall back to the theme colors. Requires ETHOS 26.1.0 or newer. Radio validation is still required. First stable Purple Hope release for Pancreatic Cancer Awareness. Includes original generic awareness-ribbon toolbar artwork and changes only the ETHOS radio theme. Automatically selects 464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios. Palette-matched transparent ETHOS header logo."
+        "content": "Readability update: improved foreground contrast and refreshed catalog previews. ETHOS 26.1 compatibility update, checked against the 26.1.2 theme API. Suite local ZIP layout corrected with the manifest and files at archive root. Unsupported firmware skips registration; optional toolbar load failures during initialization fall back to the theme colors. Requires ETHOS 26.1.0 or newer. Radio validation is still required. First stable Purple Hope release for Pancreatic Cancer Awareness. Includes original generic awareness-ribbon toolbar artwork and changes only the ETHOS radio theme. Automatically selects 464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios. Palette-matched transparent ETHOS header logo. Toolbar artwork frames a clear center so the logo cannot cover decorative details."
     },
     "folder": "theme-purple-hope",
     "files": [

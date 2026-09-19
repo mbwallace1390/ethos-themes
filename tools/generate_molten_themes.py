@@ -11,6 +11,7 @@ from theme_lib import (
     THEME_VERSION,
     X18_SIZE,
     X20_SIZE,
+    compose_toolbar_sides,
     mix,
     rgb,
     save_png,
@@ -43,30 +44,40 @@ def palette(focus: tuple[int, int, int], active: tuple[int, int, int]) -> dict[s
 
 def toolbar(width: int, page: tuple[int, int, int], primary_bg: tuple[int, int, int],
             focus: tuple[int, int, int], active: tuple[int, int, int], seed: int) -> Image.Image:
-    h = 50
-    image = Image.new("RGB", (width, h))
-    draw = ImageDraw.Draw(image)
-    for y in range(h):
-        draw.line((0, y, width - 1, y), fill=mix(page, primary_bg, y / (h - 1)))
+    height = X20_SIZE[1]
 
-    rng = random.Random(seed)
-    points = []
-    y = 25
-    for x in range(0, width, 14):
-        y = max(17, min(34, y + rng.randint(-4, 4)))
-        points.append((x, y))
-    for i in range(len(points) - 1):
-        draw.line([points[i], points[i + 1]], fill=mix(primary_bg, focus, .28), width=5)
-    for i in range(len(points) - 1):
-        draw.line([points[i], points[i + 1]], fill=focus, width=2)
+    def background(panel_width, panel_height):
+        image = Image.new("RGB", (panel_width, panel_height))
+        draw = ImageDraw.Draw(image)
+        for y in range(panel_height):
+            draw.line((0, y, panel_width - 1, y),
+                      fill=mix(page, primary_bg, y / (panel_height - 1)))
+        draw.line((0, panel_height - 1, panel_width - 1, panel_height - 1),
+                  fill=mix(page, (0, 0, 0), .35))
+        return image
 
-    for _ in range(width // 22):
-        x, yy = rng.randint(0, width - 1), rng.randint(0, h - 1)
-        brightness = rng.choice((.35, .55, .75, .95))
-        draw.point((x, yy), fill=mix(page, active, brightness))
+    def render_panel(panel_width, panel_height, side_index):
+        image = background(panel_width, panel_height)
+        draw = ImageDraw.Draw(image)
+        rng = random.Random(seed + side_index * 1009)
+        points = []
+        y = 25
+        # Separate native-width fissures frame the clear logo area on both sides.
+        for x in range(0, panel_width + 14, 14):
+            y = max(17, min(34, y + rng.randint(-4, 4)))
+            points.append((min(x, panel_width - 1), y))
+        draw.line(points, fill=mix(primary_bg, focus, .28), width=5)
+        draw.line(points, fill=focus, width=2)
 
-    draw.line((0, h - 1, width - 1, h - 1), fill=mix(page, (0, 0, 0), .35))
-    return image
+        for _ in range(panel_width // 22):
+            x, yy = rng.randint(0, panel_width - 1), rng.randint(0, panel_height - 1)
+            brightness = rng.choice((.35, .55, .75, .95))
+            draw.point((x, yy), fill=mix(page, active, brightness))
+        draw.line((0, panel_height - 1, panel_width - 1, panel_height - 1),
+                  fill=mix(page, (0, 0, 0), .35))
+        return image
+
+    return compose_toolbar_sides(background(width, height), render_panel)
 
 
 def build(defn: tuple[str, str, str, str, str, int]) -> None:

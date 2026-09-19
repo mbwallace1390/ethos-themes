@@ -23,6 +23,7 @@ from theme_lib import (
     THEME_VERSION,
     X18_SIZE,
     X20_SIZE,
+    compose_toolbar_sides,
     contrasting,
     mix,
     rgb,
@@ -158,15 +159,28 @@ STYLES = {"weave": weave, "mosaic": mosaic, "halftone": halftone, "bloom": bloom
 
 def toolbar(width, style, page, panel, accent, active, seed) -> Image.Image:
     height = X20_SIZE[1]
-    image = Image.new("RGB", (width, height), page)
-    draw = ImageDraw.Draw(image)
-    for y in range(height):
-        draw.line((0, y, width - 1, y), fill=mix(page, panel, (y / (height - 1)) * 0.85))
 
-    STYLES[style](image, draw, width, height, page, panel, accent, active, random.Random(seed))
+    def background(panel_width, panel_height):
+        image = Image.new("RGB", (panel_width, panel_height), page)
+        draw = ImageDraw.Draw(image)
+        for y in range(panel_height):
+            draw.line((0, y, panel_width - 1, y),
+                      fill=mix(page, panel, (y / (panel_height - 1)) * 0.85))
+        draw.line((0, panel_height - 1, panel_width - 1, panel_height - 1),
+                  fill=mix(page, (0, 0, 0), 0.35))
+        return image
 
-    draw.line((0, height - 1, width - 1, height - 1), fill=mix(page, (0, 0, 0), 0.35))
-    return image
+    def render_panel(panel_width, panel_height, side_index):
+        image = background(panel_width, panel_height)
+        draw = ImageDraw.Draw(image)
+        # Rebuild the texture at its final size so weave and dots stay pixel aligned.
+        STYLES[style](image, draw, panel_width, panel_height, page, panel, accent, active,
+                      random.Random(seed + side_index * 1009))
+        draw.line((0, panel_height - 1, panel_width - 1, panel_height - 1),
+                  fill=mix(page, (0, 0, 0), 0.35))
+        return image
+
+    return compose_toolbar_sides(background(width, height), render_panel)
 
 
 def palette(accent, active, page, panel):

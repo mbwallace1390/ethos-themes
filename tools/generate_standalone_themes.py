@@ -19,7 +19,7 @@ from theme_lib import (
     X18_SIZE,
     X20_SIZE,
     contrasting,
-    downscale_to_x18,
+    compose_toolbar_sides,
     lua_color,
     mix,
     rgb,
@@ -120,8 +120,8 @@ def palette(family: str, focus: tuple[int, int, int], active: tuple[int, int, in
                 safe_contrast=(7, 24, 12))
 
 
-def toolbar(style: str, page: tuple[int, int, int], primary: tuple[int, int, int], focus: tuple[int, int, int], active: tuple[int, int, int]) -> Image.Image:
-    w, h = X20_SIZE
+def _toolbar_panel(style, page, primary, focus, active, width):
+    w, h = width, X20_SIZE[1]
     image = Image.new("RGB", (w, h))
     draw = ImageDraw.Draw(image)
     for y in range(h):
@@ -174,6 +174,24 @@ def toolbar(style: str, page: tuple[int, int, int], primary: tuple[int, int, int
     return image
 
 
+def toolbar(style, page, primary, focus, active, width=X20_SIZE[0]):
+    """Draw textures and accent lines beside the logo at the native width."""
+    base = Image.new("RGB", (width, X20_SIZE[1]), page)
+    draw = ImageDraw.Draw(base)
+    for y in range(base.height):
+        if style == "oled":
+            background = page
+        elif style == "daylight":
+            background = mix(mix(page, (255, 255, 255), .55), primary, y / 49 * .30)
+        else:
+            background = mix(page, primary, y / 49)
+        draw.line((0, y, width - 1, y), fill=background)
+    result = compose_toolbar_sides(base, lambda w, h, side: _toolbar_panel(
+        style, page, primary, focus, active, w))
+    ImageDraw.Draw(result).line((0, 49, width - 1, 49), fill=mix(page, (0, 0, 0), .35))
+    return result
+
+
 def build(defn: tuple[str, str, str, str, str, str, str]) -> None:
     family, slug, name, key, focus_hex, active_hex, style = defn
     focus, active = rgb(focus_hex), rgb(active_hex)
@@ -188,7 +206,7 @@ def build(defn: tuple[str, str, str, str, str, str, str]) -> None:
     small_name = f"toolbar-{slug}-x18.png"
     large_art = toolbar(style, p["page"], p["primary_bg"], focus, active)
     save_png(large_art, theme_dir / large_name)
-    save_png(downscale_to_x18(large_art), theme_dir / small_name)
+    save_png(toolbar(style, p["page"], p["primary_bg"], focus, active, X18_SIZE[0]), theme_dir / small_name)
 
     roles = [
         ("PRIMARY_COLOR", p["primary"]), ("SECONDARY_BGCOLOR", p["secondary_bg"]),

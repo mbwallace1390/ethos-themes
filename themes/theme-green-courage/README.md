@@ -1,4 +1,4 @@
-# Green Courage v1.2.1
+# Green Courage v1.2.2
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -15,5 +15,6 @@ A standalone FrSky ETHOS radio theme with original generic awareness-ribbon tool
 - Separate installable package
 - Does not modify Rotorflight or RF Suite Lua files
 - Palette-matched ETHOS header logo with a transparent background
+- Artwork is drawn on either side of a clear logo area at both native widths
 
 To install from repository sources, copy `theme-green-courage` into the transmitter's `scripts` folder, restart, and select **Green Courage** under **System > General > Theme**.

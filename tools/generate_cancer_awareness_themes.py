@@ -18,9 +18,10 @@ from theme_lib import (
     SELECTOR_LUA,
     THEMES_ROOT,
     THEME_VERSION,
+    X18_SIZE,
     X20_SIZE,
     contrasting,
-    downscale_to_x18,
+    compose_toolbar_sides,
     save_png,
     toolbar_call,
     write_release,
@@ -102,9 +103,8 @@ def draw_ribbon(draw: ImageDraw.ImageDraw, cx: int, top: int, ribbon: tuple[int,
     draw.line(right_loop + [right_loop[0]], fill=dark, width=max(1, round(scale)))
 
 
-def draw_toolbar(theme) -> Image.Image:
+def draw_panel(theme, width, height, side) -> Image.Image:
     slug, _, _, _, ribbon_hex, active_hex, page_hex, primary_hex, _, _, style = theme
-    width, height = X20_SIZE
     ribbon, active, page, primary = map(rgb, (ribbon_hex, active_hex, page_hex, primary_hex))
     image = Image.new("RGB", (width, height), page)
     draw = ImageDraw.Draw(image)
@@ -112,61 +112,79 @@ def draw_toolbar(theme) -> Image.Image:
     for y in range(height):
         draw.line((0, y, width - 1, y), fill=mix(page, primary, y / (height - 1)))
 
-    # Repeating fine accent line keeps the toolbar readable across the full width.
+    # The ribbon remains singular on the left. Motifs are drawn at their native
+    # size within each flank, with room before the shared inner-edge fade.
     draw.line((0, 39, width - 1, 39), fill=mix(page, ribbon, 0.82), width=2)
-    draw_ribbon(draw, 32, 7, ribbon, 1.05)
+    if side == 0:
+        draw_ribbon(draw, 32, 7, ribbon, 1.05)
+    start = 78 if side == 0 else 18
+    end = width - 10
 
     if style == "hearts":
-        for x in range(92, width, 92):
+        for x in range(start, end - 22 + 1, 92):
             draw.arc((x, 12, x + 12, 24), 190, 355, fill=mix(page, ribbon, .58), width=2)
             draw.arc((x + 10, 12, x + 22, 24), 185, 350, fill=mix(page, ribbon, .58), width=2)
             draw.line((x + 1, 19, x + 11, 30), fill=mix(page, ribbon, .58), width=2)
             draw.line((x + 21, 19, x + 11, 30), fill=mix(page, ribbon, .58), width=2)
     elif style == "stars":
-        for x in range(88, width, 68):
+        for x in range(start, end - 6 + 1, 68):
             y = 17 if (x // 68) % 2 else 25
             draw.ellipse((x, y, x + 3, y + 3), fill=active)
             draw.line((x - 3, y + 1, x + 6, y + 1), fill=mix(page, ribbon, .56))
             draw.line((x + 1, y - 3, x + 1, y + 6), fill=mix(page, ribbon, .56))
     elif style == "unity":
-        for x in range(90, width, 74):
+        for x in range(start, end - 37 + 1, 74):
             draw.arc((x, 10, x + 26, 36), 30, 330, fill=mix(page, ribbon, .62), width=2)
             draw.arc((x + 11, 10, x + 37, 36), 210, 150, fill=mix(page, active, .62), width=2)
     elif style == "waves":
         points = []
-        for x in range(78, width):
-            y = 23 + round(5 * math.sin((x - 78) / 24))
+        for x in range(start, end):
+            y = 23 + round(5 * math.sin((x - start) / 24))
             points.append((x, y))
         draw.line(points, fill=mix(page, ribbon, .68), width=2)
         draw.line([(x, y + 7) for x, y in points], fill=mix(page, active, .35), width=1)
     elif style == "shield":
-        for x in range(94, width, 95):
+        for x in range(start, end - 23 + 1, 95):
             draw.polygon([(x, 9), (x + 23, 14), (x + 20, 30), (x + 11, 36), (x + 2, 30), (x - 1, 14)], outline=mix(page, ribbon, .65))
             draw.line((x + 11, 15, x + 11, 31), fill=mix(page, active, .55))
     elif style == "flame":
-        for x in range(94, width, 88):
+        for x in range(start, end - 25 + 1, 88):
             draw.polygon([(x + 10, 34), (x + 2, 25), (x + 8, 12), (x + 14, 23), (x + 20, 8), (x + 25, 24), (x + 19, 34)], outline=mix(page, ribbon, .66))
     elif style == "rays":
-        for x in range(102, width, 104):
+        for x in range(start, end - 26 + 1, 104):
             for offset in (-13, 0, 13):
                 draw.line((x, 22, x + 26, 22 + offset), fill=mix(page, ribbon if offset else active, .55), width=2)
     elif style == "breath":
         for row in range(3):
             y = 13 + row * 9
-            for x in range(86 + row * 18, width, 130):
+            for x in range(start + row * 18, end - 80 + 1, 130):
                 draw.arc((x, y - 4, x + 80, y + 8), 190, 345, fill=mix(page, ribbon, .54), width=2)
     elif style == "geometry":
-        for x in range(86, width, 64):
+        for x in range(start, end - 28 + 1, 64):
             draw.line((x, 11, x + 28, 25), fill=mix(page, ribbon, .65), width=2)
             draw.line((x + 28, 25, x, 36), fill=mix(page, active, .47), width=2)
     elif style == "leaves":
-        for x in range(90, width, 82):
+        for x in range(start, end - 38 + 1, 82):
             draw.arc((x, 12, x + 24, 34), 80, 270, fill=mix(page, ribbon, .68), width=2)
             draw.arc((x + 14, 11, x + 38, 33), 270, 100, fill=mix(page, active, .48), width=2)
             draw.line((x + 18, 16, x + 18, 35), fill=mix(page, ribbon, .52))
 
     draw.line((0, height - 1, width - 1, height - 1), fill=mix(page, (0, 0, 0), .38))
     return image
+
+
+def draw_toolbar(theme, width=X20_SIZE[0]) -> Image.Image:
+    """Lay out the ribbon and decorative motifs around a clear logo center."""
+    page, primary = rgb(theme[6]), rgb(theme[7])
+    height = X20_SIZE[1]
+    image = Image.new("RGB", (width, height), page)
+    draw = ImageDraw.Draw(image)
+    for y in range(height):
+        draw.line((0, y, width - 1, y), fill=mix(page, primary, y / (height - 1)))
+    draw.line((0, height - 1, width - 1, height - 1), fill=mix(page, (0, 0, 0), .38))
+    return compose_toolbar_sides(
+        image, lambda panel_width, panel_height, side: draw_panel(theme, panel_width, panel_height, side)
+    )
 
 
 def palette(theme):
@@ -206,9 +224,8 @@ def build_theme(theme) -> None:
 
     large_name = f"toolbar-{slug}.png"
     small_name = f"toolbar-{slug}-x18.png"
-    large_art = draw_toolbar(theme)
-    save_png(large_art, theme_dir / large_name)
-    save_png(downscale_to_x18(large_art), theme_dir / small_name)
+    for width, filename in ((X20_SIZE[0], large_name), (X18_SIZE[0], small_name)):
+        save_png(draw_toolbar(theme, width), theme_dir / filename)
     colors = palette(theme)
     color_lines = []
     order = [

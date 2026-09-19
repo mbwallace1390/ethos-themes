@@ -2,9 +2,9 @@
 
 ## Current catalog
 
-The 66 collection themes are now **v1.2.1**, each with a transparent ETHOS header logo colored to match its palette. The small logo bitmap is requested once during initialization; no recurring drawing task is added. Their v1.2.0 ZIPs remain frozen snapshots.
+The 66 collection themes are now **v1.2.2**. Their artwork is drawn in left and right panels, leaving a clear 160px center around each palette-matched ETHOS logo at both display sizes. Palettes, transparent logos, and initialization-only behavior are preserved. The v1.2.0 and v1.2.1 ZIPs remain frozen snapshots.
 
-America 250 stays at [v1.2.1](America-250-v1.2.1.zip), with the default ETHOS logo hidden over its anniversary inscription. [Ink & Halo v1.0.1](Ink-and-Halo-v1.0.1.zip) keeps its white and pale-blue ETHOS wordmark inside the luminous halo header. Its [v1.0.0 ZIP](Ink-and-Halo-v1.0.0.zip) is preserved. Startup and About/Info branding remain unchanged for all themes; see [native-theme limits](../ETHOS26.md#ink--halo-header-update-v101).
+America 250 stays at [v1.2.1](America-250-v1.2.1.zip), with the default ETHOS logo hidden over its anniversary inscription. [Ink & Halo v1.0.2](Ink-and-Halo-v1.0.2.zip) raises and widens its halo arc to leave a clear gap around the white and pale-blue ETHOS wordmark. Its [v1.0.0 ZIP](Ink-and-Halo-v1.0.0.zip) and [v1.0.1 ZIP](Ink-and-Halo-v1.0.1.zip) are preserved. See [artwork changes](../ETHOS26.md#header-artwork-clearance-v122-and-v102). Startup and About/Info branding remain unchanged for all themes; see [native-theme limits](../ETHOS26.md#ink--halo-header-update-v101).
 
 All 68 themes target ETHOS 26.1.0 and newer, with API checks against 26.1.2. Choose a theme from the [main catalog](../README.md) for its individual ZIP.
 

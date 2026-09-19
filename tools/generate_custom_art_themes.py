@@ -21,16 +21,12 @@ from theme_lib import (
     THEME_VERSION,
     X18_SIZE,
     X20_SIZE,
-    downscale_to_x18,
+    compose_toolbar_sides,
     save_png,
     toolbar_call,
     write_release,
     zip_install_instructions,
 )
-
-# The X18 artwork for this theme was validated on real hardware, so it is kept
-# byte-for-byte instead of being re-derived from the X20 art.
-PRESERVED_X18 = {"aviation-hud"}
 
 # collection, slug, display name, short ETHOS key, release ZIP, artwork style,
 # round buttons, focus style, then 16 palette colors:
@@ -108,7 +104,7 @@ def camo(draw, width, height, colors, seed):
             draw.polygon([(x, y+h//2),(x+w//3,y),(x+w,y+h//3),(x+2*w//3,y+h),(x+w//8,y+3*h//4)], fill=fill)
 
 
-def artwork(draw, style, width, height, page, panel, accent, active):
+def artwork(draw, style, width, height, page, panel, accent, active, side=0):
     gradient(draw, width, height, page, panel)
     center = width // 2
 
@@ -116,24 +112,36 @@ def artwork(draw, style, width, height, page, panel, accent, active):
         draw.line((0, 36, width-1, 36), fill=mix(page, accent, .8))
         for x in range(14, width, 28):
             draw.line((x, 37, x, 45 if x % 112 == 14 else 41), fill=mix(page, accent, .72))
-        draw.ellipse((center-12, 10, center+12, 34), outline=accent)
-        draw.line((center-22,22,center-5,22), fill=accent)
-        draw.line((center+5,22,center+22,22), fill=accent)
-        draw.line((center,4,center,16), fill=active)
+        if side == 0:
+            draw.ellipse((center-12, 10, center+12, 34), outline=accent)
+            draw.line((center-22,22,center-5,22), fill=accent)
+            draw.line((center+5,22,center+22,22), fill=accent)
+            draw.line((center,4,center,16), fill=active)
+        else:
+            for y, half_width in ((10, 15), (18, 24), (26, 15)):
+                draw.line((center-half_width,y,center+half_width,y), fill=accent)
     elif style == "blueprint":
         for x in range(0, width, 16):
             draw.line((x,0,x,height-1), fill=mix(page, accent, .28 if x % 64 == 0 else .13))
         for y in range(0, height, 10):
             draw.line((0,y,width-1,y), fill=mix(page, accent, .26 if y % 20 == 0 else .12))
-        draw.rectangle((20,8,122,34), outline=mix(page,accent,.8))
-        draw.arc((width-120,-22,width-20,72),190,330,fill=active)
+        if side == 0:
+            half_width = min(51, center - 16)
+            draw.rectangle((center-half_width,8,center+half_width,34), outline=mix(page,accent,.8))
+        else:
+            draw.arc((center-40,3,center+40,45),190,350,fill=active)
     elif style == "rotor":
         draw.line((0,36,width-1,36), fill=mix(page,accent,.7))
-        draw.line((center-66,17,center+66,17), fill=accent, width=2)
-        draw.ellipse((center-4,13,center+4,21), fill=active)
-        draw.line((center,21,center,32), fill=accent, width=2)
-        draw.polygon([(center-20,31),(center+23,31),(center+11,21),(center-10,21)], outline=accent)
-        draw.line((center+22,27,center+47,22), fill=accent, width=2)
+        if side == 0:
+            rotor_half_width = min(66, center - 12)
+            draw.line((center-rotor_half_width,17,center+rotor_half_width,17), fill=accent, width=2)
+            draw.ellipse((center-4,13,center+4,21), fill=active)
+            draw.line((center,21,center,32), fill=accent, width=2)
+            draw.polygon([(center-20,31),(center+23,31),(center+11,21),(center-10,21)], outline=accent)
+            draw.line((center+22,27,center+47,22), fill=accent, width=2)
+        else:
+            for x in range(16, width - 12, 24):
+                draw.line((x,29,x,35), fill=mix(page,accent,.7))
     elif style == "woodland":
         camo(draw,width,height,[color("1A2214"),color("344126"),color("55603A"),color("24291C")],101)
         draw.line((0,39,width-1,39), fill=accent, width=2)
@@ -144,28 +152,32 @@ def artwork(draw, style, width, height, page, panel, accent, active):
         camo(draw,width,height,[color("E5D2AD"),color("C3A777"),color("9E7A4B"),color("D8BE91")],303)
         draw.line((0,39,width-1,39), fill=accent, width=2)
     elif style == "space":
-        rng = random.Random(143)
-        for _ in range(130):
+        rng = random.Random(143 + side)
+        for _ in range(max(18, width // 6)):
             x, y = rng.randrange(width), rng.randrange(height)
             bright = rng.choice((.3,.45,.65,.9))
             radius = 2 if bright > .8 else 1
             draw.ellipse((x,y,x+radius,y+radius), fill=mix(page,(255,255,255),bright))
-        draw.ellipse((70,-30,235,74), fill=mix(page,accent,.08), outline=mix(page,accent,.4))
-        draw.ellipse((width-260,-45,width-40,78), fill=mix(page,active,.06), outline=mix(page,active,.35))
+        radius = 19 if side == 0 else 22
+        planet = accent if side == 0 else active
+        draw.ellipse((center-radius,24-radius,center+radius,24+radius),
+                     fill=mix(page,planet,.08), outline=mix(page,planet,.4))
     elif style == "lunar":
         surface = mix(panel, accent, .12)
         draw.rectangle((0,27,width-1,height-1), fill=surface)
-        rng = random.Random(2049)
-        for _ in range(50):
+        rng = random.Random(2049 + side)
+        for _ in range(max(10, width // 15)):
             x, y, radius = rng.randrange(width), rng.randrange(27,height), rng.randint(2,8)
             draw.ellipse((x-radius,y-radius//2,x+radius,y+radius//2), outline=mix(surface,page,.35))
-        draw.arc((center-42,-28,center+42,54),0,180,fill=accent,width=2)
+        if side == 0:
+            draw.arc((center-21,2,center+21,44),0,180,fill=accent,width=2)
         draw.line((0,26,width-1,26), fill=active)
     elif style == "horizon":
         horizon = 29
         draw.line((0,horizon,width-1,horizon), fill=active, width=2)
-        draw.ellipse((center-28,4,center+28,48), fill=mix(page,accent,.25), outline=accent, width=2)
-        for y in range(8,29,5): draw.line((center-25,y,center+25,y), fill=mix(page,accent,.45))
+        if side == 0:
+            draw.ellipse((center-28,4,center+28,48), fill=mix(page,accent,.25), outline=accent, width=2)
+            for y in range(8,29,5): draw.line((center-25,y,center+25,y), fill=mix(page,accent,.45))
         for x in range(0,width,52): draw.line((center,horizon,x,height-1), fill=mix(page,active,.38))
         for y in (34,39,44,48): draw.line((0,y,width-1,y), fill=mix(page,active,.35))
     elif style == "circuit":
@@ -184,7 +196,7 @@ def artwork(draw, style, width, height, page, panel, accent, active):
             for x in range(0,width,square):
                 draw.rectangle((x,y,x+square-1,y+square-1), fill=active if ((x//square)+(y-y0)//square)%2==0 else page)
         for offset in (0,16,32):
-            x = 90 + offset
+            x = center - 16 + offset
             draw.polygon([(x,0),(x+14,0),(x-22,30),(x-36,30)], fill=accent)
         draw.line((0,28,width-1,28), fill=accent, width=2)
     elif style == "hex":
@@ -198,13 +210,22 @@ def artwork(draw, style, width, height, page, panel, accent, active):
         draw.line((0,38,width-1,38), fill=accent, width=2)
 
 
-def make_toolbar(theme):
+def make_toolbar(theme, width=X20_SIZE[0]):
     _, _, _, _, _, style, _, _, palette = theme
     page, panel, accent, active = color(palette[8]), color(palette[5]), color(palette[2]), color(palette[10])
-    width, height = X20_SIZE
+    height = X20_SIZE[1]
     image = Image.new("RGB", (width,height), page)
     draw = ImageDraw.Draw(image)
-    artwork(draw,style,width,height,page,panel,accent,active)
+    gradient(draw, width, height, page, panel)
+
+    def render_panel(panel_width, panel_height, side):
+        flank = Image.new("RGB", (panel_width, panel_height), page)
+        artwork(ImageDraw.Draw(flank), style, panel_width, panel_height,
+                page, panel, accent, active, side)
+        return flank
+
+    image = compose_toolbar_sides(image, render_panel)
+    draw = ImageDraw.Draw(image)
     draw.line((0,height-1,width-1,height-1), fill=mix(page,(0,0,0),.35))
     return image
 
@@ -216,20 +237,12 @@ def build_theme(theme):
     large_name = f"toolbar-{slug}.png"
     small_name = f"toolbar-{slug}-x18.png"
 
-    approved_x18 = None
-    if slug in PRESERVED_X18 and (theme_dir / small_name).exists():
-        approved_x18 = (theme_dir / small_name).read_bytes()
-
     if theme_dir.exists(): shutil.rmtree(theme_dir)
     theme_dir.mkdir(parents=True)
     RELEASES_ROOT.mkdir(parents=True,exist_ok=True)
 
-    large_art = make_toolbar(theme)
-    save_png(large_art, theme_dir/large_name)
-    if approved_x18 is not None:
-        (theme_dir/small_name).write_bytes(approved_x18)
-    else:
-        save_png(downscale_to_x18(large_art), theme_dir/small_name)
+    for width, filename in ((X20_SIZE[0], large_name), (X18_SIZE[0], small_name)):
+        save_png(make_toolbar(theme, width), theme_dir / filename)
 
     lines = []
     for index, role in enumerate(ROLES):

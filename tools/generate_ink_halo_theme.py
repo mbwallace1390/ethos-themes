@@ -21,19 +21,17 @@ PANEL = (13, 16, 23)
 WHITE = (244, 247, 252)
 ICE = (189, 215, 255)
 SLUG = "ink-halo"
-VERSION = "1.0.1"
+VERSION = "1.0.2"
 WORDMARK = Path(__file__).resolve().parent / "assets" / "ink-halo" / "ethos-wordmark.png"
 
 
-def toolbar(width):
-    """Draw a luminous elliptical horizon while leaving both ends quiet."""
+def halo_background(width):
+    """Raise and widen the halo around a clear wordmark area on both displays."""
     image = Image.new("RGB", (width, 50), INK)
     pixels = image.load()
     center = (width - 1) / 2
-    visible_half_width = min(194.0, width * 0.285)
-    center_y, radius_y = 170.0, 166.0
-    # Solve the ellipse radius so the arc exits through the bottom of the strip.
-    radius_x = visible_half_width / math.sqrt(1 - ((center_y - 50) / radius_y) ** 2)
+    # A shared radius stops the smaller display compressing the arc into the logo.
+    center_y, radius_y, radius_x = 170.0, 169.0, 400.0
     for x in range(width):
         relative_x = (x - center) / radius_x
         arc_y = (center_y - radius_y * math.sqrt(1 - relative_x * relative_x)
@@ -45,7 +43,18 @@ def toolbar(width):
             strength = min(1.0, 0.19 * math.exp(-(distance / 6.4) ** 2)
                            + 0.24 * math.exp(-(distance / 1.9) ** 2)
                            + 0.76 * math.exp(-(distance / 0.62) ** 2))
+            # Fade bloom before it reaches the padded wordmark rectangle, so the
+            # clear area has no visible rectangular edge or decoration inside it.
+            dx = max(0.0, abs(x - center) - 80)
+            dy = max(0.0, 8 - y, y - 45)
+            clearance = min(1.0, math.hypot(dx, dy) / 5)
+            strength *= clearance * clearance * (3 - 2 * clearance)
             pixels[x, y] = mix(mix(INK, PANEL, y / 100), tint, strength)
+    return image
+
+
+def toolbar(width):
+    image = halo_background(width)
     draw = ImageDraw.Draw(image)
     # A single native-size wordmark leaves the halo above it and avoids relying
     # on firmware-specific logo positioning. The default overlay stays hidden.
@@ -149,12 +158,14 @@ def main():
         header="Ink-black panels and a quiet halo. Native ETHOS radio theme; no background tasks.",
         round_buttons=True, focus_style="outline", roles=palette(),
         version=VERSION, hide_toolbar_logo=True,
-        release_notes=("Replaced the header inscription with a soft-white and pale-blue ETHOS "
-                       "wordmark to match the theme. The default green header overlay stays hidden. "
+        release_notes=("Raised and widened the halo so its arc and glow stay clear of the "
+                       "soft-white and pale-blue ETHOS wordmark at both display widths. "
+                       "The default green header overlay stays hidden. "
                        "Startup and About logos are unchanged."),
         readme_extra=("- Original halo artwork, drawn at each native display width\n"
                       "- Glow is baked into opaque PNGs; no animation or background drawing\n"
                       "- Soft-white and pale-blue ETHOS wordmark baked into the header artwork\n"
+                      "- Raised halo arc and a clear area around the wordmark at both display sizes\n"
                       "- Transparent logo override prevents the default green logo overlapping it\n"
                       "- Startup and About logos are unchanged; ETHOS 26 exposes no documented theme option for them\n"),
     )

@@ -23,11 +23,13 @@ ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 RELEASES_ROOT = ROOT / "releases"
 PREVIEWS_ROOT = ROOT / "previews"
-THEME_VERSION = "1.2.1"
+THEME_VERSION = "1.2.2"
 WORDMARK_MASK = Path(__file__).resolve().parent / "assets" / "ethos-logo" / "wordmark-alpha.png"
 LOGO_SIZE = (128, 26)
-LOGO_RELEASE_NOTES = "Palette-matched transparent ETHOS header logo."
-LOGO_README_LINE = "- Palette-matched ETHOS header logo with a transparent background\n"
+LOGO_RELEASE_NOTES = "Palette-matched transparent ETHOS header logo. Toolbar artwork frames a clear center so the logo cannot cover decorative details."
+LOGO_README_LINE = ("- Palette-matched ETHOS header logo with a transparent background\n"
+                    "- Artwork is drawn on either side of a clear logo area at both native widths\n")
+LOGO_CLEAR_WIDTH = 160
 ETHOS26_SUPPORT = (
     "Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. "
     "Radio validation is still required."
@@ -76,6 +78,32 @@ def rgb(value: str) -> tuple[int, int, int]:
 
 def mix(a: tuple[int, int, int], b: tuple[int, int, int], amount: float) -> tuple[int, int, int]:
     return tuple(round(a[i] * (1 - amount) + b[i] * amount) for i in range(3))
+
+
+def compose_toolbar_sides(base: Image.Image, render_panel) -> Image.Image:
+    """Render artwork in two native-size flanks around a plain logo area.
+
+    The renderer receives (panel_width, height, side_index), with 0 for left.
+    No artwork is scaled or cropped to make space. An eight-pixel inner fade
+    joins patterned panels to the original background, outside the clear area.
+    """
+    width, height = base.size
+    if width <= LOGO_CLEAR_WIDTH:
+        raise ValueError("Toolbar is too narrow for the centered logo area")
+    result = base.convert("RGB").copy()
+    left = (width - LOGO_CLEAR_WIDTH) // 2
+    right = left + LOGO_CLEAR_WIDTH
+    for side, (start, end) in enumerate(((0, left), (right, width))):
+        panel = render_panel(end - start, height, side)
+        if panel.size != (end - start, height):
+            raise ValueError("Artwork renderer must use its native panel dimensions")
+        mask = Image.new("L", panel.size, 255)
+        # The fade ends before the reserved area; it cannot bleed behind a logo.
+        for distance in range(8):
+            x = panel.width - 1 - distance if side == 0 else distance
+            mask.paste(round(255 * distance / 8), (x, 0, x + 1, height))
+        result.paste(panel.convert("RGB"), (start, 0), mask)
+    return result
 
 
 def lua_color(color: tuple[int, int, int]) -> str:

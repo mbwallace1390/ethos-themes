@@ -1,4 +1,4 @@
-# Molten Sulfur v1.2.1
+# Molten Sulfur v1.2.2
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -13,5 +13,6 @@ A standalone FrSky ETHOS theme.
 - Internal key: `MltSulf`
 - Automatically selects 784x50 artwork on 800px radios and 464x50 artwork on standard X18 radios
 - Palette-matched ETHOS header logo with a transparent background
+- Artwork is drawn on either side of a clear logo area at both native widths
 
 To install from repository sources, copy `theme-molten-sulfur` into the transmitter `scripts` folder, restart, and select **Molten Sulfur** under **System > General > Theme**.

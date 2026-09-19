@@ -16,9 +16,10 @@ from theme_lib import (
     SELECTOR_LUA,
     THEMES_ROOT,
     THEME_VERSION,
+    X18_SIZE,
     X20_SIZE,
+    compose_toolbar_sides,
     contrasting,
-    downscale_to_x18,
     save_png,
     toolbar_call,
     write_release,
@@ -42,8 +43,8 @@ def rgb_lua(color: tuple[int, int, int]) -> str:
     return f"lcd.RGB(0x{color[0]:02X}, 0x{color[1]:02X}, 0x{color[2]:02X})"
 
 
-def make_toolbar(accent: tuple[int, int, int], page_bg: tuple[int, int, int], primary_bg: tuple[int, int, int]) -> Image.Image:
-    width, height = X20_SIZE
+def _toolbar_panel(accent, page_bg, primary_bg, width):
+    height = X20_SIZE[1]
     image = Image.new("RGB", (width, height))
     draw = ImageDraw.Draw(image)
 
@@ -63,6 +64,18 @@ def make_toolbar(accent: tuple[int, int, int], page_bg: tuple[int, int, int], pr
     return image
 
 
+def make_toolbar(accent, page_bg, primary_bg, width=X20_SIZE[0]):
+    """Keep the accent band on the flanks so it cannot pass behind the logo."""
+    base = Image.new("RGB", (width, X20_SIZE[1]))
+    draw = ImageDraw.Draw(base)
+    for y in range(base.height):
+        color = tuple(round(page_bg[i] * (1 - y / 49) + primary_bg[i] * y / 49) for i in range(3))
+        draw.line((0, y, width - 1, y), fill=color)
+    result = compose_toolbar_sides(base, lambda w, h, side: _toolbar_panel(accent, page_bg, primary_bg, w))
+    ImageDraw.Draw(result).line((0, 49, width - 1, 49), fill=tuple(max(value - 2, 0) for value in page_bg))
+    return result
+
+
 def build_theme(theme: dict[str, object]) -> None:
     folder = str(theme["folder"])
     name = str(theme["name"])
@@ -79,7 +92,7 @@ def build_theme(theme: dict[str, object]) -> None:
     small_name = f"toolbar-{folder.removeprefix('theme-')}-x18.png"
     large_art = make_toolbar(theme["accent"], theme["page_bg"], theme["primary_bg"])
     save_png(large_art, theme_dir / large_name)
-    save_png(downscale_to_x18(large_art), theme_dir / small_name)
+    save_png(make_toolbar(theme["accent"], theme["page_bg"], theme["primary_bg"], X18_SIZE[0]), theme_dir / small_name)
 
     main_lua = f'''-- {name}
 -- Lightweight RF Pro outline-focus color variant.

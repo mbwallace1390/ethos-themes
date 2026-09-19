@@ -1,4 +1,4 @@
-# Ink & Halo v1.0.1
+# Ink & Halo v1.0.2
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -15,6 +15,7 @@ A standalone FrSky ETHOS theme.
 - Original halo artwork, drawn at each native display width
 - Glow is baked into opaque PNGs; no animation or background drawing
 - Soft-white and pale-blue ETHOS wordmark baked into the header artwork
+- Raised halo arc and a clear area around the wordmark at both display sizes
 - Transparent logo override prevents the default green logo overlapping it
 - Startup and About logos are unchanged; ETHOS 26 exposes no documented theme option for them
 
