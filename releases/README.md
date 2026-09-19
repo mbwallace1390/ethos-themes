@@ -2,7 +2,7 @@
 
 ## Current catalog
 
-America 250 is now [v1.2.1](America-250-v1.2.1.zip), which hides the default ETHOS logo over its header inscription. [Ink & Halo v1.0.0](Ink-and-Halo-v1.0.0.zip) adds ink-black panels, pale-blue outlines, and a luminous halo header with the same logo override. The remaining 66 themes stay at v1.2.0; their toolbar artwork contains no text.
+America 250 is now [v1.2.1](America-250-v1.2.1.zip), which hides the default ETHOS logo over its header inscription. [Ink & Halo v1.0.1](Ink-and-Halo-v1.0.1.zip) places a white and pale-blue ETHOS wordmark inside its luminous halo header, replacing the theme-name inscription. Startup and About/Info branding remain unchanged. The [v1.0.0 ZIP](Ink-and-Halo-v1.0.0.zip) is preserved. The remaining 66 themes stay at v1.2.0; their toolbar artwork contains no text.
 
 All 68 themes target ETHOS 26.1.0 and newer, with API checks against 26.1.2. Choose a theme from the [main catalog](../README.md) for its individual ZIP.
 

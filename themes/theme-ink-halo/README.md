@@ -1,4 +1,4 @@
-# Ink & Halo v1.0.0
+# Ink & Halo v1.0.1
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -14,6 +14,8 @@ A standalone FrSky ETHOS theme.
 - Automatically selects 784x50 artwork on 800px radios and 464x50 artwork on standard X18 radios
 - Original halo artwork, drawn at each native display width
 - Glow is baked into opaque PNGs; no animation or background drawing
-- Transparent logo override keeps the centered Ink & Halo inscription clear
+- Soft-white and pale-blue ETHOS wordmark baked into the header artwork
+- Transparent logo override prevents the default green logo overlapping it
+- Startup and About logos are unchanged; ETHOS 26 exposes no documented theme option for them
 
 To install from repository sources, copy `theme-ink-halo` into the transmitter `scripts` folder, restart, and select **Ink & Halo** under **System > General > Theme**.

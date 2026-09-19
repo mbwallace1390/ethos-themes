@@ -2,13 +2,19 @@
 
 All 68 current themes target **ETHOS 26.1.0 and newer** on the existing 480px and 800px display layouts. Their API was checked against **26.1.2**, released September 10, 2026. FrSky describes that release as being for early adopters. [Official release](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/tag/26.1.2)
 
-The v1.2.0 collection includes [readability and preview improvements](VISUAL_UPGRADE.md). Ink & Halo joins the catalog at v1.0.0 with the same contrast checks, responsive artwork, and native registration behavior.
+The v1.2.0 collection includes [readability and preview improvements](VISUAL_UPGRADE.md). Ink & Halo v1.0.1 uses the same contrast checks, responsive artwork, and native registration behavior.
 
 ## America 250 header fix: v1.2.1
 
 On the user's transmitter, the default ETHOS logo covered the America 250 inscription. This patch sets `toolbarLogo` to a packaged, fully transparent 1x1 PNG loaded once during initialization. ETHOS documents bitmap logo overrides and PNG transparency in its [26.1.2 Lua reference](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/download/26.1.2/lua-doc.zip). A failed logo load still allows the palette and toolbar background to register.
 
-In the original 67-theme review, all 134 toolbar images were checked at both native sizes. America 250 was the only theme with header text; the other 66 themes retained their existing logo behavior. Its palette, artwork, name, and runtime key were unchanged. Ink & Halo now uses the same transparent logo override for its header inscription. Both generators and Suite manifests include the logo asset so regeneration and installation preserve the text.
+In the original 67-theme review, all 134 toolbar images were checked at both native sizes. America 250 was the only theme with header text; the other 66 themes retained their existing logo behavior. Its palette, artwork, name, and runtime key were unchanged. The generator and Suite manifest include the transparent logo asset so regeneration and installation preserve the inscription.
+
+## Ink & Halo header update: v1.0.1
+
+Ink & Halo replaces its toolbar inscription with a white and pale-blue ETHOS wordmark inside the halo. The wordmark is baked into both toolbar images, while the existing transparent `toolbarLogo` override prevents a second logo from appearing. The palette, theme name, runtime key, and initialization-only behavior stay the same. The v1.0.0 ZIP remains a frozen snapshot.
+
+Startup and About/Info branding remain unchanged. The [ETHOS 26.1.2 native-theme API](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/download/26.1.2/lua-doc.zip) documents toolbar customization but no startup-logo or About/Info customization settings. FrSky's [Info documentation](https://ethos-doc.frsky-rc.com/system-setup/info/) describes the firmware information page. A [2022 developer explanation](https://github.com/FrSkyRC/ETHOS-Feedback-Community/issues/1339#issuecomment-1012032025) says startup occurs before the filesystem is mounted; that is historical context, not a verified ETHOS 26 customization method.
 
 ## What changed in theme package v1.1.0
 
@@ -20,7 +26,7 @@ In the original 67-theme review, all 134 toolbar images were checked at both nat
 
 ## Install or update
 
-1. Download the theme's latest ZIP from the main catalog: **America 250 v1.2.1**, **Ink & Halo v1.0.0**, or **v1.2.0** for the remaining themes.
+1. Download the theme's latest ZIP from the main catalog: **America 250 v1.2.1**, **Ink & Halo v1.0.1**, or **v1.2.0** for the remaining themes.
 2. In Suite, use **Lua Library > Install from local .zip**, then select that ZIP.
 3. Restart the transmitter and select the theme under **System > General > Theme**.
 

@@ -6,7 +6,7 @@ Every current theme download automatically selects the correct toolbar artwork: 
 
 Standalone themes for FrSky ETHOS 26, with custom colors, controls, and toolbar artwork for the radio interface.
 
-**Current packages: America 250 v1.2.1; Ink & Halo v1.0.0; remaining themes v1.2.0, for ETHOS 26.1.0 and newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
+**Current packages: America 250 v1.2.1; Ink & Halo v1.0.1; remaining themes v1.2.0, for ETHOS 26.1.0 and newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
 
 The **v1.2.0 readability update** improves foreground contrast and refreshes every collection preview. [See changes and validation](VISUAL_UPGRADE.md).
 
@@ -20,11 +20,11 @@ The **v1.2.0 readability update** improves foreground contrast and refreshes eve
 
 ## Ink & Halo
 
-**Ink & Halo v1.0.0** — dark ink panels, soft-white text, pale-blue focus outlines, and a luminous halo across the header. Rounded controls retain ETHOS's native layout and icons. The artwork is drawn separately for both display sizes, and a transparent logo override keeps the centered inscription visible. The glow is part of the static toolbar image; the theme adds no background tasks.
+**Ink & Halo v1.0.1** — dark ink panels, soft-white text, pale-blue focus outlines, and a luminous halo around a white and pale-blue ETHOS wordmark. Rounded controls retain ETHOS's native layout and icons. The logo and glow are part of the static toolbar artwork, drawn separately for both display sizes; the theme adds no background tasks. Startup and About/Info branding are unchanged; see [native-theme limits](ETHOS26.md#ink--halo-header-update-v101).
 
-<a href="previews/ink-halo.png"><img src="previews/ink-halo.png" alt="Ink and Halo theme preview: near-black panels, white text, pale-blue outlines, and a luminous header arc" width="760"></a>
+<a href="previews/ink-halo.png"><img src="previews/ink-halo.png" alt="Ink and Halo theme preview: near-black panels, white text, pale-blue outlines, and an ETHOS wordmark inside a luminous header arc" width="760"></a>
 
-**[Download Ink & Halo](releases/Ink-and-Halo-v1.0.0.zip)** · [Theme source and installation](themes/theme-ink-halo)
+**[Download Ink & Halo](releases/Ink-and-Halo-v1.0.1.zip)** · [Theme source and installation](themes/theme-ink-halo)
 
 ## Cancer Awareness collection
 

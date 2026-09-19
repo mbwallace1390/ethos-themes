@@ -1,11 +1,12 @@
 """Build Ink & Halo with portable original artwork and a source-driven preview.
 
-The glow is baked into native-size opaque PNGs; the radio does no animation or
-background drawing. Fixed glyphs keep the installed art independent of fonts.
+The glow and recolored ETHOS wordmark are baked into native-size opaque PNGs;
+the radio does no animation or background drawing.
 """
 from __future__ import annotations
 
 import math
+from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -20,34 +21,8 @@ PANEL = (13, 16, 23)
 WHITE = (244, 247, 252)
 ICE = (189, 215, 255)
 SLUG = "ink-halo"
-VERSION = "1.0.0"
-
-# Five-column, seven-row glyphs render a small, deliberately spaced inscription.
-GLYPHS = {
-    "I": ("11111", "00100", "00100", "00100", "00100", "00100", "11111"),
-    "N": ("10001", "11001", "11001", "10101", "10011", "10011", "10001"),
-    "K": ("10001", "10010", "10100", "11000", "10100", "10010", "10001"),
-    "&": ("01100", "10010", "10100", "01000", "10101", "10010", "01101"),
-    "H": ("10001", "10001", "10001", "11111", "10001", "10001", "10001"),
-    "A": ("01110", "10001", "10001", "11111", "10001", "10001", "10001"),
-    "L": ("10000", "10000", "10000", "10000", "10000", "10000", "11111"),
-    "O": ("01110", "10001", "10001", "10001", "10001", "10001", "01110"),
-    " ": ("00000",) * 7,
-}
-
-
-def pixel_text(draw, center_x, y, text, color):
-    """Keep the label at the same pixel size on both display widths."""
-    scale = 2
-    width = (len(text) * 8 - 3) * scale
-    x = center_x - width // 2
-    for letter in text:
-        for row, line in enumerate(GLYPHS[letter]):
-            for column, filled in enumerate(line):
-                if filled == "1":
-                    left, top = x + column * scale, y + row * scale
-                    draw.rectangle((left, top, left + scale - 1, top + scale - 1), fill=color)
-        x += 8 * scale
+VERSION = "1.0.1"
+WORDMARK = Path(__file__).resolve().parent / "assets" / "ink-halo" / "ethos-wordmark.png"
 
 
 def toolbar(width):
@@ -72,7 +47,11 @@ def toolbar(width):
                            + 0.76 * math.exp(-(distance / 0.62) ** 2))
             pixels[x, y] = mix(mix(INK, PANEL, y / 100), tint, strength)
     draw = ImageDraw.Draw(image)
-    pixel_text(draw, width // 2, 28, "INK & HALO", WHITE)
+    # A single native-size wordmark leaves the halo above it and avoids relying
+    # on firmware-specific logo positioning. The default overlay stays hidden.
+    with Image.open(WORDMARK) as wordmark:
+        wordmark = wordmark.convert("RGBA").resize((128, 26), Image.Resampling.LANCZOS)
+        image.paste(wordmark, ((width - wordmark.width) // 2, 13), wordmark)
     draw.line((0, 49, width - 1, 49), fill=(40, 49, 63))
     return image
 
@@ -170,11 +149,14 @@ def main():
         header="Ink-black panels and a quiet halo. Native ETHOS radio theme; no background tasks.",
         round_buttons=True, focus_style="outline", roles=palette(),
         version=VERSION, hide_toolbar_logo=True,
-        release_notes=("Initial Ink & Halo release: ink-black panels, soft-white text, "
-                       "pale-blue focus borders, rounded controls, and an original luminous halo header."),
+        release_notes=("Replaced the header inscription with a soft-white and pale-blue ETHOS "
+                       "wordmark to match the theme. The default green header overlay stays hidden. "
+                       "Startup and About logos are unchanged."),
         readme_extra=("- Original halo artwork, drawn at each native display width\n"
                       "- Glow is baked into opaque PNGs; no animation or background drawing\n"
-                      "- Transparent logo override keeps the centered Ink & Halo inscription clear\n"),
+                      "- Soft-white and pale-blue ETHOS wordmark baked into the header artwork\n"
+                      "- Transparent logo override prevents the default green logo overlapping it\n"
+                      "- Startup and About logos are unchanged; ETHOS 26 exposes no documented theme option for them\n"),
     )
     for width, name in ((X20_SIZE[0], large), (X18_SIZE[0], small)):
         save_png(toolbar(width), theme_dir / name)
