@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-neon-horizon.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "NeoHor",
         name = "Neon Horizon",
@@ -45,6 +48,7 @@ local function init()
             lcd.RGB(0x07, 0x1A, 0x11), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x0B, 0x07, 0x16), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-neon-horizon.png", "toolbar-neon-horizon-x18.png"),
     })
 end

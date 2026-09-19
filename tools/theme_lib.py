@@ -10,19 +10,24 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import zipfile
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageFilter, ImageOps
 
 from png_optimize import optimize_png
-from palette_quality import polish_lua_source
+from palette_quality import contrast_ratio, polish_lua_source
 
 ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 RELEASES_ROOT = ROOT / "releases"
 PREVIEWS_ROOT = ROOT / "previews"
-THEME_VERSION = "1.2.0"
+THEME_VERSION = "1.2.1"
+WORDMARK_MASK = Path(__file__).resolve().parent / "assets" / "ethos-logo" / "wordmark-alpha.png"
+LOGO_SIZE = (128, 26)
+LOGO_RELEASE_NOTES = "Palette-matched transparent ETHOS header logo."
+LOGO_README_LINE = "- Palette-matched ETHOS header logo with a transparent background\n"
 ETHOS26_SUPPORT = (
     "Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. "
     "Radio validation is still required."
@@ -170,6 +175,89 @@ def downscale_to_x18(source: Image.Image) -> Image.Image:
     return output
 
 
+def add_toolbar_logo(theme_dir: Path, slug: str) -> str:
+    """Add a palette-matched logo after a generator writes its polished files.
+
+    Keep the logo separate from opaque toolbar artwork so both native display
+    sizes reuse the same small bitmap. Branded headers deliberately skip this.
+    """
+    source_path = theme_dir / "main.lua"
+    source = source_path.read_text(encoding="utf-8")
+    if re.search(r"^[ \t]*toolbarLogo[ \t]*=", source, re.MULTILINE):
+        raise ValueError(f"Toolbar logo is already configured: {theme_dir}")
+    # Legacy examples suggested the unsupported string value "none" in a
+    # comment. It is not an active override and is obsolete once a bitmap exists.
+    source = re.sub(r"^[ \t]*--[ \t]*toolbarLogo[ \t]*=.*(?:\n|$)", "", source,
+                    flags=re.MULTILINE)
+    if source.count(INIT_GUARD_LUA) != 1 or source.count("        toolbarBackground = ") != 1:
+        raise ValueError(f"Unexpected native theme initialization: {theme_dir}")
+    manifest_path = theme_dir / "ethos_lua_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if (not isinstance(manifest.get("files"), list)
+            or not isinstance(manifest.get("releaseNotes"), dict)
+            or not isinstance(manifest["releaseNotes"].get("content"), str)):
+        raise ValueError(f"Unexpected generated theme manifest: {theme_dir}")
+    readme_path = theme_dir / "README.md"
+    readme = readme_path.read_text(encoding="utf-8")
+    marker = "\nTo install from repository sources"
+    if marker in readme:
+        readme = readme.replace(marker, LOGO_README_LINE + marker, 1)
+    elif "\n## Installation" in readme:
+        readme = readme.replace("\n## Installation", "\n" + LOGO_README_LINE + "\n## Installation", 1)
+    else:
+        # The hand-maintained Classic Blue README uses numbered instructions.
+        readme = readme.rstrip() + "\n\n" + LOGO_README_LINE
+    palette = {
+        role: (int(red, 16), int(green, 16), int(blue, 16))
+        for red, green, blue, role in re.findall(
+            r"lcd\.RGB\(0x([0-9A-Fa-f]{2}),\s*0x([0-9A-Fa-f]{2}),\s*"
+            r"0x([0-9A-Fa-f]{2})\),\s*--\s*([A-Z_]+)", source)
+    }
+    if len(palette) != 17:
+        raise ValueError(f"Expected the complete polished RGB palette: {theme_dir}")
+    with Image.open(WORDMARK_MASK) as mask:
+        alpha = mask.convert("L")
+    canvas = Image.new("RGBA", LOGO_SIZE, (0, 0, 0, 0))
+    # The source has an empty gap at x600 between ETH and OS. Work from its
+    # original alpha rather than recoloring antialiased RGB edge pixels.
+    for start, end, foreground in ((0, 600, palette["PRIMARY_COLOR"]),
+                                   (600, alpha.width, palette["HIGHLIGHT_COLOR"])):
+        part = Image.new("L", alpha.size, 0)
+        part.paste(alpha.crop((start, 0, end, alpha.height)), (start, 0))
+        resized = ImageOps.contain(part, (126, 24), Image.Resampling.LANCZOS)
+        # Remove only near-invisible resampling fringes (under 3% opacity),
+        # retaining antialiased edges while keeping the surrounding pixels clear.
+        resized = resized.point(lambda opacity: opacity if opacity >= 8 else 0)
+        native_alpha = Image.new("L", LOGO_SIZE, 0)
+        native_alpha.paste(resized, ((LOGO_SIZE[0] - resized.width) // 2, 1))
+        # A one-pixel outer edge keeps the theme colors distinct from busy art;
+        # its color comes from the same palette, with maximum foreground contrast.
+        outline_color = max(palette.values(), key=lambda color: contrast_ratio(foreground, color))
+        outline = Image.new("RGBA", LOGO_SIZE, outline_color + (0,))
+        outline.putalpha(native_alpha.filter(ImageFilter.MaxFilter(3)))
+        canvas = Image.alpha_composite(canvas, outline)
+        fill = Image.new("RGBA", LOGO_SIZE, foreground + (0,))
+        fill.putalpha(native_alpha)
+        canvas = Image.alpha_composite(canvas, fill)
+    logo_name = f"logo-{slug}.png"
+    canvas.save(theme_dir / logo_name, optimize=True)
+
+    initialization = (
+        "    -- Load the optional palette-matched logo once; failures keep the theme usable.\n"
+        f'    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "{logo_name}")\n'
+        "    if not logoOk then toolbarLogo = nil end\n"
+    )
+    source = source.replace(INIT_GUARD_LUA, INIT_GUARD_LUA + initialization, 1)
+    source = source.replace("        toolbarBackground = ",
+                            "        toolbarLogo = toolbarLogo,\n        toolbarBackground = ", 1)
+    source_path.write_text(source, encoding="utf-8", newline="\n")
+    manifest["files"].append(logo_name)
+    manifest["releaseNotes"]["content"] += " " + LOGO_RELEASE_NOTES
+    manifest_path.write_text(json.dumps(manifest, indent=4) + "\n", encoding="utf-8", newline="\n")
+    readme_path.write_text(readme, encoding="utf-8", newline="\n")
+    return logo_name
+
+
 def write_theme_files(
     theme_dir: Path,
     *,
@@ -260,6 +348,8 @@ return {{ init = init }}
         encoding="utf-8",
         newline="\n",
     )
+    if not hide_toolbar_logo:
+        add_toolbar_logo(theme_dir, slug)
     return large_name, small_name
 
 

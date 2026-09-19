@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-rf-emerald-pro.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "RFEmer",
         name = "RF Emerald Pro",
@@ -45,6 +48,7 @@ local function init()
             lcd.RGB(0x08, 0x11, 0x0D), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x07, 0x11, 0x0F), -- TOPLCD_BGCOLOR (XE/S)
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-rf-emerald-pro.png", "toolbar-rf-emerald-pro-x18.png"),
     })
 end

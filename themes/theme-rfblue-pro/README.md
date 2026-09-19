@@ -1,4 +1,4 @@
-# RF Blue Pro v1.2.0
+# RF Blue Pro v1.2.1
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -13,6 +13,7 @@ Features:
 - Responsive 784x50 X20 / 464x50 X18 toolbar
 - Internal theme key RFPro
 - Installs beside RF Suite Blue
+- Palette-matched ETHOS header logo with a transparent background
 
 To install from repository sources, copy the complete theme-rfblue-pro folder into the transmitter scripts folder, restart, and select RF Blue Pro under System > General > Theme.
 

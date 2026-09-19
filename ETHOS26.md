@@ -4,6 +4,12 @@ All 68 current themes target **ETHOS 26.1.0 and newer** on the existing 480px an
 
 The v1.2.0 collection includes [readability and preview improvements](VISUAL_UPGRADE.md). Ink & Halo v1.0.1 uses the same contrast checks, responsive artwork, and native registration behavior.
 
+## Collection logo update: v1.2.1
+
+All 66 collection themes now provide a transparent ETHOS `toolbarLogo` bitmap colored to match their own palettes. The small bitmap is requested once during initialization, with a protected load so an initialization failure still allows the palette and toolbar background to register. The update adds no recurring drawing task. The underlying toolbar artwork, palette, theme name, and runtime key are preserved; earlier release ZIPs remain frozen snapshots.
+
+America 250 remains v1.2.1 with its logo hidden to protect the anniversary inscription. Ink & Halo remains v1.0.1 with its wordmark baked into the halo artwork. Startup and About/Info branding remain unchanged for all themes; the documented API limits are explained below.
+
 ## America 250 header fix: v1.2.1
 
 On the user's transmitter, the default ETHOS logo covered the America 250 inscription. This patch sets `toolbarLogo` to a packaged, fully transparent 1x1 PNG loaded once during initialization. ETHOS documents bitmap logo overrides and PNG transparency in its [26.1.2 Lua reference](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/download/26.1.2/lua-doc.zip). A failed logo load still allows the palette and toolbar background to register.
@@ -26,7 +32,7 @@ Startup and About/Info branding remain unchanged. The [ETHOS 26.1.2 native-theme
 
 ## Install or update
 
-1. Download the theme's latest ZIP from the main catalog: **America 250 v1.2.1**, **Ink & Halo v1.0.1**, or **v1.2.0** for the remaining themes.
+1. Download the theme's latest ZIP from the main catalog: **America 250 and the 66 collection themes v1.2.1**, or **Ink & Halo v1.0.1**.
 2. In Suite, use **Lua Library > Install from local .zip**, then select that ZIP.
 3. Restart the transmitter and select the theme under **System > General > Theme**.
 

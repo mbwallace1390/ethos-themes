@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw
 
 from palette_quality import polish_lua_source
 from theme_lib import (
+    add_toolbar_logo,
     ETHOS26_RELEASE_NOTES,
     ETHOS26_SUPPORT,
     INIT_GUARD_LUA,
@@ -158,6 +159,7 @@ To install from repository sources, copy the complete `{folder}` folder into the
 '''
     (theme_dir / "README.md").write_text(readme, encoding="utf-8", newline="\n")
 
+    add_toolbar_logo(theme_dir, folder.removeprefix("theme-"))
     write_release(theme_dir, RELEASES_ROOT / f"RF-{slug.title()}-Pro-v{THEME_VERSION}.zip")
 
 

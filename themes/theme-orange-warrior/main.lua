@@ -21,6 +21,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-orange-warrior.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "OrgWar",
         name = "Orange Warrior",
@@ -46,6 +49,7 @@ local function init()
             lcd.RGB(0x07, 0x18, 0x0C), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x1A, 0x0E, 0x05), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-orange-warrior.png", "toolbar-orange-warrior-x18.png"),
     })
 end

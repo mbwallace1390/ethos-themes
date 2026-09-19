@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-soft-sky.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "SSky",
         name = "Soft Sky",
@@ -45,6 +48,7 @@ local function init()
             lcd.RGB(0x14, 0x2A, 0x1E), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x1A, 0x20, 0x24), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-soft-sky.png", "toolbar-soft-sky-x18.png"),
     })
 end

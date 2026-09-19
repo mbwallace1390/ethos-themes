@@ -1,4 +1,4 @@
-# RF Emerald Pro v1.2.0
+# RF Emerald Pro v1.2.1
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -12,6 +12,7 @@ A lightweight FrSky ETHOS theme based on the proven RF Blue Pro design.
 - Responsive 784x50 X20 / 464x50 X18 toolbar
 - ETHOS-safe internal key `RFEmer`
 - Installs beside every other RF Pro theme
+- Palette-matched ETHOS header logo with a transparent background
 
 To install from repository sources, copy the complete `theme-rf-emerald-pro` folder into the transmitter's `scripts` folder, restart, and select **RF Emerald Pro** under **System > General > Theme**.
 

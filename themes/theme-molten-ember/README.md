@@ -1,4 +1,4 @@
-# Molten Ember v1.2.0
+# Molten Ember v1.2.1
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -12,5 +12,6 @@ A standalone FrSky ETHOS theme.
 - Controls: square
 - Internal key: `MltEmbr`
 - Automatically selects 784x50 artwork on 800px radios and 464x50 artwork on standard X18 radios
+- Palette-matched ETHOS header logo with a transparent background
 
 To install from repository sources, copy `theme-molten-ember` into the transmitter `scripts` folder, restart, and select **Molten Ember** under **System > General > Theme**.

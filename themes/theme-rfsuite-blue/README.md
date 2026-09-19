@@ -1,4 +1,4 @@
-# RF Suite Blue v1.2.0
+# RF Suite Blue v1.2.1
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -13,6 +13,8 @@ A dark FrSky ETHOS theme that replaces the yellow selected-control highlight wit
 - Keeps the proven six-character internal theme key `RFBlue`.
 - Keeps the 784-pixel toolbar width because testing confirmed ETHOS enforces that toolbar safe area even when an 800-pixel image is supplied.
 - Omits `main.luac` so ETHOS compiles a fresh copy during startup.
+
+- Palette-matched ETHOS header logo with a transparent background
 
 ## Installation
 

@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-carbon.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "Carbon",
         name = "Carbon",
@@ -45,6 +48,7 @@ local function init()
             lcd.RGB(0x05, 0x16, 0x0A), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x0C, 0x0E, 0x11), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-carbon.png", "toolbar-carbon-x18.png"),
     })
 end

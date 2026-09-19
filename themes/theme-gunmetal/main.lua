@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-gunmetal.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "Gunmet",
         name = "Gunmetal",
@@ -45,6 +48,7 @@ local function init()
             lcd.RGB(0x05, 0x16, 0x0A), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x16, 0x1B, 0x1F), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-gunmetal.png", "toolbar-gunmetal-x18.png"),
     })
 end

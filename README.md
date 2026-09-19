@@ -6,9 +6,11 @@ Every current theme download automatically selects the correct toolbar artwork: 
 
 Standalone themes for FrSky ETHOS 26, with custom colors, controls, and toolbar artwork for the radio interface.
 
-**Current packages: America 250 v1.2.1; Ink & Halo v1.0.1; remaining themes v1.2.0, for ETHOS 26.1.0 and newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
+**Current packages: America 250 v1.2.1; Ink & Halo v1.0.1; remaining themes v1.2.1, for ETHOS 26.1.0 and newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
 
 The **v1.2.0 readability update** improves foreground contrast and refreshes every collection preview. [See changes and validation](VISUAL_UPGRADE.md).
+
+The **v1.2.1 logo update** gives all 66 collection themes a transparent ETHOS header logo colored to match their palettes. Each small logo bitmap is requested once during initialization; no recurring drawing task is added. America 250 keeps its anniversary inscription clear, and Ink & Halo keeps its existing wordmark. Startup and About/Info branding remain unchanged. [Details and native-theme limits](ETHOS26.md#collection-logo-update-v121).
 
 ## Featured: America 250
 
@@ -32,16 +34,16 @@ These 10 themes use original generic awareness-ribbon artwork and matching color
 
 <a href="previews/cancer-awareness.png"><img src="previews/cancer-awareness.png" alt="Cancer Awareness theme previews" width="760"></a>
 
-- **Pink Hope v1.2.0** — breast cancer awareness — [Download](releases/Pink-Hope-v1.2.0.zip) — [Source](themes/theme-pink-hope)
-- **Golden Courage v1.2.0** — childhood cancer awareness — [Download](releases/Golden-Courage-v1.2.0.zip) — [Source](themes/theme-golden-courage)
-- **Lavender Unity v1.2.0** — all-cancers awareness — [Download](releases/Lavender-Unity-v1.2.0.zip) — [Source](themes/theme-lavender-unity)
-- **Teal Strength v1.2.0** — ovarian cancer awareness — [Download](releases/Teal-Strength-v1.2.0.zip) — [Source](themes/theme-teal-strength)
-- **Blue Resolve v1.2.0** — prostate cancer awareness — [Download](releases/Blue-Resolve-v1.2.0.zip) — [Source](themes/theme-blue-resolve)
-- **Orange Warrior v1.2.0** — leukemia awareness — [Download](releases/Orange-Warrior-v1.2.0.zip) — [Source](themes/theme-orange-warrior)
-- **Purple Hope v1.2.0** — pancreatic cancer awareness — [Download](releases/Purple-Hope-v1.2.0.zip) — [Source](themes/theme-purple-hope)
-- **Pearl Breath v1.2.0** — lung cancer awareness — [Download](releases/Pearl-Breath-v1.2.0.zip) — [Source](themes/theme-pearl-breath)
-- **Royal Blue Strong v1.2.0** — colorectal cancer awareness — [Download](releases/Royal-Blue-Strong-v1.2.0.zip) — [Source](themes/theme-royal-blue-strong)
-- **Green Courage v1.2.0** — liver cancer awareness — [Download](releases/Green-Courage-v1.2.0.zip) — [Source](themes/theme-green-courage)
+- **Pink Hope v1.2.1** — breast cancer awareness — [Download](releases/Pink-Hope-v1.2.1.zip) — [Source](themes/theme-pink-hope)
+- **Golden Courage v1.2.1** — childhood cancer awareness — [Download](releases/Golden-Courage-v1.2.1.zip) — [Source](themes/theme-golden-courage)
+- **Lavender Unity v1.2.1** — all-cancers awareness — [Download](releases/Lavender-Unity-v1.2.1.zip) — [Source](themes/theme-lavender-unity)
+- **Teal Strength v1.2.1** — ovarian cancer awareness — [Download](releases/Teal-Strength-v1.2.1.zip) — [Source](themes/theme-teal-strength)
+- **Blue Resolve v1.2.1** — prostate cancer awareness — [Download](releases/Blue-Resolve-v1.2.1.zip) — [Source](themes/theme-blue-resolve)
+- **Orange Warrior v1.2.1** — leukemia awareness — [Download](releases/Orange-Warrior-v1.2.1.zip) — [Source](themes/theme-orange-warrior)
+- **Purple Hope v1.2.1** — pancreatic cancer awareness — [Download](releases/Purple-Hope-v1.2.1.zip) — [Source](themes/theme-purple-hope)
+- **Pearl Breath v1.2.1** — lung cancer awareness — [Download](releases/Pearl-Breath-v1.2.1.zip) — [Source](themes/theme-pearl-breath)
+- **Royal Blue Strong v1.2.1** — colorectal cancer awareness — [Download](releases/Royal-Blue-Strong-v1.2.1.zip) — [Source](themes/theme-royal-blue-strong)
+- **Green Courage v1.2.1** — liver cancer awareness — [Download](releases/Green-Courage-v1.2.1.zip) — [Source](themes/theme-green-courage)
 
 ## Custom-art collections
 
@@ -51,33 +53,33 @@ These 12 themes add detailed toolbar artwork while remaining normal standalone E
 
 <a href="previews/flight-systems.png"><img src="previews/flight-systems.png" alt="Flight Systems theme previews" width="760"></a>
 
-- **Aviation HUD v1.2.0** — targeting reticle, heading ticks, and green HUD styling — [Download](releases/Aviation-HUD-v1.2.0.zip) — [Source](themes/theme-aviation-hud)
-- **Midnight Blueprint v1.2.0** — dark technical grid and blueprint markings — [Download](releases/Midnight-Blueprint-v1.2.0.zip) — [Source](themes/theme-midnight-blueprint)
-- **Rotor Command v1.2.0** — rotor silhouette and command-panel accents — [Download](releases/Rotor-Command-v1.2.0.zip) — [Source](themes/theme-rotor-command)
+- **Aviation HUD v1.2.1** — targeting reticle, heading ticks, and green HUD styling — [Download](releases/Aviation-HUD-v1.2.1.zip) — [Source](themes/theme-aviation-hud)
+- **Midnight Blueprint v1.2.1** — dark technical grid and blueprint markings — [Download](releases/Midnight-Blueprint-v1.2.1.zip) — [Source](themes/theme-midnight-blueprint)
+- **Rotor Command v1.2.1** — rotor silhouette and command-panel accents — [Download](releases/Rotor-Command-v1.2.1.zip) — [Source](themes/theme-rotor-command)
 
 ### Tactical
 
 <a href="previews/tactical.png"><img src="previews/tactical.png" alt="Tactical theme previews" width="760"></a>
 
-- **Woodland Tactical v1.2.0** — dark woodland camouflage and amber active states — [Download](releases/Woodland-Tactical-v1.2.0.zip) — [Source](themes/theme-woodland-tactical)
-- **Arctic Tactical v1.2.0** — pale arctic camouflage with blue controls — [Download](releases/Arctic-Tactical-v1.2.0.zip) — [Source](themes/theme-arctic-tactical)
-- **Desert Tactical v1.2.0** — sand camouflage with brown and orange accents — [Download](releases/Desert-Tactical-v1.2.0.zip) — [Source](themes/theme-desert-tactical)
+- **Woodland Tactical v1.2.1** — dark woodland camouflage and amber active states — [Download](releases/Woodland-Tactical-v1.2.1.zip) — [Source](themes/theme-woodland-tactical)
+- **Arctic Tactical v1.2.1** — pale arctic camouflage with blue controls — [Download](releases/Arctic-Tactical-v1.2.1.zip) — [Source](themes/theme-arctic-tactical)
+- **Desert Tactical v1.2.1** — sand camouflage with brown and orange accents — [Download](releases/Desert-Tactical-v1.2.1.zip) — [Source](themes/theme-desert-tactical)
 
 ### Cosmic
 
 <a href="previews/cosmic.png"><img src="previews/cosmic.png" alt="Cosmic theme previews" width="760"></a>
 
-- **Deep Space v1.2.0** — star field, violet nebula tones, and cyan active states — [Download](releases/Deep-Space-v1.2.0.zip) — [Source](themes/theme-deep-space)
-- **Lunar Command v1.2.0** — cratered lunar surface and instrument styling — [Download](releases/Lunar-Command-v1.2.0.zip) — [Source](themes/theme-lunar-command)
-- **Neon Horizon v1.2.0** — glowing sunset, perspective grid, and neon controls — [Download](releases/Neon-Horizon-v1.2.0.zip) — [Source](themes/theme-neon-horizon)
+- **Deep Space v1.2.1** — star field, violet nebula tones, and cyan active states — [Download](releases/Deep-Space-v1.2.1.zip) — [Source](themes/theme-deep-space)
+- **Lunar Command v1.2.1** — cratered lunar surface and instrument styling — [Download](releases/Lunar-Command-v1.2.1.zip) — [Source](themes/theme-lunar-command)
+- **Neon Horizon v1.2.1** — glowing sunset, perspective grid, and neon controls — [Download](releases/Neon-Horizon-v1.2.1.zip) — [Source](themes/theme-neon-horizon)
 
 ### Tech & Racing
 
 <a href="previews/tech-racing.png"><img src="previews/tech-racing.png" alt="Tech and Racing theme previews" width="760"></a>
 
-- **Circuit Trace v1.2.0** — circuit-board paths and illuminated connection nodes — [Download](releases/Circuit-Trace-v1.2.0.zip) — [Source](themes/theme-circuit-trace)
-- **Racing Division v1.2.0** — checkered pattern, speed stripes, and red race styling — [Download](releases/Racing-Division-v1.2.0.zip) — [Source](themes/theme-racing-division)
-- **Hex Core v1.2.0** — illuminated honeycomb pattern with orange and cyan — [Download](releases/Hex-Core-v1.2.0.zip) — [Source](themes/theme-hex-core)
+- **Circuit Trace v1.2.1** — circuit-board paths and illuminated connection nodes — [Download](releases/Circuit-Trace-v1.2.1.zip) — [Source](themes/theme-circuit-trace)
+- **Racing Division v1.2.1** — checkered pattern, speed stripes, and red race styling — [Download](releases/Racing-Division-v1.2.1.zip) — [Source](themes/theme-racing-division)
+- **Hex Core v1.2.1** — illuminated honeycomb pattern with orange and cyan — [Download](releases/Hex-Core-v1.2.1.zip) — [Source](themes/theme-hex-core)
 
 ## Elements collection
 
@@ -85,10 +87,10 @@ Four themes named for a natural phenomenon, each built from a different procedur
 
 <a href="previews/elements.png"><img src="previews/elements.png" alt="Elements theme previews" width="760"></a>
 
-- **Summit v1.2.0** — stacked elevation contours with two peak rings, amber on warm charcoal — [Download](releases/Summit-v1.2.0.zip) — [Source](themes/theme-summit)
-- **Aurora v1.2.0** — banded aurora curtains drifting between green and violet — [Download](releases/Aurora-v1.2.0.zip) — [Source](themes/theme-aurora)
-- **Abyss v1.2.0** — sonar rings expanding from below the bar, cyan on deep navy — [Download](releases/Abyss-v1.2.0.zip) — [Source](themes/theme-abyss)
-- **Prism v1.2.0** — a light beam splitting into its full spectrum, violet focus with gold active states — [Download](releases/Prism-v1.2.0.zip) — [Source](themes/theme-prism)
+- **Summit v1.2.1** — stacked elevation contours with two peak rings, amber on warm charcoal — [Download](releases/Summit-v1.2.1.zip) — [Source](themes/theme-summit)
+- **Aurora v1.2.1** — banded aurora curtains drifting between green and violet — [Download](releases/Aurora-v1.2.1.zip) — [Source](themes/theme-aurora)
+- **Abyss v1.2.1** — sonar rings expanding from below the bar, cyan on deep navy — [Download](releases/Abyss-v1.2.1.zip) — [Source](themes/theme-abyss)
+- **Prism v1.2.1** — a light beam splitting into its full spectrum, violet focus with gold active states — [Download](releases/Prism-v1.2.1.zip) — [Source](themes/theme-prism)
 
 ## Texture collection
 
@@ -96,10 +98,10 @@ Four themes built from a surface texture rather than a scene, each drawn with a 
 
 <a href="previews/texture.png"><img src="previews/texture.png" alt="Texture theme previews" width="760"></a>
 
-- **Loom v1.2.0** — an over-under basket weave in warm rust and amber — [Download](releases/Loom-v1.2.0.zip) — [Source](themes/theme-loom)
-- **Mosaic v1.2.0** — jittered stained-glass cells with lit seams, teal and gold — [Download](releases/Mosaic-v1.2.0.zip) — [Source](themes/theme-mosaic)
-- **Halftone v1.2.0** — a dot screen that swells and fades across the bar, crimson focus with amber active states — [Download](releases/Halftone-v1.2.0.zip) — [Source](themes/theme-halftone)
-- **Bloom v1.2.0** — soft overlapping bokeh orbs in pink and violet — [Download](releases/Bloom-v1.2.0.zip) — [Source](themes/theme-bloom)
+- **Loom v1.2.1** — an over-under basket weave in warm rust and amber — [Download](releases/Loom-v1.2.1.zip) — [Source](themes/theme-loom)
+- **Mosaic v1.2.1** — jittered stained-glass cells with lit seams, teal and gold — [Download](releases/Mosaic-v1.2.1.zip) — [Source](themes/theme-mosaic)
+- **Halftone v1.2.1** — a dot screen that swells and fades across the bar, crimson focus with amber active states — [Download](releases/Halftone-v1.2.1.zip) — [Source](themes/theme-halftone)
+- **Bloom v1.2.1** — soft overlapping bokeh orbs in pink and violet — [Download](releases/Bloom-v1.2.1.zip) — [Source](themes/theme-bloom)
 
 ## Standalone style collection
 
@@ -109,61 +111,61 @@ These themes use six genuinely different visual styles rather than only changing
 
 <a href="previews/retro-instrument.png"><img src="previews/retro-instrument.png" alt="Retro Instrument theme previews" width="760"></a>
 
-- **Amber Instrument v1.2.0** — amber cockpit-display styling — [Download](releases/Amber-Instrument-v1.2.0.zip) — [Source](themes/theme-amber-instrument)
-- **Phosphor Green v1.2.0** — green CRT-style display — [Download](releases/Phosphor-Green-v1.2.0.zip) — [Source](themes/theme-phosphor-green)
-- **Ice Instrument v1.2.0** — cool blue instrument panel — [Download](releases/Ice-Instrument-v1.2.0.zip) — [Source](themes/theme-ice-instrument)
+- **Amber Instrument v1.2.1** — amber cockpit-display styling — [Download](releases/Amber-Instrument-v1.2.1.zip) — [Source](themes/theme-amber-instrument)
+- **Phosphor Green v1.2.1** — green CRT-style display — [Download](releases/Phosphor-Green-v1.2.1.zip) — [Source](themes/theme-phosphor-green)
+- **Ice Instrument v1.2.1** — cool blue instrument panel — [Download](releases/Ice-Instrument-v1.2.1.zip) — [Source](themes/theme-ice-instrument)
 
 ### Soft
 
 <a href="previews/soft.png"><img src="previews/soft.png" alt="Soft theme previews" width="760"></a>
 
-- **Soft Lavender v1.2.0** — rounded pastel lavender — [Download](releases/Soft-Lavender-v1.2.0.zip) — [Source](themes/theme-soft-lavender)
-- **Soft Mint v1.2.0** — rounded pastel mint — [Download](releases/Soft-Mint-v1.2.0.zip) — [Source](themes/theme-soft-mint)
-- **Soft Coral v1.2.0** — rounded pastel coral — [Download](releases/Soft-Coral-v1.2.0.zip) — [Source](themes/theme-soft-coral)
-- **Soft Sky v1.2.0** — rounded pastel sky blue — [Download](releases/Soft-Sky-v1.2.0.zip) — [Source](themes/theme-soft-sky)
+- **Soft Lavender v1.2.1** — rounded pastel lavender — [Download](releases/Soft-Lavender-v1.2.1.zip) — [Source](themes/theme-soft-lavender)
+- **Soft Mint v1.2.1** — rounded pastel mint — [Download](releases/Soft-Mint-v1.2.1.zip) — [Source](themes/theme-soft-mint)
+- **Soft Coral v1.2.1** — rounded pastel coral — [Download](releases/Soft-Coral-v1.2.1.zip) — [Source](themes/theme-soft-coral)
+- **Soft Sky v1.2.1** — rounded pastel sky blue — [Download](releases/Soft-Sky-v1.2.1.zip) — [Source](themes/theme-soft-sky)
 
 ### OLED Stealth
 
 <a href="previews/oled-stealth.png"><img src="previews/oled-stealth.png" alt="OLED Stealth theme previews" width="760"></a>
 
-- **OLED Blue v1.2.0** — near-black with blue focus — [Download](releases/Oled-Blue-v1.2.0.zip) — [Source](themes/theme-oled-blue)
-- **OLED Red v1.2.0** — near-black with red focus — [Download](releases/Oled-Red-v1.2.0.zip) — [Source](themes/theme-oled-red)
-- **OLED Green v1.2.0** — near-black with green focus — [Download](releases/Oled-Green-v1.2.0.zip) — [Source](themes/theme-oled-green)
-- **OLED White v1.2.0** — near-black monochrome styling — [Download](releases/Oled-White-v1.2.0.zip) — [Source](themes/theme-oled-white)
+- **OLED Blue v1.2.1** — near-black with blue focus — [Download](releases/Oled-Blue-v1.2.1.zip) — [Source](themes/theme-oled-blue)
+- **OLED Red v1.2.1** — near-black with red focus — [Download](releases/Oled-Red-v1.2.1.zip) — [Source](themes/theme-oled-red)
+- **OLED Green v1.2.1** — near-black with green focus — [Download](releases/Oled-Green-v1.2.1.zip) — [Source](themes/theme-oled-green)
+- **OLED White v1.2.1** — near-black monochrome styling — [Download](releases/Oled-White-v1.2.1.zip) — [Source](themes/theme-oled-white)
 
 ### Daylight
 
 <a href="previews/daylight.png"><img src="previews/daylight.png" alt="Daylight theme previews" width="760"></a>
 
-- **Daylight Blue v1.2.0** — light background with blue selection — [Download](releases/Daylight-Blue-v1.2.0.zip) — [Source](themes/theme-daylight-blue)
-- **Daylight Orange v1.2.0** — light background with orange selection — [Download](releases/Daylight-Orange-v1.2.0.zip) — [Source](themes/theme-daylight-orange)
-- **Daylight Green v1.2.0** — light background with green selection — [Download](releases/Daylight-Green-v1.2.0.zip) — [Source](themes/theme-daylight-green)
+- **Daylight Blue v1.2.1** — light background with blue selection — [Download](releases/Daylight-Blue-v1.2.1.zip) — [Source](themes/theme-daylight-blue)
+- **Daylight Orange v1.2.1** — light background with orange selection — [Download](releases/Daylight-Orange-v1.2.1.zip) — [Source](themes/theme-daylight-orange)
+- **Daylight Green v1.2.1** — light background with green selection — [Download](releases/Daylight-Green-v1.2.1.zip) — [Source](themes/theme-daylight-green)
 
 ### Industrial
 
 <a href="previews/industrial.png"><img src="previews/industrial.png" alt="Industrial theme previews" width="760"></a>
 
-- **Carbon v1.2.0** — carbon texture and cyan accent — [Download](releases/Carbon-v1.2.0.zip) — [Source](themes/theme-carbon)
-- **Gunmetal v1.2.0** — brushed gunmetal styling — [Download](releases/Gunmetal-v1.2.0.zip) — [Source](themes/theme-gunmetal)
-- **Hazard v1.2.0** — black-and-yellow hazard styling — [Download](releases/Hazard-v1.2.0.zip) — [Source](themes/theme-hazard)
-- **Titanium v1.2.0** — brushed cool-silver styling — [Download](releases/Titanium-v1.2.0.zip) — [Source](themes/theme-titanium)
+- **Carbon v1.2.1** — carbon texture and cyan accent — [Download](releases/Carbon-v1.2.1.zip) — [Source](themes/theme-carbon)
+- **Gunmetal v1.2.1** — brushed gunmetal styling — [Download](releases/Gunmetal-v1.2.1.zip) — [Source](themes/theme-gunmetal)
+- **Hazard v1.2.1** — black-and-yellow hazard styling — [Download](releases/Hazard-v1.2.1.zip) — [Source](themes/theme-hazard)
+- **Titanium v1.2.1** — brushed cool-silver styling — [Download](releases/Titanium-v1.2.1.zip) — [Source](themes/theme-titanium)
 
 ### Two-Tone
 
 <a href="previews/two-tone.png"><img src="previews/two-tone.png" alt="Two-Tone theme previews" width="760"></a>
 
-- **Violet Circuit v1.2.0** — violet focus with cyan active states — [Download](releases/Violet-Circuit-v1.2.0.zip) — [Source](themes/theme-violet-circuit)
-- **Blue Vector v1.2.0** — blue focus with green active states — [Download](releases/Blue-Vector-v1.2.0.zip) — [Source](themes/theme-blue-vector)
-- **Ember Signal v1.2.0** — orange focus with red active states — [Download](releases/Ember-Signal-v1.2.0.zip) — [Source](themes/theme-ember-signal)
-- **Neon Fusion v1.2.0** — cyan focus with magenta active states — [Download](releases/Neon-Fusion-v1.2.0.zip) — [Source](themes/theme-neon-fusion)
+- **Violet Circuit v1.2.1** — violet focus with cyan active states — [Download](releases/Violet-Circuit-v1.2.1.zip) — [Source](themes/theme-violet-circuit)
+- **Blue Vector v1.2.1** — blue focus with green active states — [Download](releases/Blue-Vector-v1.2.1.zip) — [Source](themes/theme-blue-vector)
+- **Ember Signal v1.2.1** — orange focus with red active states — [Download](releases/Ember-Signal-v1.2.1.zip) — [Source](themes/theme-ember-signal)
+- **Neon Fusion v1.2.1** — cyan focus with magenta active states — [Download](releases/Neon-Fusion-v1.2.1.zip) — [Source](themes/theme-neon-fusion)
 
 ### Molten
 
 <a href="previews/molten.png"><img src="previews/molten.png" alt="Molten theme previews" width="760"></a>
 
-- **Molten Ember v1.2.0** — glowing lava-crack toolbar with a red-orange fissure — [Download](releases/Molten-Ember-v1.2.0.zip) — [Source](themes/theme-molten-ember)
-- **Molten Sulfur v1.2.0** — glowing lava-crack toolbar with an acid yellow-green fissure — [Download](releases/Molten-Sulfur-v1.2.0.zip) — [Source](themes/theme-molten-sulfur)
-- **Molten Verdigris v1.2.0** — glowing lava-crack toolbar with a cooled teal-green fissure — [Download](releases/Molten-Verdigris-v1.2.0.zip) — [Source](themes/theme-molten-verdigris)
+- **Molten Ember v1.2.1** — glowing lava-crack toolbar with a red-orange fissure — [Download](releases/Molten-Ember-v1.2.1.zip) — [Source](themes/theme-molten-ember)
+- **Molten Sulfur v1.2.1** — glowing lava-crack toolbar with an acid yellow-green fissure — [Download](releases/Molten-Sulfur-v1.2.1.zip) — [Source](themes/theme-molten-sulfur)
+- **Molten Verdigris v1.2.1** — glowing lava-crack toolbar with a cooled teal-green fissure — [Download](releases/Molten-Verdigris-v1.2.1.zip) — [Source](themes/theme-molten-verdigris)
 
 ## Pro color collection
 
@@ -171,25 +173,25 @@ All Pro themes use dark square controls, outline focus, clear inactive and disab
 
 <a href="previews/rf-pro.png"><img src="previews/rf-pro.png" alt="Pro color collection previews" width="760"></a>
 
-- **Blue Pro v1.2.0** — [Download](releases/RF-Blue-Pro-v1.2.0.zip) — [Source](themes/theme-rfblue-pro)
-- **Violet Pro v1.2.0** — [Download](releases/RF-Violet-Pro-v1.2.0.zip) — [Source](themes/theme-rf-violet-pro)
-- **Emerald Pro v1.2.0** — [Download](releases/RF-Emerald-Pro-v1.2.0.zip) — [Source](themes/theme-rf-emerald-pro)
-- **Ember Pro v1.2.0** — [Download](releases/RF-Ember-Pro-v1.2.0.zip) — [Source](themes/theme-rf-ember-pro)
-- **Magenta Pro v1.2.0** — [Download](releases/RF-Magenta-Pro-v1.2.0.zip) — [Source](themes/theme-rf-magenta-pro)
-- **Cyan Pro v1.2.0** — [Download](releases/RF-Cyan-Pro-v1.2.0.zip) — [Source](themes/theme-rf-cyan-pro)
-- **Crimson Pro v1.2.0** — [Download](releases/RF-Crimson-Pro-v1.2.0.zip) — [Source](themes/theme-rf-crimson-pro)
-- **Gold Pro v1.2.0** — [Download](releases/RF-Gold-Pro-v1.2.0.zip) — [Source](themes/theme-rf-gold-pro)
-- **Teal Pro v1.2.0** — [Download](releases/RF-Teal-Pro-v1.2.0.zip) — [Source](themes/theme-rf-teal-pro)
-- **Lime Pro v1.2.0** — [Download](releases/RF-Lime-Pro-v1.2.0.zip) — [Source](themes/theme-rf-lime-pro)
+- **Blue Pro v1.2.1** — [Download](releases/RF-Blue-Pro-v1.2.1.zip) — [Source](themes/theme-rfblue-pro)
+- **Violet Pro v1.2.1** — [Download](releases/RF-Violet-Pro-v1.2.1.zip) — [Source](themes/theme-rf-violet-pro)
+- **Emerald Pro v1.2.1** — [Download](releases/RF-Emerald-Pro-v1.2.1.zip) — [Source](themes/theme-rf-emerald-pro)
+- **Ember Pro v1.2.1** — [Download](releases/RF-Ember-Pro-v1.2.1.zip) — [Source](themes/theme-rf-ember-pro)
+- **Magenta Pro v1.2.1** — [Download](releases/RF-Magenta-Pro-v1.2.1.zip) — [Source](themes/theme-rf-magenta-pro)
+- **Cyan Pro v1.2.1** — [Download](releases/RF-Cyan-Pro-v1.2.1.zip) — [Source](themes/theme-rf-cyan-pro)
+- **Crimson Pro v1.2.1** — [Download](releases/RF-Crimson-Pro-v1.2.1.zip) — [Source](themes/theme-rf-crimson-pro)
+- **Gold Pro v1.2.1** — [Download](releases/RF-Gold-Pro-v1.2.1.zip) — [Source](themes/theme-rf-gold-pro)
+- **Teal Pro v1.2.1** — [Download](releases/RF-Teal-Pro-v1.2.1.zip) — [Source](themes/theme-rf-teal-pro)
+- **Lime Pro v1.2.1** — [Download](releases/RF-Lime-Pro-v1.2.1.zip) — [Source](themes/theme-rf-lime-pro)
 
 ## Classic theme
 
 <a href="previews/classic.png"><img src="previews/classic.png" alt="Classic Blue theme preview" width="760"></a>
 
-**Classic Blue v1.2.0** keeps rounded controls and solid blue selected controls.
+**Classic Blue v1.2.1** keeps rounded controls and solid blue selected controls.
 
 - [View source](themes/theme-rfsuite-blue)
-- [Download current responsive release v1.2.0](releases/RF-Suite-Blue-v1.2.0.zip)
+- [Download current responsive release v1.2.1](releases/RF-Suite-Blue-v1.2.1.zip)
 - [Download previous packaged release v1.0.3](releases/RF-Suite-Blue-v1.0.3.zip)
 
 ## Installation

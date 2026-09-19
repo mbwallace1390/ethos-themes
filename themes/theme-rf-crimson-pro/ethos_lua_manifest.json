@@ -2,14 +2,15 @@
     "manifestVersion": 1,
     "name": "RF Crimson Pro",
     "key": "mbwallace1390-theme-RFCrim",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "releaseNotes": {
         "format": "markdown",
-        "content": "Readability update: improved foreground contrast and refreshed catalog previews. ETHOS 26.1 compatibility update, checked against the 26.1.2 theme API. Suite local ZIP layout corrected with the manifest and files at archive root. Unsupported firmware skips registration; optional toolbar load failures during initialization fall back to the theme colors. Requires ETHOS 26.1.0 or newer. Radio validation is still required. First stable RF Crimson Pro release using the proven RF Pro outline-focus layout, square controls, and responsive X18/X20 toolbar. Automatically selects 464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios."
+        "content": "Readability update: improved foreground contrast and refreshed catalog previews. ETHOS 26.1 compatibility update, checked against the 26.1.2 theme API. Suite local ZIP layout corrected with the manifest and files at archive root. Unsupported firmware skips registration; optional toolbar load failures during initialization fall back to the theme colors. Requires ETHOS 26.1.0 or newer. Radio validation is still required. First stable RF Crimson Pro release using the proven RF Pro outline-focus layout, square controls, and responsive X18/X20 toolbar. Automatically selects 464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios. Palette-matched transparent ETHOS header logo."
     },
     "folder": "theme-rf-crimson-pro",
     "files": [
         "main.lua",
-        "toolbar-*"
+        "toolbar-*",
+        "logo-rf-crimson-pro.png"
     ]
 }

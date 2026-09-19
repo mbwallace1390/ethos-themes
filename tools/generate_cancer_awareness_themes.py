@@ -9,6 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 from png_optimize import optimize_png
 from palette_quality import polish_lua_source
 from theme_lib import (
+    add_toolbar_logo,
     ETHOS26_RELEASE_NOTES,
     ETHOS26_SUPPORT,
     INIT_GUARD_LUA,
@@ -283,6 +284,7 @@ To install from repository sources, copy `{folder}` into the transmitter's `scri
     (theme_dir / "README.md").write_text(readme, encoding="utf-8", newline="\n")
 
     release_name = "-".join(word.capitalize() for word in slug.split("-")) + f"-v{THEME_VERSION}.zip"
+    add_toolbar_logo(theme_dir, slug)
     write_release(theme_dir, RELEASES_ROOT / release_name)
 
 

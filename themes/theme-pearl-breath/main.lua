@@ -21,6 +21,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-pearl-breath.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "PearlBr",
         name = "Pearl Breath",
@@ -46,6 +49,7 @@ local function init()
             lcd.RGB(0x07, 0x18, 0x0C), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x11, 0x16, 0x1A), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-pearl-breath.png", "toolbar-pearl-breath-x18.png"),
     })
 end

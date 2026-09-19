@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-prism.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "Prism",
         name = "Prism",
@@ -45,6 +48,7 @@ local function init()
             lcd.RGB(0x06, 0x16, 0x0B), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x09, 0x08, 0x0E), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-prism.png", "toolbar-prism-x18.png"),
     })
 end

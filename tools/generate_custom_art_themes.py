@@ -10,6 +10,7 @@ from PIL import Image, ImageDraw, ImageFont
 from png_optimize import optimize_png
 from palette_quality import polish_lua_source
 from theme_lib import (
+    add_toolbar_logo,
     ETHOS26_RELEASE_NOTES,
     ETHOS26_SUPPORT,
     INIT_GUARD_LUA,
@@ -270,6 +271,7 @@ return {{ init = init }}
         f"To install from repository sources, copy `{folder}` into the transmitter `scripts` folder, restart, then select **{name}** under **System > General > Theme**.\n",
         encoding="utf-8",newline="\n")
 
+    add_toolbar_logo(theme_dir, slug)
     write_release(theme_dir, RELEASES_ROOT/release_name)
 
 

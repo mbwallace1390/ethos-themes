@@ -1,4 +1,4 @@
-# Golden Courage v1.2.0
+# Golden Courage v1.2.1
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -14,5 +14,6 @@ A standalone FrSky ETHOS radio theme with original generic awareness-ribbon tool
 - Responsive 784x50 X20 / 464x50 X18 toolbar
 - Separate installable package
 - Does not modify Rotorflight or RF Suite Lua files
+- Palette-matched ETHOS header logo with a transparent background
 
 To install from repository sources, copy `theme-golden-courage` into the transmitter's `scripts` folder, restart, and select **Golden Courage** under **System > General > Theme**.

@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-racing-division.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "RaceDiv",
         name = "Racing Division",
@@ -45,6 +48,7 @@ local function init()
             lcd.RGB(0x07, 0x18, 0x0D), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x0B, 0x0B, 0x0B), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-racing-division.png", "toolbar-racing-division-x18.png"),
     })
 end

@@ -35,10 +35,28 @@ def parse_theme(slug):
     rounded = re.search(r"roundButtons\s*=\s*(true|false)", source)
     focus = re.search(r'focusStyle\s*=\s*"([^"]+)"', source)
     art = [p for p in folder.glob("toolbar-*.png") if not p.stem.endswith("-x18")]
+    logo = re.search(r'pcall\(lcd\.loadBitmap,\s*"(logo-[^"]+\.png)"\)', source)
     if not name or not rounded or not focus or len(colors) != 17 or len(art) != 1:
         raise ValueError(f"Incomplete native theme: {folder}")
     return {"name": name[1], "round": rounded[1] == "true", "focus": focus[1],
-            "colors": colors, "toolbar": art[0]}
+            "colors": colors, "toolbar": art[0],
+            "logo": folder / logo[1] if logo else None}
+
+
+def toolbar_preview(theme):
+    """Composite shipped assets at the representative centered logo position.
+
+    ETHOS owns the final layout. This is a catalog illustration, not a capture
+    of the firmware screen. Baked-header themes use an invisible 1x1 override.
+    """
+    with Image.open(theme["toolbar"]) as art:
+        strip = art.convert("RGB")
+    if theme.get("logo"):
+        with Image.open(theme["logo"]) as source:
+            logo = source.convert("RGBA")
+            strip.paste(logo, ((strip.width - logo.width) // 2,
+                              (strip.height - logo.height) // 2), logo)
+    return strip
 
 
 def centered(draw, bounds, label, face, color):
@@ -64,10 +82,9 @@ def draw_card(canvas, theme, x, y):
     draw.text((x + 34, y + 15), theme["name"], font=title, fill=text)
     draw.text((x + 431, y + 24), theme["focus"].upper(), font=font(12, True), fill=c["SECONDARY_COLOR"])
 
-    with Image.open(theme["toolbar"]) as art:
-        # This is explicitly a scaled catalog sample; native art ships unchanged.
-        strip = art.convert("RGB").resize((512, 33), Image.Resampling.LANCZOS)
-        canvas.paste(strip, (x + 20, y + 65))
+    # This is explicitly a scaled catalog sample; native art ships unchanged.
+    strip = toolbar_preview(theme).resize((512, 33), Image.Resampling.LANCZOS)
+    canvas.paste(strip, (x + 20, y + 65))
     radius = 8 if theme["round"] else 0
     for index, label in enumerate(("Selected", "Normal", "Active", "Disabled")):
         bx, by = x + 20 + index % 2 * 266, y + 119 + index // 2 * 87
@@ -110,7 +127,7 @@ def render_collection(slug, title, theme_slugs, *, display_names=None):
     draw = ImageDraw.Draw(canvas)
     draw.text((36, 25), "ETHOS 26  /  THE THEME COLLECTION", font=font(13, True), fill=(140, 169, 198))
     draw.text((33, 46), title, font=font(36, True), fill=(245, 247, 250))
-    draw.text((36, 101), f"{len(themes):02d} THEMES  |  Actual palettes and artwork  |  Illustrative controls",
+    draw.text((36, 101), f"{len(themes):02d} THEMES  |  Actual palettes and artwork  |  Illustrative layout",
               font=font(15), fill=(168, 185, 203))
     for index, theme in enumerate(themes):
         draw_card(canvas, theme, 36 + index % 2 * 576, 144 + index // 2 * 394)

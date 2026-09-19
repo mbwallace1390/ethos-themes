@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-rfblue-pro.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "RFPro",
         name = "RF Blue Pro",
@@ -45,7 +48,7 @@ local function init()
             lcd.RGB(0x08, 0x11, 0x0D), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x08, 0x0D, 0x16), -- TOPLCD_BGCOLOR (XE/S)
         },
-        --toolbarLogo = "none",
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-rfblue-pro.png", "toolbar-rfblue-pro-x18.png"),
     })
 end

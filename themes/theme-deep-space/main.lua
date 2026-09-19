@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-deep-space.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "DSpace",
         name = "Deep Space",
@@ -45,6 +48,7 @@ local function init()
             lcd.RGB(0x07, 0x1A, 0x10), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x08, 0x06, 0x0F), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-deep-space.png", "toolbar-deep-space-x18.png"),
     })
 end

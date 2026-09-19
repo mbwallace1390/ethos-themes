@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw
 
 from palette_quality import polish_lua_source
 from theme_lib import (
+    add_toolbar_logo,
     ETHOS26_RELEASE_NOTES,
     ETHOS26_SUPPORT,
     INIT_GUARD_LUA,
@@ -243,6 +244,7 @@ return {{ init = init }}
         newline="\n",
     )
     release = RELEASES_ROOT / f"{'-'.join(word.capitalize() for word in slug.split('-'))}-v{THEME_VERSION}.zip"
+    add_toolbar_logo(theme_dir, slug)
     write_release(theme_dir, release)
 
 

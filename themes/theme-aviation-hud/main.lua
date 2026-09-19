@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-aviation-hud.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "AvHUD",
         name = "Aviation HUD",
@@ -45,6 +48,7 @@ local function init()
             lcd.RGB(0x03, 0x10, 0x06), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x05, 0x0D, 0x08), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-aviation-hud.png", "toolbar-aviation-hud-x18.png"),
     })
 end

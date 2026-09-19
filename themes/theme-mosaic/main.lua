@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-mosaic.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "Mosaic",
         name = "Mosaic",
@@ -45,6 +48,7 @@ local function init()
             lcd.RGB(0x06, 0x16, 0x0B), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x06, 0x11, 0x0F), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-mosaic.png", "toolbar-mosaic-x18.png"),
     })
 end

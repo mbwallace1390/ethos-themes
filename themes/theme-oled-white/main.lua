@@ -20,6 +20,9 @@ end
 local function init()
     -- Skip unsupported firmware before creating colors or loading artwork.
     if type(system.registerTheme) ~= "function" then return end
+    -- Load the optional palette-matched logo once; failures keep the theme usable.
+    local logoOk, toolbarLogo = pcall(lcd.loadBitmap, "logo-oled-white.png")
+    if not logoOk then toolbarLogo = nil end
     system.registerTheme({
         key = "OLWht",
         name = "OLED White",
@@ -45,6 +48,7 @@ local function init()
             lcd.RGB(0x00, 0x12, 0x05), -- SAFE_CONTRASTING_COLOR
             lcd.RGB(0x00, 0x00, 0x00), -- TOPLCD_BGCOLOR
         },
+        toolbarLogo = toolbarLogo,
         toolbarBackground = loadToolbar("toolbar-oled-white.png", "toolbar-oled-white-x18.png"),
     })
 end
