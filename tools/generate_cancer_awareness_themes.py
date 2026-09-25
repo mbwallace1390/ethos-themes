@@ -17,11 +17,11 @@ from theme_lib import (
     RELEASES_ROOT,
     SELECTOR_LUA,
     THEMES_ROOT,
-    THEME_VERSION,
     X18_SIZE,
     X20_SIZE,
     contrasting,
     save_png,
+    theme_version,
     toolbar_call,
     write_release,
     zip_install_instructions,
@@ -41,6 +41,11 @@ THEMES = [
     ("royal-blue-strong", "Royal Blue Strong", "RoyBlue", "Colorectal Cancer Awareness", "#275DCE", "#A9C8FF", "#080E1A", "#111F38", "#1A3156", "#31548A", "geometry"),
     ("green-courage", "Green Courage", "GrnCour", "Liver Cancer Awareness", "#36B96B", "#A8F0C0", "#07150C", "#102B19", "#194126", "#2D7044", "leaves"),
 ]
+
+ROYAL_BLUE_UPDATE = (
+    "Brighter royal-blue selected outlines reach at least 3:1 contrast on every "
+    "control and page background, with readable highlight text and unchanged awareness artwork."
+)
 
 
 def rgb(value: str) -> tuple[int, int, int]:
@@ -190,14 +195,17 @@ def draw_toolbar(theme, width=X20_SIZE[0]) -> Image.Image:
 
 
 def palette(theme):
-    _, _, _, _, ribbon_hex, active_hex, page_hex, primary_hex, secondary_hex, border_hex, _ = theme
+    slug, _, _, _, ribbon_hex, active_hex, page_hex, primary_hex, secondary_hex, border_hex, _ = theme
     ribbon, active, page, primary, secondary, border = map(rgb, (ribbon_hex, active_hex, page_hex, primary_hex, secondary_hex, border_hex))
+    # A small lighter-blue blend makes the selected outline visible on all
+    # three surfaces while retaining the awareness ribbon's original color.
+    highlight = rgb("#4977D6") if slug == "royal-blue-strong" else ribbon
     primary_text = (245, 247, 250)
     highlight_contrast = (12, 10, 13) if sum(ribbon) > 430 else contrasting(ribbon, (255, 255, 255), primary)
     return {
         "PRIMARY_COLOR": primary_text,
         "SECONDARY_BGCOLOR": secondary,
-        "HIGHLIGHT_COLOR": ribbon,
+        "HIGHLIGHT_COLOR": highlight,
         "HIGHLIGHT_CONTRASTING_COLOR": highlight_contrast,
         "DISABLE_COLOR": mix(primary, primary_text, .38),
         "PRIMARY_BGCOLOR": primary,
@@ -217,6 +225,10 @@ def palette(theme):
 
 def build_theme(theme) -> None:
     slug, name, key, awareness, *_ = theme
+    version = theme_version(slug)
+    visual_update = ROYAL_BLUE_UPDATE if slug == "royal-blue-strong" else ""
+    update_notes = f"{visual_update} " if visual_update else ""
+    update_readme = f"- {visual_update}\n" if visual_update else ""
     folder = f"theme-{slug}"
     theme_dir = THEMES_ROOT / folder
     if theme_dir.exists():
@@ -265,11 +277,11 @@ return {{ init = init }}
         "manifestVersion": 1,
         "name": name,
         "key": f"mbwallace1390-theme-{key}",
-        "version": THEME_VERSION,
+        "version": version,
         "releaseNotes": {
             "format": "markdown",
             "content": (
-                f"{ETHOS26_RELEASE_NOTES} "
+                f"{update_notes}{ETHOS26_RELEASE_NOTES} "
                 f"First stable {name} release for {awareness}. Includes original generic "
                 "awareness-ribbon toolbar artwork and changes only the ETHOS radio theme. "
                 "Automatically selects 464x50 artwork on standard X18 radios and 784x50 "
@@ -281,7 +293,7 @@ return {{ init = init }}
     }
     (theme_dir / "ethos_lua_manifest.json").write_text(json.dumps(manifest, indent=4) + "\n", encoding="utf-8", newline="\n")
 
-    readme = f"""# {name} v{THEME_VERSION}
+    readme = f"""# {name} v{version}
 
 {ETHOS26_SUPPORT}
 
@@ -296,13 +308,13 @@ A standalone FrSky ETHOS radio theme with original generic awareness-ribbon tool
 - Unique internal key: `{key}`
 - Responsive 784x50 X20 / 464x50 X18 toolbar
 - Separate installable package
-- Does not modify Rotorflight or RF Suite Lua files
+{update_readme}- Does not modify Rotorflight or RF Suite Lua files
 
 To install from repository sources, copy `{folder}` into the transmitter's `scripts` folder, restart, and select **{name}** under **System > General > Theme**.
 """
     (theme_dir / "README.md").write_text(readme, encoding="utf-8", newline="\n")
 
-    release_name = "-".join(word.capitalize() for word in slug.split("-")) + f"-v{THEME_VERSION}.zip"
+    release_name = "-".join(word.capitalize() for word in slug.split("-")) + f"-v{version}.zip"
     add_toolbar_logo(theme_dir, slug)
     write_release(theme_dir, RELEASES_ROOT / release_name)
 

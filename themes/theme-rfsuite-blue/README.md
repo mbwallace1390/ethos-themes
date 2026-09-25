@@ -1,10 +1,15 @@
-# RF Suite Blue v1.2.3
+# RF Suite Blue v1.2.4
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
 Install the ZIP with ETHOS Suite's local ZIP installer. For manual ZIP installation, create `scripts/theme-rfsuite-blue/` on the transmitter and extract the ZIP contents into that folder.
 
-A dark FrSky ETHOS theme that replaces the yellow selected-control highlight with blue, including selected controls inside Rotorflight RF Suite.
+A standalone dark FrSky ETHOS radio theme with rounded controls and solid blue selected controls.
+
+## Changes in v1.2.4
+
+- Clarifies the standalone installation and purpose.
+- Preserves the palette, artwork, runtime behavior, and existing RF Suite Blue theme identity.
 
 ## Changes in v1.0.5
 

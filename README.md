@@ -6,7 +6,9 @@ Every current theme download automatically selects the correct toolbar artwork: 
 
 Standalone themes for FrSky ETHOS 26, with custom colors, controls, and toolbar artwork for the radio interface.
 
-**Current packages: America 250 v1.2.1; Ink & Halo v1.0.2; remaining themes v1.2.3, for ETHOS 26.1.0 and newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
+**Current packages: seven updated themes v1.2.4; 59 collection themes v1.2.3; America 250 v1.2.1; Ink & Halo v1.0.2. All require ETHOS 26.1.0 or newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
+
+The **v1.2.4 refinements** fix Neon Horizon's sun stripes and deepen its perspective grid, strengthen selected-control outlines in Royal Blue Strong and Desert Tactical, and improve logo separation in Loom, Halftone, and Desert Tactical. Blue Pro and Classic Blue receive standalone-theme wording updates. Catalog previews now show the actual artwork for both radio sizes. [Changes and validation](ETHOS26.md#targeted-refinements-v124).
 
 The **v1.2.3 artwork update** restores continuous toolbar backgrounds and textures across the full width. Accent lines run below the ETHOS wordmark, while prominent illustrations sit beside it; there is no blank center strip. **Ink & Halo v1.0.2** keeps its wider, raised halo. Palettes, logo colors, and runtime behavior are preserved. [Artwork changes](ETHOS26.md#continuous-header-artwork-v123).
 
@@ -44,7 +46,7 @@ These 10 themes use original generic awareness-ribbon artwork and matching color
 - **Orange Warrior v1.2.3** — leukemia awareness — [Download](releases/Orange-Warrior-v1.2.3.zip) — [Source](themes/theme-orange-warrior)
 - **Purple Hope v1.2.3** — pancreatic cancer awareness — [Download](releases/Purple-Hope-v1.2.3.zip) — [Source](themes/theme-purple-hope)
 - **Pearl Breath v1.2.3** — lung cancer awareness — [Download](releases/Pearl-Breath-v1.2.3.zip) — [Source](themes/theme-pearl-breath)
-- **Royal Blue Strong v1.2.3** — colorectal cancer awareness — [Download](releases/Royal-Blue-Strong-v1.2.3.zip) — [Source](themes/theme-royal-blue-strong)
+- **Royal Blue Strong v1.2.4** — colorectal cancer awareness — [Download](releases/Royal-Blue-Strong-v1.2.4.zip) — [Source](themes/theme-royal-blue-strong)
 - **Green Courage v1.2.3** — liver cancer awareness — [Download](releases/Green-Courage-v1.2.3.zip) — [Source](themes/theme-green-courage)
 
 ## Custom-art collections
@@ -65,7 +67,7 @@ These 12 themes add detailed toolbar artwork while remaining normal standalone E
 
 - **Woodland Tactical v1.2.3** — dark woodland camouflage and amber active states — [Download](releases/Woodland-Tactical-v1.2.3.zip) — [Source](themes/theme-woodland-tactical)
 - **Arctic Tactical v1.2.3** — pale arctic camouflage with blue controls — [Download](releases/Arctic-Tactical-v1.2.3.zip) — [Source](themes/theme-arctic-tactical)
-- **Desert Tactical v1.2.3** — sand camouflage with brown and orange accents — [Download](releases/Desert-Tactical-v1.2.3.zip) — [Source](themes/theme-desert-tactical)
+- **Desert Tactical v1.2.4** — sand camouflage with brown and orange accents — [Download](releases/Desert-Tactical-v1.2.4.zip) — [Source](themes/theme-desert-tactical)
 
 ### Cosmic
 
@@ -73,7 +75,7 @@ These 12 themes add detailed toolbar artwork while remaining normal standalone E
 
 - **Deep Space v1.2.3** — star field, violet nebula tones, and cyan active states — [Download](releases/Deep-Space-v1.2.3.zip) — [Source](themes/theme-deep-space)
 - **Lunar Command v1.2.3** — cratered lunar surface and instrument styling — [Download](releases/Lunar-Command-v1.2.3.zip) — [Source](themes/theme-lunar-command)
-- **Neon Horizon v1.2.3** — glowing sunset, perspective grid, and neon controls — [Download](releases/Neon-Horizon-v1.2.3.zip) — [Source](themes/theme-neon-horizon)
+- **Neon Horizon v1.2.4** — glowing sunset, perspective grid, and neon controls — [Download](releases/Neon-Horizon-v1.2.4.zip) — [Source](themes/theme-neon-horizon)
 
 ### Tech & Racing
 
@@ -100,9 +102,9 @@ Four themes built from a surface texture rather than a scene, each drawn with a 
 
 <a href="previews/texture.png"><img src="previews/texture.png" alt="Texture theme previews" width="760"></a>
 
-- **Loom v1.2.3** — an over-under basket weave in warm rust and amber — [Download](releases/Loom-v1.2.3.zip) — [Source](themes/theme-loom)
+- **Loom v1.2.4** — an over-under basket weave in warm rust and amber — [Download](releases/Loom-v1.2.4.zip) — [Source](themes/theme-loom)
 - **Mosaic v1.2.3** — jittered stained-glass cells with lit seams, teal and gold — [Download](releases/Mosaic-v1.2.3.zip) — [Source](themes/theme-mosaic)
-- **Halftone v1.2.3** — a dot screen that swells and fades across the bar, crimson focus with amber active states — [Download](releases/Halftone-v1.2.3.zip) — [Source](themes/theme-halftone)
+- **Halftone v1.2.4** — a dot screen that swells and fades across the bar, crimson focus with amber active states — [Download](releases/Halftone-v1.2.4.zip) — [Source](themes/theme-halftone)
 - **Bloom v1.2.3** — soft overlapping bokeh orbs in pink and violet — [Download](releases/Bloom-v1.2.3.zip) — [Source](themes/theme-bloom)
 
 ## Standalone style collection
@@ -175,7 +177,7 @@ All Pro themes use dark square controls, outline focus, clear inactive and disab
 
 <a href="previews/rf-pro.png"><img src="previews/rf-pro.png" alt="Pro color collection previews" width="760"></a>
 
-- **Blue Pro v1.2.3** — [Download](releases/RF-Blue-Pro-v1.2.3.zip) — [Source](themes/theme-rfblue-pro)
+- **Blue Pro v1.2.4** — [Download](releases/RF-Blue-Pro-v1.2.4.zip) — [Source](themes/theme-rfblue-pro)
 - **Violet Pro v1.2.3** — [Download](releases/RF-Violet-Pro-v1.2.3.zip) — [Source](themes/theme-rf-violet-pro)
 - **Emerald Pro v1.2.3** — [Download](releases/RF-Emerald-Pro-v1.2.3.zip) — [Source](themes/theme-rf-emerald-pro)
 - **Ember Pro v1.2.3** — [Download](releases/RF-Ember-Pro-v1.2.3.zip) — [Source](themes/theme-rf-ember-pro)
@@ -190,10 +192,10 @@ All Pro themes use dark square controls, outline focus, clear inactive and disab
 
 <a href="previews/classic.png"><img src="previews/classic.png" alt="Classic Blue theme preview" width="760"></a>
 
-**Classic Blue v1.2.3** keeps rounded controls and solid blue selected controls.
+**Classic Blue v1.2.4** keeps rounded controls and solid blue selected controls.
 
 - [View source](themes/theme-rfsuite-blue)
-- [Download current responsive release v1.2.3](releases/RF-Suite-Blue-v1.2.3.zip)
+- [Download current responsive release v1.2.4](releases/RF-Suite-Blue-v1.2.4.zip)
 - [Download previous packaged release v1.0.3](releases/RF-Suite-Blue-v1.0.3.zip)
 
 ## Installation
@@ -207,10 +209,10 @@ All themes can remain installed together. `main.luac` is intentionally omitted; 
 
 ## Development
 
-Every generator writes both toolbar sizes, the automatic display-size selection, palette-encoded artwork, and a reproducible ZIP, so regenerating a family never drifts from what is committed.
+Family generators write both native toolbar sizes and their theme packages. Shared helpers preserve display-size selection, palette handling, and ZIP layout. Review regenerated files before publishing: font versions, image-compression tools, and manually maintained themes can affect output or require separate updates.
 
 - `tools/theme_lib.py` holds the shared packaging helpers every generator uses.
-- `tools/generate_all_previews.py` refreshes all catalog images from the current Lua palettes and toolbar files, including America 250, Ink & Halo, and Classic. It does not regenerate the radio artwork.
+- `tools/generate_all_previews.py` refreshes all catalog images from the current Lua palettes and toolbar files, including both native header sizes, America 250, Ink & Halo, and Classic. It does not regenerate the radio artwork.
 - `tools/generate_america250_theme.py` regenerates America 250, both native-size toolbar images, its ETHOS Suite-compatible ZIP, and the featured preview.
 - `tools/generate_ink_halo_theme.py` regenerates Ink & Halo, its halo artwork at both native sizes, transparent logo override, ETHOS Suite-compatible ZIP, and preview.
 - `tools/test_ethos26.py` executes all themes against the documented ETHOS 26 API using Lua runtimes and API stubs. See [test commands](TESTING.md#automated-checks).

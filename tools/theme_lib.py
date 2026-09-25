@@ -24,6 +24,11 @@ THEMES_ROOT = ROOT / "themes"
 RELEASES_ROOT = ROOT / "releases"
 PREVIEWS_ROOT = ROOT / "previews"
 THEME_VERSION = "1.2.3"
+THEME_VERSION_OVERRIDES = dict.fromkeys((
+    "neon-horizon", "royal-blue-strong", "desert-tactical", "loom", "halftone",
+    "rfblue-pro", "rfsuite-blue",
+), "1.2.4")
+STRONG_LOGO_OUTLINES = {"loom", "halftone", "desert-tactical"}
 WORDMARK_MASK = Path(__file__).resolve().parent / "assets" / "ethos-logo" / "wordmark-alpha.png"
 LOGO_SIZE = (128, 26)
 LOGO_RELEASE_NOTES = "Palette-matched transparent ETHOS header logo. Continuous toolbar materials and accents preserve the theme's style without a blank logo panel; prominent motifs sit clear of the lettering."
@@ -77,6 +82,11 @@ def rgb(value: str) -> tuple[int, int, int]:
 
 def mix(a: tuple[int, int, int], b: tuple[int, int, int], amount: float) -> tuple[int, int, int]:
     return tuple(round(a[i] * (1 - amount) + b[i] * amount) for i in range(3))
+
+
+def theme_version(slug: str) -> str:
+    """Keep unchanged downloads on their existing release version."""
+    return THEME_VERSION_OVERRIDES.get(slug, THEME_VERSION)
 
 
 def lua_color(color: tuple[int, int, int]) -> str:
@@ -176,6 +186,38 @@ def downscale_to_x18(source: Image.Image) -> Image.Image:
     return output
 
 
+def render_toolbar_logo(palette, *, strong_outline=False) -> Image.Image:
+    """Render transparent letter edges without painting a background panel."""
+    with Image.open(WORDMARK_MASK) as mask:
+        alpha = mask.convert("L")
+    canvas = Image.new("RGBA", LOGO_SIZE, (0, 0, 0, 0))
+    # Busy materials get one extra soft edge pixel. Leave room inside the same
+    # bitmap so the expanded outline is complete at all four image edges.
+    target_size = (124, 22) if strong_outline else (126, 24)
+    top = 2 if strong_outline else 1
+    for start, end, foreground in ((0, 600, palette["PRIMARY_COLOR"]),
+                                   (600, alpha.width, palette["HIGHLIGHT_COLOR"])):
+        part = Image.new("L", alpha.size, 0)
+        part.paste(alpha.crop((start, 0, end, alpha.height)), (start, 0))
+        resized = ImageOps.contain(part, target_size, Image.Resampling.LANCZOS)
+        resized = resized.point(lambda opacity: opacity if opacity >= 8 else 0)
+        native_alpha = Image.new("L", LOGO_SIZE, 0)
+        native_alpha.paste(resized, ((LOGO_SIZE[0] - resized.width) // 2, top))
+        outline_color = max(palette.values(), key=lambda color: contrast_ratio(foreground, color))
+        if strong_outline:
+            outer = Image.new("RGBA", LOGO_SIZE, outline_color + (0,))
+            outer.putalpha(native_alpha.filter(ImageFilter.MaxFilter(5)).point(
+                lambda opacity: round(opacity * .72) if opacity >= 32 else 0))
+            canvas = Image.alpha_composite(canvas, outer)
+        outline = Image.new("RGBA", LOGO_SIZE, outline_color + (0,))
+        outline.putalpha(native_alpha.filter(ImageFilter.MaxFilter(3)))
+        canvas = Image.alpha_composite(canvas, outline)
+        fill = Image.new("RGBA", LOGO_SIZE, foreground + (0,))
+        fill.putalpha(native_alpha)
+        canvas = Image.alpha_composite(canvas, fill)
+    return canvas
+
+
 def add_toolbar_logo(theme_dir: Path, slug: str) -> str:
     """Add a palette-matched logo after a generator writes its polished files.
 
@@ -216,30 +258,8 @@ def add_toolbar_logo(theme_dir: Path, slug: str) -> str:
     }
     if len(palette) != 17:
         raise ValueError(f"Expected the complete polished RGB palette: {theme_dir}")
-    with Image.open(WORDMARK_MASK) as mask:
-        alpha = mask.convert("L")
-    canvas = Image.new("RGBA", LOGO_SIZE, (0, 0, 0, 0))
-    # The source has an empty gap at x600 between ETH and OS. Work from its
-    # original alpha rather than recoloring antialiased RGB edge pixels.
-    for start, end, foreground in ((0, 600, palette["PRIMARY_COLOR"]),
-                                   (600, alpha.width, palette["HIGHLIGHT_COLOR"])):
-        part = Image.new("L", alpha.size, 0)
-        part.paste(alpha.crop((start, 0, end, alpha.height)), (start, 0))
-        resized = ImageOps.contain(part, (126, 24), Image.Resampling.LANCZOS)
-        # Remove only near-invisible resampling fringes (under 3% opacity),
-        # retaining antialiased edges while keeping the surrounding pixels clear.
-        resized = resized.point(lambda opacity: opacity if opacity >= 8 else 0)
-        native_alpha = Image.new("L", LOGO_SIZE, 0)
-        native_alpha.paste(resized, ((LOGO_SIZE[0] - resized.width) // 2, 1))
-        # A one-pixel outer edge keeps the theme colors distinct from busy art;
-        # its color comes from the same palette, with maximum foreground contrast.
-        outline_color = max(palette.values(), key=lambda color: contrast_ratio(foreground, color))
-        outline = Image.new("RGBA", LOGO_SIZE, outline_color + (0,))
-        outline.putalpha(native_alpha.filter(ImageFilter.MaxFilter(3)))
-        canvas = Image.alpha_composite(canvas, outline)
-        fill = Image.new("RGBA", LOGO_SIZE, foreground + (0,))
-        fill.putalpha(native_alpha)
-        canvas = Image.alpha_composite(canvas, fill)
+    strong_outline = slug in STRONG_LOGO_OUTLINES
+    canvas = render_toolbar_logo(palette, strong_outline=strong_outline)
     logo_name = f"logo-{slug}.png"
     canvas.save(theme_dir / logo_name, optimize=True)
 
@@ -254,6 +274,10 @@ def add_toolbar_logo(theme_dir: Path, slug: str) -> str:
     source_path.write_text(source, encoding="utf-8", newline="\n")
     manifest["files"].append(logo_name)
     manifest["releaseNotes"]["content"] += " " + LOGO_RELEASE_NOTES
+    if strong_outline:
+        manifest["releaseNotes"]["content"] += " Refined letter edges improve logo separation over the preserved texture."
+        readme = readme.replace(LOGO_README_LINE, LOGO_README_LINE +
+            "- Refined logo letter edges preserve readability over the continuous toolbar texture\n", 1)
     manifest_path.write_text(json.dumps(manifest, indent=4) + "\n", encoding="utf-8", newline="\n")
     readme_path.write_text(readme, encoding="utf-8", newline="\n")
     return logo_name
@@ -273,10 +297,11 @@ def write_theme_files(
     release_notes: str,
     label: str = "Family",
     readme_extra: str = "",
-    version: str = THEME_VERSION,
+    version: str | None = None,
     hide_toolbar_logo: bool = False,
 ) -> tuple[str, str]:
     """Write main.lua, the manifest and the per-theme README. Returns art names."""
+    version = version or theme_version(slug)
     large_name = f"toolbar-{slug}.png"
     small_name = f"toolbar-{slug}-x18.png"
     logo_name = "logo-transparent.png"

@@ -2,7 +2,20 @@
 
 All 68 current themes target **ETHOS 26.1.0 and newer** on the existing 480px and 800px display layouts. Their API was checked against **26.1.2**, released September 10, 2026. FrSky describes that release as being for early adopters. [Official release](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/tag/26.1.2)
 
-The v1.2.0 collection introduced [readability and preview improvements](VISUAL_UPGRADE.md). Current collection packages are v1.2.3; Ink & Halo is v1.0.2 and uses the same contrast checks, responsive artwork, and native registration behavior. America 250 remains v1.2.1.
+The v1.2.0 collection introduced [readability and preview improvements](VISUAL_UPGRADE.md). Seven collection packages are v1.2.4 and the other 59 remain v1.2.3; Ink & Halo is v1.0.2 and uses the same contrast checks, responsive artwork, and native registration behavior. America 250 remains v1.2.1.
+
+## Targeted refinements: v1.2.4
+
+Seven themes receive v1.2.4 packages:
+
+- **Neon Horizon:** clips the horizontal sun stripes inside its outline and gives the perspective grid more depth while keeping the logo clear.
+- **Royal Blue Strong and Desert Tactical:** strengthen selected-control outlines against the theme backgrounds.
+- **Loom, Halftone, and Desert Tactical:** improve separation between the ETHOS logo and the continuous textured artwork.
+- **RF Blue Pro and RF Suite Blue (Classic Blue in the catalog):** clarify that each is a standalone ETHOS radio theme. Their existing theme names, folders, artwork, and runtime behavior are preserved.
+
+All catalog cards now show the actual 784x50 and 464x50 toolbar variants instead of showing only a resized copy of the larger image. These remain desktop illustrations, not firmware screenshots. Check the updated details on both radio sizes using [the testing checklist](TESTING.md).
+
+The remaining 59 collection themes stay at v1.2.3; Ink & Halo stays at v1.0.2 and America 250 at v1.2.1. Previous ZIPs remain frozen snapshots. The changes add no recurring Lua drawing work.
 
 ## Continuous header artwork: v1.2.3
 
@@ -46,7 +59,7 @@ Startup and About/Info branding remain unchanged. The [ETHOS 26.1.2 native-theme
 
 ## Install or update
 
-1. Download the theme's latest ZIP from the main catalog: **66 collection themes v1.2.3**, **Ink & Halo v1.0.2**, or **America 250 v1.2.1**.
+1. Download the theme's latest ZIP from the main catalog: **seven updated themes v1.2.4**, **59 collection themes v1.2.3**, **Ink & Halo v1.0.2**, or **America 250 v1.2.1**.
 2. In Suite, use **Lua Library > Install from local .zip**, then select that ZIP.
 3. Restart the transmitter and select the theme under **System > General > Theme**.
 

@@ -22,6 +22,7 @@ from theme_lib import (
     X18_SIZE,
     X20_SIZE,
     save_png,
+    theme_version,
     toolbar_call,
     write_release,
     zip_install_instructions,
@@ -43,13 +44,13 @@ THEMES = [
      ["EEF0D8","39432A","B7C96B","171C0C","7B8265","272F1D","CBD2A4","7FE07B","161C11","FF5B4F","E9A441","8D956E","E9A441","586342","F5C65D","0A1808"]),
     ("Tactical", "arctic-tactical", "Arctic Tactical", "ArcTac", f"Arctic-Tactical-v{THEME_VERSION}.zip", "arctic", False, "outline",
      ["17242E","CAD6DC","1679A8","F6FBFE","7B8C96","E6EDF0","3E5D70","168A59","F5F8FA","C93645","0C5D86","8095A1","0C5D86","AABBC4","A76400","FFFFFF"]),
-    ("Tactical", "desert-tactical", "Desert Tactical", "DesTac", f"Desert-Tactical-v{THEME_VERSION}.zip", "desert", False, "outline",
-     ["2E2418","C9B38C","A85C24","FFF8EA","8C7C64","E3D2B1","624A32","3B8458","F1E7D2","B83832","7B3E17","967E5F","7B3E17","B29B74","A15E00","FFFFFF"]),
+    ("Tactical", "desert-tactical", "Desert Tactical", "DesTac", f"Desert-Tactical-v{theme_version('desert-tactical')}.zip", "desert", False, "outline",
+     ["2E2418","C9B38C","93501F","FFF8EA","8C7C64","E3D2B1","624A32","3B8458","F1E7D2","B83832","7B3E17","967E5F","7B3E17","B29B74","A15E00","FFFFFF"]),
     ("Cosmic", "deep-space", "Deep Space", "DSpace", f"Deep-Space-v{THEME_VERSION}.zip", "space", False, "outline",
      ["F4F0FF","241B3D","9C6CFF","130B25","75698F","171126","CDBCF2","54E59A","08060F","FF5370","4EC9FF","81749A","4EC9FF","473763","FFD166","071A10"]),
     ("Cosmic", "lunar-command", "Lunar Command", "Lunar", f"Lunar-Command-v{THEME_VERSION}.zip", "lunar", False, "outline",
      ["F0F2F4","41474E","C8D0D8","1D2227","858C93","2B3036","D2D7DC","74D895","181B1F","FF5A62","E7B04A","929AA2","E7B04A","606972","E7B04A","0B180F"]),
-    ("Cosmic", "neon-horizon", "Neon Horizon", "NeoHor", f"Neon-Horizon-v{THEME_VERSION}.zip", "horizon", True, "invert",
+    ("Cosmic", "neon-horizon", "Neon Horizon", "NeoHor", f"Neon-Horizon-v{theme_version('neon-horizon')}.zip", "horizon", True, "invert",
      ["F7F1FF","2B1B49","FF4FB8","250A20","806A92","1A1230","D9BAF4","5FE8A5","0B0716","FF4D6D","34D8FF","8B73A0","34D8FF","58366F","FFD166","071A11"]),
     ("Tech & Racing", "circuit-trace", "Circuit Trace", "CirTrce", f"Circuit-Trace-v{THEME_VERSION}.zip", "circuit", False, "outline",
      ["E7F9E8","173B2A","44E57A","06180C","5F806A","0D281B","A9DFB7","44E57A","06150E","FF5360","F0D84D","6D9278","F0D84D","2C5A3E","F0D84D","06180C"]),
@@ -64,6 +65,11 @@ COLLECTIONS = {
     "tactical": ("Tactical", ["woodland-tactical", "arctic-tactical", "desert-tactical"]),
     "cosmic": ("Cosmic", ["deep-space", "lunar-command", "neon-horizon"]),
     "tech-racing": ("Tech & Racing", ["circuit-trace", "racing-division", "hex-core"]),
+}
+
+VISUAL_UPDATES = {
+    "neon-horizon": "Sun bands stay inside the sunset oval, with a deeper perspective grid that continues below the ETHOS lettering.",
+    "desert-tactical": "Darker brown selected outlines reach at least 3:1 contrast on every control and page background; the camo artwork retains its original colors.",
 }
 
 ROLES = [
@@ -171,12 +177,38 @@ def artwork(draw, style, width, height, page, panel, accent, active):
         draw.arc((center-21,2,center+21,44),0,180,fill=accent,width=2)
         draw.line((0,44,width-1,44), fill=active)
     elif style == "horizon":
-        horizon = 42
-        draw.line((0,horizon,width-1,horizon), fill=active, width=2)
-        draw.ellipse((center-28,4,center+28,40), fill=mix(page,accent,.25), outline=accent, width=2)
-        for y in range(8,29,5): draw.line((center-25,y,center+25,y), fill=mix(page,accent,.45))
-        for x in range(0,width,52): draw.line((center,horizon,x,height-1), fill=mix(page,active,.38))
-        for y in (45,48): draw.line((0,y,width-1,y), fill=mix(page,active,.35))
+        # The floor has real depth on both flanks. Its unbroken horizon bows
+        # below the centered wordmark, rather than blanking the scene behind it.
+        horizons = []
+        for x in range(width):
+            distance = abs(x - (width - 1) / 2)
+            weight = min(1.0, max(0.0, (126 - distance) / 50))
+            weight = weight * weight * (3 - 2 * weight)
+            horizons.append(31 + 11 * weight)
+
+        # Project equally spaced floor rays from the sunset's vanishing point.
+        # Nonuniform cross-line spacing makes the near cells visibly deeper.
+        for endpoint in range(-52, width + 52, 52):
+            points = []
+            for step in range(69):
+                depth = step / 68
+                x = round(center + (endpoint - center) * depth)
+                if 0 <= x < width:
+                    y = round(horizons[x] + (48 - horizons[x]) * depth)
+                    points.append((x, y))
+            if len(points) > 1:
+                draw.line(points, fill=mix(page, active, .48))
+        for depth in (.12, .28, .52, .8, 1.0):
+            points = [(x, round(y + (48 - y) * depth)) for x, y in enumerate(horizons)]
+            draw.line(points, fill=mix(page, active, .42))
+        draw.line([(x, round(y)) for x, y in enumerate(horizons)], fill=active)
+
+        # Fit each band inside the inner ellipse so no horizontal stripe can
+        # stick out through its curved silhouette or overwrite the rim.
+        draw.ellipse((center-28,3,center+28,31), fill=mix(page,accent,.25), outline=accent, width=2)
+        for y in range(7,29,5):
+            half_width = math.floor(26 * math.sqrt(max(0, 1 - ((y - 17) / 12) ** 2)))
+            draw.line((center-half_width,y,center+half_width,y), fill=mix(page,accent,.45))
     elif style == "circuit":
         rng = random.Random(880)
         # Continuous traces run above and below the lettering, with no center cut.
@@ -210,8 +242,11 @@ def artwork(draw, style, width, height, page, panel, accent, active):
 
 
 def make_toolbar(theme, width=X20_SIZE[0]):
-    _, _, _, _, _, style, _, _, palette = theme
+    _, slug, _, _, _, style, _, _, palette = theme
     page, panel, accent, active = color(palette[8]), color(palette[5]), color(palette[2]), color(palette[10])
+    if slug == "desert-tactical":
+        # The darker control outline does not recolor the existing camo trim.
+        accent = color("A85C24")
     height = X20_SIZE[1]
     image = Image.new("RGB", (width,height), page)
     draw = ImageDraw.Draw(image)
@@ -222,6 +257,10 @@ def make_toolbar(theme, width=X20_SIZE[0]):
 
 def build_theme(theme):
     collection, slug, name, key, release_name, _, rounded, focus, palette = theme
+    version = theme_version(slug)
+    visual_update = VISUAL_UPDATES.get(slug, "")
+    update_notes = f"{visual_update} " if visual_update else ""
+    update_readme = f"- {visual_update}\n" if visual_update else ""
     folder = f"theme-{slug}"
     theme_dir = THEMES_ROOT / folder
     large_name = f"toolbar-{slug}.png"
@@ -258,8 +297,8 @@ return {{ init = init }}
 '''
     (theme_dir/"main.lua").write_text(polish_lua_source(lua),encoding="utf-8",newline="\n")
     manifest = {
-        "manifestVersion":1,"name":name,"key":f"mbwallace1390-theme-{key}","version":THEME_VERSION,
-        "releaseNotes":{"format":"markdown","content":(f"{ETHOS26_RELEASE_NOTES} "
+        "manifestVersion":1,"name":name,"key":f"mbwallace1390-theme-{key}","version":version,
+        "releaseNotes":{"format":"markdown","content":(f"{update_notes}{ETHOS26_RELEASE_NOTES} "
                 f"First stable {name} release from the {collection} collection. Custom "
                     "radio-theme artwork only; no Rotorflight or RF Suite files are changed. "
                     "Automatically selects 464x50 artwork on standard X18 radios and 784x50 "
@@ -268,8 +307,9 @@ return {{ init = init }}
     }
     (theme_dir/"ethos_lua_manifest.json").write_text(json.dumps(manifest,indent=4)+"\n",encoding="utf-8",newline="\n")
     (theme_dir/"README.md").write_text(
-        f"# {name} v{THEME_VERSION}\n\n{ETHOS26_SUPPORT}\n\n{zip_install_instructions(folder)}\n\n**Collection:** {collection}\n\nA standalone FrSky ETHOS radio theme with custom toolbar artwork.\n\n"
+        f"# {name} v{version}\n\n{ETHOS26_SUPPORT}\n\n{zip_install_instructions(folder)}\n\n**Collection:** {collection}\n\nA standalone FrSky ETHOS radio theme with custom toolbar artwork.\n\n"
         f"- Focus: `{focus}`\n- Controls: {'rounded' if rounded else 'square'}\n- Internal key: `{key}`\n- Responsive 784x50 X20 / 464x50 X18 toolbar\n"
+        f"{update_readme}"
         "- Does not modify Rotorflight or RF Suite Lua files\n\n"
         f"To install from repository sources, copy `{folder}` into the transmitter `scripts` folder, restart, then select **{name}** under **System > General > Theme**.\n",
         encoding="utf-8",newline="\n")

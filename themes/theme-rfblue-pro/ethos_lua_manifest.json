@@ -2,10 +2,10 @@
     "manifestVersion": 1,
     "name": "RF Blue Pro",
     "key": "mbwallace1390-theme-RFPro",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "releaseNotes": {
         "format": "markdown",
-        "content": "Readability update: improved foreground contrast and refreshed catalog previews. ETHOS 26.1 compatibility update, checked against the 26.1.2 theme API. Suite local ZIP layout corrected with the manifest and files at archive root. Unsupported firmware skips registration; optional toolbar load failures during initialization fall back to the theme colors. Requires ETHOS 26.1.0 or newer. Radio validation is still required. First stable RF Blue Pro release: outline focus, sharper square controls, bright cyan-blue active accents, improved inactive/disabled contrast, and a lightweight 784x50 thin-line toolbar. Automatically selects 464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios. Palette-matched transparent ETHOS header logo. Continuous toolbar materials and accents preserve the theme's style without a blank logo panel; prominent motifs sit clear of the lettering."
+        "content": "Documentation update: clarifies that this package is a standalone ETHOS radio theme. Its theme identity, palette, artwork, and initialization behavior are unchanged. Readability update: improved foreground contrast and refreshed catalog previews. ETHOS 26.1 compatibility update, checked against the 26.1.2 theme API. Suite local ZIP layout corrected with the manifest and files at archive root. Unsupported firmware skips registration; optional toolbar load failures during initialization fall back to the theme colors. Requires ETHOS 26.1.0 or newer. Radio validation is still required. First stable RF Blue Pro release: outline focus, sharper square controls, bright cyan-blue active accents, improved inactive/disabled contrast, and a lightweight 784x50 thin-line toolbar. Automatically selects 464x50 artwork on standard X18 radios and 784x50 artwork on 800px radios. Palette-matched transparent ETHOS header logo. Continuous toolbar materials and accents preserve the theme's style without a blank logo panel; prominent motifs sit clear of the lettering."
     },
     "folder": "theme-rfblue-pro",
     "files": [

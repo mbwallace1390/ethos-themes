@@ -2,7 +2,9 @@
 
 ## Current catalog
 
-The 66 collection themes are now **v1.2.3**. Backgrounds and textures continue across the full toolbar, accent lines run below the ETHOS wordmark, and prominent illustrations sit beside it. Both display sizes retain each theme's visual identity without a blank center strip. Palettes, transparent logos, and initialization-only behavior are preserved. The v1.2.0, v1.2.1, and v1.2.2 ZIPs remain frozen snapshots.
+Seven collection themes are now **v1.2.4**: Neon Horizon, Royal Blue Strong, Desert Tactical, Loom, Halftone, RF Blue Pro, and RF Suite Blue (Classic Blue in the catalog). The update fixes Neon Horizon's sun stripes and improves its grid depth, strengthens selected-control outlines and textured-header logo readability in the named themes, and clarifies the two Blue themes' standalone purpose. Catalog cards now show both native header sizes. See [the per-theme changes](../ETHOS26.md#targeted-refinements-v124).
+
+The remaining **59 collection themes stay at v1.2.3**. Continuous toolbar materials and theme identities are preserved across the collection, with no blank logo panel or recurring Lua drawing task. Earlier ZIPs remain frozen snapshots, including the previous v1.2.3 packages for the seven updated themes.
 
 America 250 stays at [v1.2.1](America-250-v1.2.1.zip), with the default ETHOS logo hidden over its anniversary inscription. [Ink & Halo v1.0.2](Ink-and-Halo-v1.0.2.zip) raises and widens its halo arc to leave a clear gap around the white and pale-blue ETHOS wordmark. Its [v1.0.0 ZIP](Ink-and-Halo-v1.0.0.zip) and [v1.0.1 ZIP](Ink-and-Halo-v1.0.1.zip) are preserved. See [artwork changes](../ETHOS26.md#continuous-header-artwork-v123). Startup and About/Info branding remain unchanged for all themes; see [native-theme limits](../ETHOS26.md#ink--halo-header-update-v101).
 

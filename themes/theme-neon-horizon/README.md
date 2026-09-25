@@ -1,4 +1,4 @@
-# Neon Horizon v1.2.3
+# Neon Horizon v1.2.4
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 
@@ -12,6 +12,7 @@ A standalone FrSky ETHOS radio theme with custom toolbar artwork.
 - Controls: rounded
 - Internal key: `NeoHor`
 - Responsive 784x50 X20 / 464x50 X18 toolbar
+- Sun bands stay inside the sunset oval, with a deeper perspective grid that continues below the ETHOS lettering.
 - Does not modify Rotorflight or RF Suite Lua files
 - Palette-matched ETHOS header logo with a transparent background
 - Continuous toolbar styling with prominent artwork arranged around the lettering at both native widths

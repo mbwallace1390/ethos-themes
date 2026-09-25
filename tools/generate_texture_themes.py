@@ -20,7 +20,7 @@ from PIL import Image, ImageChops, ImageDraw
 from theme_lib import (
     RELEASES_ROOT,
     THEMES_ROOT,
-    THEME_VERSION,
+    theme_version,
     X18_SIZE,
     X20_SIZE,
     contrasting,
@@ -239,7 +239,7 @@ def build(defn) -> None:
     for width, filename in ((X20_SIZE[0], large_name), (X18_SIZE[0], small_name)):
         save_png(toolbar(width, style, page, panel, accent, active, seed), theme_dir / filename)
 
-    write_release(theme_dir, RELEASES_ROOT / f"{name}-v{THEME_VERSION}.zip")
+    write_release(theme_dir, RELEASES_ROOT / f"{name}-v{theme_version(slug)}.zip")
 
 
 def main() -> None:

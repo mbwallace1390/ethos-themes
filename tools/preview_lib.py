@@ -9,6 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 PREVIEWS_ROOT = ROOT / "previews"
 ROLE_RE = re.compile(r"lcd\.RGB\(0x([0-9A-Fa-f]{2}),\s*0x([0-9A-Fa-f]{2}),\s*0x([0-9A-Fa-f]{2})\),\s*--\s*([A-Z_]+)")
+CARD_WIDTH, CARD_HEIGHT = 552, 442
+CARD_ROW_STEP = CARD_HEIGHT + 28
 
 
 def font(size, bold=False):
@@ -35,21 +37,25 @@ def parse_theme(slug):
     rounded = re.search(r"roundButtons\s*=\s*(true|false)", source)
     focus = re.search(r'focusStyle\s*=\s*"([^"]+)"', source)
     art = [p for p in folder.glob("toolbar-*.png") if not p.stem.endswith("-x18")]
+    small_art = list(folder.glob("toolbar-*-x18.png"))
     logo = re.search(r'pcall\(lcd\.loadBitmap,\s*"(logo-[^"]+\.png)"\)', source)
-    if not name or not rounded or not focus or len(colors) != 17 or len(art) != 1:
+    if (not name or not rounded or not focus or len(colors) != 17
+            or len(art) != 1 or len(small_art) != 1):
         raise ValueError(f"Incomplete native theme: {folder}")
     return {"name": name[1], "round": rounded[1] == "true", "focus": focus[1],
-            "colors": colors, "toolbar": art[0],
+            "colors": colors, "toolbar": art[0], "toolbar_x18": small_art[0],
             "logo": folder / logo[1] if logo else None}
 
 
-def toolbar_preview(theme):
+def toolbar_preview(theme, display_width=800):
     """Composite shipped assets at the representative centered logo position.
 
     ETHOS owns the final layout. This is a catalog illustration, not a capture
-    of the firmware screen. Baked-header themes use an invisible 1x1 override.
+    of the firmware screen. Select the actual native-size image for the radio;
+    baked-header themes use an invisible 1x1 override.
     """
-    with Image.open(theme["toolbar"]) as art:
+    asset = "toolbar_x18" if display_width <= 480 else "toolbar"
+    with Image.open(theme[asset]) as art:
         strip = art.convert("RGB")
     if theme.get("logo"):
         with Image.open(theme["logo"]) as source:
@@ -70,7 +76,7 @@ def centered(draw, bounds, label, face, color):
 def draw_card(canvas, theme, x, y):
     draw = ImageDraw.Draw(canvas)
     c = theme["colors"]
-    width, height = 552, 366
+    width, height = CARD_WIDTH, CARD_HEIGHT
     page, panel, border = c["PAGE_BGCOLOR"], c["PRIMARY_BGCOLOR"], c["BUTTON_BORDER_COLOR"]
     accent, text = c["HIGHLIGHT_COLOR"], c["PRIMARY_COLOR"]
     draw.rounded_rectangle((x, y, x + width, y + height), radius=13,
@@ -82,12 +88,20 @@ def draw_card(canvas, theme, x, y):
     draw.text((x + 34, y + 15), theme["name"], font=title, fill=text)
     draw.text((x + 431, y + 24), theme["focus"].upper(), font=font(12, True), fill=c["SECONDARY_COLOR"])
 
-    # This is explicitly a scaled catalog sample; native art ships unchanged.
-    strip = toolbar_preview(theme).resize((512, 33), Image.Resampling.LANCZOS)
-    canvas.paste(strip, (x + 20, y + 65))
+    draw.text((x + 20, y + 62), "800 PX RADIOS  |  SCALED PREVIEW",
+              font=font(12), fill=c["SECONDARY_COLOR"])
+    large = toolbar_preview(theme)
+    scaled_height = round(large.height * 512 / large.width)
+    large = large.resize((512, scaled_height), Image.Resampling.LANCZOS)
+    canvas.paste(large, (x + 20, y + 83))
+    draw.text((x + 20, y + 127), "480 PX RADIOS  |  NATIVE HEADER",
+              font=font(12), fill=c["SECONDARY_COLOR"])
+    # Show the real X18 geometry at 1:1, centered in the same available width.
+    small = toolbar_preview(theme, display_width=480)
+    canvas.paste(small, (x + (width - small.width) // 2, y + 148))
     radius = 8 if theme["round"] else 0
     for index, label in enumerate(("Selected", "Normal", "Active", "Disabled")):
-        bx, by = x + 20 + index % 2 * 266, y + 119 + index // 2 * 87
+        bx, by = x + 20 + index % 2 * 266, y + 219 + index // 2 * 72
         fill, edge, foreground = panel, border, text
         if index == 0:
             edge = accent
@@ -97,22 +111,22 @@ def draw_card(canvas, theme, x, y):
             edge, foreground = c["BUTTON_BORDER_ACTIVE_COLOR"], c["ACTIVE_COLOR"]
         elif index == 3:
             foreground = c["DISABLE_COLOR"]
-        bounds = (bx, by, bx + 246, by + 67)
+        bounds = (bx, by, bx + 246, by + 56)
         draw.rounded_rectangle(bounds, radius=radius, fill=fill, outline=edge,
                                width=3 if index == 0 else 1)
         centered(draw, bounds, label, font(19, index == 0), foreground)
     # Show selected-fill text as well as outline focus: ETHOS uses highlight
     # colors in more places than the simple focus boxes shown above.
-    draw.rounded_rectangle((x + 20, y + 291, x + 179, y + 325), radius=5, fill=accent)
-    centered(draw, (x + 20, y + 291, x + 179, y + 325), "Highlight text", font(14, True), c["HIGHLIGHT_CONTRASTING_COLOR"])
-    draw.rounded_rectangle((x + 191, y + 291, x + 333, y + 325), radius=5, fill=c["SAFE_COLOR"])
-    centered(draw, (x + 191, y + 291, x + 333, y + 325), "Safe", font(14, True), c["SAFE_CONTRASTING_COLOR"])
-    draw.text((x + 352, y + 298), "Inactive", font=font(14), fill=c["INACTIVE_COLOR"])
-    draw.text((x + 20, y + 340), "ROUNDED CONTROLS" if theme["round"] else "SQUARE CONTROLS",
+    draw.rounded_rectangle((x + 20, y + 367, x + 179, y + 401), radius=5, fill=accent)
+    centered(draw, (x + 20, y + 367, x + 179, y + 401), "Highlight text", font(14, True), c["HIGHLIGHT_CONTRASTING_COLOR"])
+    draw.rounded_rectangle((x + 191, y + 367, x + 333, y + 401), radius=5, fill=c["SAFE_COLOR"])
+    centered(draw, (x + 191, y + 367, x + 333, y + 401), "Safe", font(14, True), c["SAFE_CONTRASTING_COLOR"])
+    draw.text((x + 352, y + 374), "Inactive", font=font(14), fill=c["INACTIVE_COLOR"])
+    draw.text((x + 20, y + 416), "ROUNDED CONTROLS" if theme["round"] else "SQUARE CONTROLS",
               font=font(10), fill=c["SECONDARY_COLOR"])
     for index, role in enumerate(("HIGHLIGHT_COLOR", "ACTIVE_COLOR", "WARNING_COLOR", "ERROR_COLOR")):
         left = x + 450 + index * 22
-        draw.ellipse((left, y + 341, left + 12, y + 353), fill=c[role])
+        draw.ellipse((left, y + 417, left + 12, y + 429), fill=c[role])
 
 
 def render_collection(slug, title, theme_slugs, *, display_names=None):
@@ -122,7 +136,7 @@ def render_collection(slug, title, theme_slugs, *, display_names=None):
         if display_names and theme_slug in display_names:
             theme["name"] = display_names[theme_slug]
     rows = (len(themes) + 1) // 2
-    height = 160 + rows * 394
+    height = 160 + rows * CARD_ROW_STEP
     canvas = Image.new("RGB", (1200, height), (7, 12, 21))
     draw = ImageDraw.Draw(canvas)
     draw.text((36, 25), "ETHOS 26  /  THE THEME COLLECTION", font=font(13, True), fill=(140, 169, 198))
@@ -130,6 +144,6 @@ def render_collection(slug, title, theme_slugs, *, display_names=None):
     draw.text((36, 101), f"{len(themes):02d} THEMES  |  Actual palettes and artwork  |  Illustrative layout",
               font=font(15), fill=(168, 185, 203))
     for index, theme in enumerate(themes):
-        draw_card(canvas, theme, 36 + index % 2 * 576, 144 + index // 2 * 394)
+        draw_card(canvas, theme, 36 + index % 2 * 576, 144 + index // 2 * CARD_ROW_STEP)
     PREVIEWS_ROOT.mkdir(parents=True, exist_ok=True)
     canvas.save(PREVIEWS_ROOT / f"{slug}.png", optimize=True)
