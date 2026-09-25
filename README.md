@@ -2,19 +2,9 @@
 
 ## Radio compatibility
 
-Every current theme download automatically selects the correct toolbar artwork: **784x50** on 800px radios such as the X20 Pro and X18RS, or **464x50** on standard 480px X18 radios. One ZIP works on both display sizes.
+Standalone themes for **ETHOS 26.1.0 and newer**. One ZIP automatically selects the correct artwork for **800px radios** (X20 Pro, X18RS) or **480px X18 radios**.
 
-Standalone themes for FrSky ETHOS 26, with custom colors, controls, and toolbar artwork for the radio interface.
-
-**Current packages: seven updated themes v1.2.4; 59 collection themes v1.2.3; America 250 v1.2.1; Ink & Halo v1.0.2. All require ETHOS 26.1.0 or newer.** API checked against ETHOS 26.1.2. See [compatibility details and changes](ETHOS26.md). Physical-radio acceptance remains on the [testing checklist](TESTING.md).
-
-The **v1.2.4 refinements** fix Neon Horizon's sun stripes and deepen its perspective grid, strengthen selected-control outlines in Royal Blue Strong and Desert Tactical, and improve logo separation in Loom, Halftone, and Desert Tactical. Blue Pro and Classic Blue receive standalone-theme wording updates. Catalog previews now show the actual artwork for both radio sizes. [Changes and validation](ETHOS26.md#targeted-refinements-v124).
-
-The **v1.2.3 artwork update** restores continuous toolbar backgrounds and textures across the full width. Accent lines run below the ETHOS wordmark, while prominent illustrations sit beside it; there is no blank center strip. **Ink & Halo v1.0.2** keeps its wider, raised halo. Palettes, logo colors, and runtime behavior are preserved. [Artwork changes](ETHOS26.md#continuous-header-artwork-v123).
-
-The **v1.2.0 readability update** improves foreground contrast and refreshes every collection preview. [See changes and validation](VISUAL_UPGRADE.md).
-
-The **v1.2.1 logo update** introduced ETHOS header logos with transparent backgrounds, colored to match all 66 collection palettes. Each small logo bitmap is requested once during initialization; no recurring drawing task is added. America 250 keeps its anniversary inscription clear, and Ink & Halo keeps its existing wordmark. Startup and About/Info branding remain unchanged. [Details and native-theme limits](ETHOS26.md#collection-logo-update-v121).
+[Update history and compatibility](ETHOS26.md) · [Installation](#installation) · [Testing](TESTING.md)
 
 ## Featured: America 250
 
@@ -212,7 +202,7 @@ All themes can remain installed together. `main.luac` is intentionally omitted; 
 Family generators write both native toolbar sizes and their theme packages. Shared helpers preserve display-size selection, palette handling, and ZIP layout. Review regenerated files before publishing: font versions, image-compression tools, and manually maintained themes can affect output or require separate updates.
 
 - `tools/theme_lib.py` holds the shared packaging helpers every generator uses.
-- `tools/generate_all_previews.py` refreshes all catalog images from the current Lua palettes and toolbar files, including both native header sizes, America 250, Ink & Halo, and Classic. It does not regenerate the radio artwork.
+- `tools/generate_all_previews.py` refreshes all catalog images from the current Lua palettes and toolbar files, with one header sample per theme, including America 250, Ink & Halo, and Classic. It does not regenerate the radio artwork or remove either native-size asset from the downloads.
 - `tools/generate_america250_theme.py` regenerates America 250, both native-size toolbar images, its ETHOS Suite-compatible ZIP, and the featured preview.
 - `tools/generate_ink_halo_theme.py` regenerates Ink & Halo, its halo artwork at both native sizes, transparent logo override, ETHOS Suite-compatible ZIP, and preview.
 - `tools/test_ethos26.py` executes all themes against the documented ETHOS 26 API using Lua runtimes and API stubs. See [test commands](TESTING.md#automated-checks).

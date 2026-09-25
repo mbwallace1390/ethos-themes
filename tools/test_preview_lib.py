@@ -53,7 +53,7 @@ class PreviewHeaderTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Incomplete native theme"):
                 preview_lib.parse_theme("example")
 
-    def test_industrial_cards_show_both_headers_and_keep_everything_inside_bounds(self):
+    def test_industrial_cards_show_one_header_and_keep_everything_inside_bounds(self):
         for slug in ("carbon", "hazard"):
             with self.subTest(theme=slug):
                 theme = preview_lib.parse_theme(slug)
@@ -67,10 +67,6 @@ class PreviewHeaderTests(unittest.TestCase):
                 self.assertEqual(canvas.crop((x + 20, y + 83, x + 532,
                                               y + 83 + scaled_height)).tobytes(),
                                  expected_large.tobytes())
-                small = preview_lib.toolbar_preview(theme, display_width=480)
-                # The X18 sample remains 464x50 and occupies its own lower row.
-                self.assertEqual(canvas.crop((x + 44, y + 148, x + 508, y + 198)).tobytes(),
-                                 small.tobytes())
                 bounds = ImageChops.difference(canvas, background).getbbox()
                 self.assertIsNotNone(bounds)
                 self.assertGreaterEqual(bounds[0], x)

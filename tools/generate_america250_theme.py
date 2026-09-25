@@ -108,7 +108,7 @@ def palette():
 def preview():
     theme = parse_theme(SLUG)
     colors = theme["colors"]
-    canvas = Image.new("RGB", (1200, 804), NAVY)
+    canvas = Image.new("RGB", (1200, 726), NAVY)
     draw = ImageDraw.Draw(canvas)
     # Pillow's embedded scalable font is portable across Windows and Linux.
     def font(size):
@@ -140,13 +140,10 @@ def preview():
         draw.rounded_rectangle((925, y, 958, y + 33), radius=5, fill=color,
                                outline=colors["BUTTON_BORDER_COLOR"])
         draw.text((973, y + 7), label, font=font(17), fill=IVORY)
-    draw.text((60, 638), "NATIVE X18 ARTWORK  /  464 x 50", font=font(16), fill=BLUE)
-    with Image.open(THEMES_ROOT / "theme-america250" / "toolbar-america250-x18.png") as art:
-        canvas.paste(art.convert("RGB"), (60, 676))
-    draw.text((602, 645), "One download. Both display sizes.", font=font(23), fill=IVORY)
-    draw.text((602, 683), "Gold focus | Square controls | Navy panels", font=font(17), fill=BLUE)
-    draw.line((59, 755, 1141, 755), fill=colors["BUTTON_BORDER_COLOR"])
-    draw.text((60, 773), "Actual toolbar artwork | Illustrative controls | Radio validation pending",
+    draw.text((60, 640), "One download. Both display sizes.", font=font(23), fill=IVORY)
+    draw.text((602, 646), "Gold focus | Square controls | Navy panels", font=font(17), fill=BLUE)
+    draw.line((59, 678, 1141, 678), fill=colors["BUTTON_BORDER_COLOR"])
+    draw.text((60, 696), "Actual toolbar artwork | Illustrative controls | Radio validation pending",
               font=font(14), fill=BLUE)
     PREVIEWS_ROOT.mkdir(parents=True, exist_ok=True)
     canvas.save(PREVIEWS_ROOT / "america250.png", optimize=True)

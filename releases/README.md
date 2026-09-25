@@ -2,7 +2,7 @@
 
 ## Current catalog
 
-Seven collection themes are now **v1.2.4**: Neon Horizon, Royal Blue Strong, Desert Tactical, Loom, Halftone, RF Blue Pro, and RF Suite Blue (Classic Blue in the catalog). The update fixes Neon Horizon's sun stripes and improves its grid depth, strengthens selected-control outlines and textured-header logo readability in the named themes, and clarifies the two Blue themes' standalone purpose. Catalog cards now show both native header sizes. See [the per-theme changes](../ETHOS26.md#targeted-refinements-v124).
+Seven collection themes are now **v1.2.4**: Neon Horizon, Royal Blue Strong, Desert Tactical, Loom, Halftone, RF Blue Pro, and RF Suite Blue (Classic Blue in the catalog). The update fixes Neon Horizon's sun stripes and improves its grid depth, strengthens selected-control outlines and textured-header logo readability in the named themes, and clarifies the two Blue themes' standalone purpose. Catalog previews show one header sample per theme; every download retains both native artwork sizes. See [the per-theme changes](../ETHOS26.md#targeted-refinements-v124).
 
 The remaining **59 collection themes stay at v1.2.3**. Continuous toolbar materials and theme identities are preserved across the collection, with no blank logo panel or recurring Lua drawing task. Earlier ZIPs remain frozen snapshots, including the previous v1.2.3 packages for the seven updated themes.
 

@@ -51,8 +51,8 @@ Then rerun the checks. They cover 68 themes, both 480px and 800px artwork choice
 
 ## Catalog previews
 
-- Each theme card shows the shipped 784x50 and 464x50 toolbar variants with the corresponding logo, with clear size labels.
-- Check the smaller artwork directly, including its different motif placement or count; it should not be a resized copy of the larger toolbar.
+- Each theme preview shows one header sample with the corresponding logo; confirm there is no second banner beneath it.
+- Check that the sample uses the shipped 784x50 artwork. Inspect the packaged 464x50 artwork separately, including its different motif placement or count, and verify both native-size files remain in the download.
 - Verify the preview remains legible at the README's displayed size and labels it as an illustration. Catalog previews do not establish native firmware placement or physical-radio acceptance.
 
 ## Devices

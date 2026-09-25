@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 PREVIEWS_ROOT = ROOT / "previews"
 ROLE_RE = re.compile(r"lcd\.RGB\(0x([0-9A-Fa-f]{2}),\s*0x([0-9A-Fa-f]{2}),\s*0x([0-9A-Fa-f]{2})\),\s*--\s*([A-Z_]+)")
-CARD_WIDTH, CARD_HEIGHT = 552, 442
+CARD_WIDTH, CARD_HEIGHT = 552, 366
 CARD_ROW_STEP = CARD_HEIGHT + 28
 
 
@@ -94,14 +94,9 @@ def draw_card(canvas, theme, x, y):
     scaled_height = round(large.height * 512 / large.width)
     large = large.resize((512, scaled_height), Image.Resampling.LANCZOS)
     canvas.paste(large, (x + 20, y + 83))
-    draw.text((x + 20, y + 127), "480 PX RADIOS  |  NATIVE HEADER",
-              font=font(12), fill=c["SECONDARY_COLOR"])
-    # Show the real X18 geometry at 1:1, centered in the same available width.
-    small = toolbar_preview(theme, display_width=480)
-    canvas.paste(small, (x + (width - small.width) // 2, y + 148))
     radius = 8 if theme["round"] else 0
     for index, label in enumerate(("Selected", "Normal", "Active", "Disabled")):
-        bx, by = x + 20 + index % 2 * 266, y + 219 + index // 2 * 72
+        bx, by = x + 20 + index % 2 * 266, y + 143 + index // 2 * 72
         fill, edge, foreground = panel, border, text
         if index == 0:
             edge = accent
@@ -117,16 +112,16 @@ def draw_card(canvas, theme, x, y):
         centered(draw, bounds, label, font(19, index == 0), foreground)
     # Show selected-fill text as well as outline focus: ETHOS uses highlight
     # colors in more places than the simple focus boxes shown above.
-    draw.rounded_rectangle((x + 20, y + 367, x + 179, y + 401), radius=5, fill=accent)
-    centered(draw, (x + 20, y + 367, x + 179, y + 401), "Highlight text", font(14, True), c["HIGHLIGHT_CONTRASTING_COLOR"])
-    draw.rounded_rectangle((x + 191, y + 367, x + 333, y + 401), radius=5, fill=c["SAFE_COLOR"])
-    centered(draw, (x + 191, y + 367, x + 333, y + 401), "Safe", font(14, True), c["SAFE_CONTRASTING_COLOR"])
-    draw.text((x + 352, y + 374), "Inactive", font=font(14), fill=c["INACTIVE_COLOR"])
-    draw.text((x + 20, y + 416), "ROUNDED CONTROLS" if theme["round"] else "SQUARE CONTROLS",
+    draw.rounded_rectangle((x + 20, y + 291, x + 179, y + 325), radius=5, fill=accent)
+    centered(draw, (x + 20, y + 291, x + 179, y + 325), "Highlight text", font(14, True), c["HIGHLIGHT_CONTRASTING_COLOR"])
+    draw.rounded_rectangle((x + 191, y + 291, x + 333, y + 325), radius=5, fill=c["SAFE_COLOR"])
+    centered(draw, (x + 191, y + 291, x + 333, y + 325), "Safe", font(14, True), c["SAFE_CONTRASTING_COLOR"])
+    draw.text((x + 352, y + 298), "Inactive", font=font(14), fill=c["INACTIVE_COLOR"])
+    draw.text((x + 20, y + 340), "ROUNDED CONTROLS" if theme["round"] else "SQUARE CONTROLS",
               font=font(10), fill=c["SECONDARY_COLOR"])
     for index, role in enumerate(("HIGHLIGHT_COLOR", "ACTIVE_COLOR", "WARNING_COLOR", "ERROR_COLOR")):
         left = x + 450 + index * 22
-        draw.ellipse((left, y + 417, left + 12, y + 429), fill=c[role])
+        draw.ellipse((left, y + 341, left + 12, y + 353), fill=c[role])
 
 
 def render_collection(slug, title, theme_slugs, *, display_names=None):

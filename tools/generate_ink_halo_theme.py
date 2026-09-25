@@ -89,7 +89,7 @@ def preview():
     accent = colors["HIGHLIGHT_COLOR"]
     secondary = colors["SECONDARY_COLOR"]
     border = colors["BUTTON_BORDER_COLOR"]
-    canvas = Image.new("RGB", (1200, 804), page)
+    canvas = Image.new("RGB", (1200, 726), page)
     draw = ImageDraw.Draw(canvas)
 
     def font(size):
@@ -137,13 +137,10 @@ def preview():
         draw.text((975, y), label, font=font(18), fill=text)
         draw.text((975, y + 25), "#" + "".join(f"{channel:02X}" for channel in color),
                   font=font(13), fill=secondary)
-    draw.text((60, 643), "NATIVE X18 ARTWORK  /  464 x 50", font=font(15), fill=secondary)
-    with Image.open(THEMES_ROOT / "theme-ink-halo" / "toolbar-ink-halo-x18.png") as art:
-        canvas.paste(art.convert("RGB"), (60, 677))
-    draw.text((600, 648), "One download. Both display sizes.", font=font(22), fill=text)
-    draw.text((600, 686), "Halo focus | Rounded controls | Ink panels", font=font(17), fill=secondary)
-    draw.line((59, 754, 1141, 754), fill=border)
-    draw.text((60, 774), "Actual toolbar artwork | Illustrative controls | Radio validation pending",
+    draw.text((60, 640), "One download. Both display sizes.", font=font(22), fill=text)
+    draw.text((600, 646), "Halo focus | Rounded controls | Ink panels", font=font(17), fill=secondary)
+    draw.line((59, 678, 1141, 678), fill=border)
+    draw.text((60, 696), "Actual toolbar artwork | Illustrative controls | Radio validation pending",
               font=font(14), fill=secondary)
     PREVIEWS_ROOT.mkdir(parents=True, exist_ok=True)
     canvas.save(PREVIEWS_ROOT / "ink-halo.png", optimize=True)
