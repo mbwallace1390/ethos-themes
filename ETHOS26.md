@@ -1,10 +1,16 @@
 # ETHOS 26 compatibility
 
-All 68 current themes target **ETHOS 26.1.0 and newer** on the existing 480px and 800px display layouts. Their API was checked against **26.1.2**, released September 10, 2026. FrSky describes that release as being for early adopters. [Official release](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/tag/26.1.2)
+All 71 current themes target **ETHOS 26.1.0 and newer** on the existing 480px and 800px display layouts. Their API was checked against **26.1.2**, released September 10, 2026. FrSky describes that release as being for early adopters. [Official release](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/tag/26.1.2)
 
-The v1.2.0 collection introduced [readability and preview improvements](VISUAL_UPGRADE.md). Seven collection packages are v1.2.4 and the other 59 remain v1.2.3; Ink & Halo is v1.0.2 and uses the same contrast checks, responsive artwork, and native registration behavior. America 250 remains v1.2.1.
+The current catalog contains three new designs at v1.0.0, seven collection packages at v1.2.4, 59 collection packages at v1.2.3, Ink & Halo at v1.0.2, and America 250 at v1.2.1. The v1.2.0 collection introduced the shared [readability and preview improvements](VISUAL_UPGRADE.md).
 
 Each theme ZIP includes **784x50** artwork for 800px radios and **464x50** artwork for 480px radios, selected automatically. Current catalog previews show one header sample per theme using the larger artwork. They are desktop illustrations, not firmware screenshots; both native-size assets remain in every download.
+
+## Copperline, Stormfront, and Night Current: v1.0.0
+
+Three standalone themes add etched copper, storm clouds with blue lightning, and flowing teal light on navy to the catalog. Each has its own palette, transparent ETHOS logo, native artwork for both display widths, and separate ZIP. The [catalog preview](previews/new-designs.png) uses the shipped artwork and palette values.
+
+The themes register their native controls and load static bitmaps during initialization only; they add no animation or recurring Lua drawing task. Prominent artwork stays clear of the logo while the background continues across the header. Physical-radio readability and Suite installer UI acceptance remain pending; follow [the testing checklist](TESTING.md) for both display sizes.
 
 ## Targeted refinements: v1.2.4
 
@@ -61,7 +67,7 @@ Startup and About/Info branding remain unchanged. The [ETHOS 26.1.2 native-theme
 
 ## Install or update
 
-1. Download the theme's latest ZIP from the main catalog: **seven updated themes v1.2.4**, **59 collection themes v1.2.3**, **Ink & Halo v1.0.2**, or **America 250 v1.2.1**.
+1. Download the theme's latest ZIP from the main catalog: **Copperline, Stormfront, and Night Current v1.0.0**, **seven updated themes v1.2.4**, **59 collection themes v1.2.3**, **Ink & Halo v1.0.2**, or **America 250 v1.2.1**.
 2. In Suite, use **Lua Library > Install from local .zip**, then select that ZIP.
 3. Restart the transmitter and select the theme under **System > General > Theme**.
 

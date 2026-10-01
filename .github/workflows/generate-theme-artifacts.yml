@@ -35,6 +35,7 @@ jobs:
           python tools/generate_texture_themes.py
           python tools/generate_america250_theme.py
           python tools/generate_ink_halo_theme.py
+          python tools/generate_new_designs.py
       - name: Refresh all previews and current packages
         run: |
           python tools/generate_all_previews.py

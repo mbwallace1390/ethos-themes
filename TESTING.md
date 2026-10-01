@@ -23,12 +23,12 @@ python tools/rebuild_releases.py
 python tools/generate_all_previews.py
 ```
 
-Then rerun the checks. They cover 68 themes, both 480px and 800px artwork choices, full PNG decoding, required manifest fields, all 18 color roles, Lua 5.2/5.4 parsing and initialization, unsupported firmware, failed bitmap initialization, and complete current ZIP contents. Historical ZIPs are retained as snapshots. These tests use API stubs and do not run the actual ETHOS firmware.
+Then rerun the checks. They cover 71 themes, both 480px and 800px artwork choices, full PNG decoding, required manifest fields, all 18 color roles, Lua 5.2/5.4 parsing and initialization, unsupported firmware, failed bitmap initialization, and complete current ZIP contents. Historical ZIPs are retained as snapshots. These tests use API stubs and do not run the actual ETHOS firmware.
 
 ## ETHOS 26 installation
 
 - Use ETHOS 26.1.0 or newer; record the exact build (API reference: 26.1.2).
-- Install the current ZIP through ETHOS Suite's local ZIP installer; confirm it is recognized and targets `scripts/<theme-folder>` (seven updated themes v1.2.4; 59 collection themes v1.2.3; Ink & Halo v1.0.2; America 250 v1.2.1).
+- Install the current ZIP through ETHOS Suite's local ZIP installer; confirm it is recognized and targets `scripts/<theme-folder>` (Copperline, Stormfront, and Night Current v1.0.0; seven updated themes v1.2.4; 59 collection themes v1.2.3; Ink & Halo v1.0.2; America 250 v1.2.1).
 - Check that manual extraction into that same folder also gives `scripts/<theme-folder>/main.lua` with both toolbar images beside it.
 - Remove that theme folder's previous `main.luac` when updating; restart and confirm the theme remains selectable.
 - Check **System > Information** for Lua errors after restart and after selecting the theme.
@@ -37,6 +37,7 @@ Then rerun the checks. They cover 68 themes, both 480px and 800px artwork choice
 
 - Theme appears in **System > General > Theme**.
 - Collection themes: confirm the ETHOS header logo matches the theme palette and has a transparent background and letter interiors. At both display widths, check that background materials and textures continue through the center without a flat patch, seam, or blank strip. Continuous accent rails should run below the wordmark, connected decorative paths should bend around its letters, and prominent illustrations should remain complete beside it. Verify readable lettering over the subtle background detail, readable native indicators, and installation of the logo PNG.
+- Copperline, Stormfront, and Night Current: inspect both native widths for complete copper etching, cloud and lightning details, or flowing teal paths. Check that these static motifs leave the ETHOS lettering and native indicators readable, and that the matching logo remains distinct at normal radio brightness.
 - Neon Horizon: at both display widths, verify the sun stripes stay inside the curved outline, the deeper perspective grid remains recognizable, and neither covers the ETHOS wordmark.
 - Royal Blue Strong and Desert Tactical: check selected-control outlines remain distinct against the page and both control backgrounds at normal radio brightness.
 - Loom, Halftone, and Desert Tactical: verify the stronger logo treatment improves lettering separation while the original textures continue through the header without a flat patch.
@@ -60,3 +61,5 @@ Then rerun the checks. They cover 68 themes, both 480px and 800px artwork choice
 Record the tested ETHOS version and transmitter model in the theme's README before release.
 
 The catalog has desktop API/package checks. America 250 v1.2.1 also passed bitmap decoding and source registration in the official X20 26.1.2 WebSimulator; this was not a visual simulator test. Real-radio acceptance, Suite installer UI acceptance, and screen readability must be recorded separately. Check both a standard 480px X18 and an 800px transmitter if claiming both device layouts are verified.
+
+Copperline, Stormfront, and Night Current v1.0.0 still require physical-radio and Suite installer UI acceptance. Their catalog illustrations and desktop checks do not establish those results.

@@ -108,7 +108,7 @@ class Ethos26Tests(unittest.TestCase):
                                                 f"{path.parent.name}: {role} on {surface}")
 
     def test_catalog_registration_and_display_sizes(self):
-        self.assertEqual(len(THEMES), 68)
+        self.assertEqual(len(THEMES), 71)
         allowed = {"key", "name", "roundButtons", "focusStyle", "colors", "toolbarBackground", "toolbarLogo"}
         for runtime in RUNTIMES:
             for path in THEMES:

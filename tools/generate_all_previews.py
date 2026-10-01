@@ -6,12 +6,14 @@ from generate_rf_pro_preview import THEMES as RF_PRO
 from generate_rf_pro_preview import DISPLAY_NAMES as PRO_NAMES
 from generate_america250_theme import preview as america_preview
 from generate_ink_halo_theme import preview as ink_halo_preview
+from generate_new_designs import SLUGS as NEW_DESIGNS
 from preview_lib import render_collection
 
 
 def main():
     america_preview()
     ink_halo_preview()
+    render_collection("new-designs", "New Designs", NEW_DESIGNS)
     for slug, (title, themes) in FAMILIES.items():
         render_collection(slug, title, themes)
     for slug, (title, themes) in COLLECTIONS.items():

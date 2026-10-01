@@ -22,6 +22,16 @@ Standalone themes for **ETHOS 26.1.0 and newer**. One ZIP automatically selects 
 
 **[Download Ink & Halo](releases/Ink-and-Halo-v1.0.2.zip)** · [Theme source and installation](themes/theme-ink-halo)
 
+## New designs
+
+Three new themes pair original static header artwork with readable native controls and matching ETHOS logos.
+
+<a href="previews/new-designs.png"><img src="previews/new-designs.png" alt="Copperline, Stormfront, and Night Current previews rendered from the packaged theme artwork and palettes" width="760"></a>
+
+- **Copperline v1.0.0** — etched copper accents over warm dark panels — [Download](releases/Copperline-v1.0.0.zip) — [Source](themes/theme-copperline)
+- **Stormfront v1.0.0** — slate cloud wisps and blue lightning beside the logo — [Download](releases/Stormfront-v1.0.0.zip) — [Source](themes/theme-stormfront)
+- **Night Current v1.0.0** — flowing teal light across a deep navy header — [Download](releases/Night-Current-v1.0.0.zip) — [Source](themes/theme-night-current)
+
 ## Cancer Awareness collection
 
 These 10 themes use original generic awareness-ribbon artwork and matching color palettes. Every theme remains a separate download with its own folder, short ETHOS key, source link, and ZIP.
@@ -205,6 +215,7 @@ Family generators write both native toolbar sizes and their theme packages. Shar
 - `tools/generate_all_previews.py` refreshes all catalog images from the current Lua palettes and toolbar files, with one header sample per theme, including America 250, Ink & Halo, and Classic. It does not regenerate the radio artwork or remove either native-size asset from the downloads.
 - `tools/generate_america250_theme.py` regenerates America 250, both native-size toolbar images, its ETHOS Suite-compatible ZIP, and the featured preview.
 - `tools/generate_ink_halo_theme.py` regenerates Ink & Halo, its halo artwork at both native sizes, transparent logo override, ETHOS Suite-compatible ZIP, and preview.
+- `tools/generate_new_designs.py` regenerates Copperline, Stormfront, and Night Current, both native toolbar sizes, matching logos, separate ZIPs, and their collection preview.
 - `tools/test_ethos26.py` executes all themes against the documented ETHOS 26 API using Lua runtimes and API stubs. See [test commands](TESTING.md#automated-checks).
 - `tools/validate_catalog.py` checks the whole catalog read-only: artwork sizes and encoding, responsive toolbar selection, unique ETHOS keys, and release ZIPs that match their theme folders.
 - `tools/rebuild_releases.py` repackages every theme's current release ZIP from its source folder, leaving superseded archives untouched.
