@@ -28,7 +28,8 @@ Then rerun the checks. They cover 71 themes, both 480px and 800px artwork choice
 ## ETHOS 26 installation
 
 - Use ETHOS 26.1.0 or newer; record the exact build (API reference: 26.1.2).
-- Install the current ZIP through ETHOS Suite's local ZIP installer; confirm it is recognized and targets `scripts/<theme-folder>` (Copperline, Stormfront, and Night Current v1.0.0; seven updated themes v1.2.4; 59 collection themes v1.2.3; Ink & Halo v1.0.2; America 250 v1.2.1).
+- Install the current ZIP through ETHOS Suite's local ZIP installer; confirm it is recognized and targets `scripts/<theme-folder>` (66 collection themes v1.2.5; America 250 v1.2.2; Ink & Halo v1.0.3; Copperline, Stormfront, and Night Current v1.0.1).
+- Confirm the Suite install excludes `preview.png`; it is not selected by the manifest.
 - Check that manual extraction into that same folder also gives `scripts/<theme-folder>/main.lua` with both toolbar images beside it.
 - Remove that theme folder's previous `main.luac` when updating; restart and confirm the theme remains selectable.
 - Check **System > Information** for Lua errors after restart and after selecting the theme.
@@ -50,6 +51,14 @@ Then rerun the checks. They cover 71 themes, both 480px and 800px artwork choice
 - Warnings, errors, and safe-state colors remain recognizable.
 - Startup and About/Info branding remain unchanged for every theme; these surfaces have no documented native-theme customization setting.
 
+## Download previews
+
+- Extract each current ZIP on a computer and open its root `preview.png` without installing the theme or visiting GitHub.
+- Confirm the image fully decodes, identifies the correct theme and package version, and uses its current palette and header artwork.
+- Confirm `preview.png` matches the source theme's preview, is included in the current ZIP, and is excluded from the manifest's `files` selectors.
+- Check that the image is clearly labeled as an illustration. It does not establish native firmware placement or physical-radio acceptance.
+- Confirm all 413 previously published ZIPs remain byte-for-byte unchanged; this update adds 71 new current archives.
+
 ## Catalog previews
 
 - Each theme preview shows one header sample with the corresponding logo; confirm there is no second banner beneath it.
@@ -62,4 +71,4 @@ Record the tested ETHOS version and transmitter model in the theme's README befo
 
 The catalog has desktop API/package checks. America 250 v1.2.1 also passed bitmap decoding and source registration in the official X20 26.1.2 WebSimulator; this was not a visual simulator test. Real-radio acceptance, Suite installer UI acceptance, and screen readability must be recorded separately. Check both a standard 480px X18 and an 800px transmitter if claiming both device layouts are verified.
 
-Copperline, Stormfront, and Night Current v1.0.0 still require physical-radio and Suite installer UI acceptance. Their catalog illustrations and desktop checks do not establish those results.
+Copperline, Stormfront, and Night Current v1.0.1 still require physical-radio and Suite installer UI acceptance. Their catalog illustrations and desktop checks do not establish those results.

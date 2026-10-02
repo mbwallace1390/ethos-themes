@@ -1,6 +1,7 @@
 """Catalog previews must show the real artwork for each supported radio width."""
 from __future__ import annotations
 
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -24,6 +25,8 @@ class PreviewHeaderTests(unittest.TestCase):
         (self.folder / "main.lua").write_text(
             'name = "Example"\nroundButtons = false\nfocusStyle = "outline"\n' + colors,
             encoding="utf-8")
+        (self.folder / "ethos_lua_manifest.json").write_text(
+            json.dumps({"name": "Example", "version": "7.8.9"}), encoding="utf-8")
         self.large_path = self.folder / "toolbar-example.png"
         self.small_path = self.folder / "toolbar-example-x18.png"
         Image.new("RGB", (784, 50), (45, 60, 110)).save(self.large_path)
@@ -52,6 +55,54 @@ class PreviewHeaderTests(unittest.TestCase):
         with patch.object(preview_lib, "THEMES_ROOT", self.root):
             with self.assertRaisesRegex(ValueError, "Incomplete native theme"):
                 preview_lib.parse_theme("example")
+
+    def test_explicit_theme_folder_does_not_depend_on_the_catalog_location(self):
+        with patch.object(preview_lib, "THEMES_ROOT", self.root / "unrelated-catalog"):
+            theme = preview_lib.parse_theme_dir(self.folder)
+        self.assertEqual(theme["name"], "Example")
+        self.assertEqual(theme["toolbar"], self.large_path)
+        self.assertEqual(theme["toolbar_x18"], self.small_path)
+
+    def test_download_preview_labels_its_exact_theme_version_and_illustration(self):
+        output = self.root / "download-preview.png"
+        original_text = ImageDraw.ImageDraw.text
+        with patch.object(ImageDraw.ImageDraw, "text", autospec=True,
+                          side_effect=original_text) as text:
+            preview_lib.render_theme_preview(self.folder, output)
+        labels = [call.args[2] for call in text.call_args_list]
+        self.assertEqual(labels.count("Example"), 1)
+        self.assertIn("Version 7.8.9", labels)
+        self.assertIn("ETHOS 26  /  THEME PREVIEW", labels)
+        self.assertIn("Illustrative layout", labels)
+        self.assertIn("Not a firmware screenshot.", labels)
+        self.assertEqual(labels.count("Selected"), 1, "only one theme card belongs in the download")
+
+    def test_download_preview_is_deterministic_opaque_and_uses_the_real_header(self):
+        # A distinctive transparent logo proves the saved preview uses both
+        # runtime assets, rather than a generic banner or the uncomposited art.
+        logo = Image.new("RGBA", (128, 26), (0, 0, 0, 0))
+        ImageDraw.Draw(logo).rectangle((17, 4, 103, 21), fill=(240, 110, 20, 255))
+        logo.save(self.folder / "logo-example.png")
+        source = self.folder / "main.lua"
+        source.write_text(source.read_text(encoding="utf-8")
+                          + '\nlocal ok, logo = pcall(lcd.loadBitmap, "logo-example.png")\n',
+                          encoding="utf-8")
+        output = self.root / "previews" / "download.png"
+        preview_lib.render_theme_preview(self.folder, output)
+        first_bytes = output.read_bytes()
+        preview_lib.render_theme_preview(self.folder, output)
+        self.assertEqual(first_bytes, output.read_bytes())
+        with Image.open(output) as actual:
+            actual.load()
+            self.assertEqual(actual.format, "PNG")
+            self.assertEqual(actual.mode, "RGB")
+            self.assertEqual(actual.size, (600, 624))
+            self.assertNotIn("transparency", actual.info)
+            with Image.open(self.large_path) as source_art:
+                expected = source_art.convert("RGB")
+            expected.paste(logo, ((784 - 128) // 2, (50 - 26) // 2), logo)
+            expected = expected.resize((512, 33), Image.Resampling.LANCZOS)
+            self.assertEqual(actual.crop((44, 215, 556, 248)).tobytes(), expected.tobytes())
 
     def test_industrial_cards_show_one_header_and_keep_everything_inside_bounds(self):
         for slug in ("carbon", "hazard"):

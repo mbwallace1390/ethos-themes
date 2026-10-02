@@ -21,7 +21,7 @@ PANEL = (13, 16, 23)
 WHITE = (244, 247, 252)
 ICE = (189, 215, 255)
 SLUG = "ink-halo"
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 WORDMARK = Path(__file__).resolve().parent / "assets" / "ink-halo" / "ethos-wordmark.png"
 
 

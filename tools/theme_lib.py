@@ -1,9 +1,9 @@
 """Shared helpers for the ETHOS theme generators.
 
-Every generator writes the same three things: palette-encoded toolbar art at
-both display sizes, a ``main.lua`` that picks the right art at runtime, and a
-release ZIP. Keeping that in one place stops a regeneration from silently
-undoing the X18 responsive support or the palette encoding.
+Every generator writes palette-encoded toolbar art at both display sizes,
+a ``main.lua`` that picks the right art at runtime, and a release ZIP with a
+desktop preview. Keeping that in one place stops a regeneration from silently
+undoing the X18 responsive support, palette encoding, or downloadable preview.
 """
 
 from __future__ import annotations
@@ -12,6 +12,7 @@ import json
 import math
 import re
 import zipfile
+from fnmatch import fnmatchcase
 from pathlib import Path
 
 from PIL import Image, ImageFilter, ImageOps
@@ -23,11 +24,19 @@ ROOT = Path(__file__).resolve().parents[1]
 THEMES_ROOT = ROOT / "themes"
 RELEASES_ROOT = ROOT / "releases"
 PREVIEWS_ROOT = ROOT / "previews"
-THEME_VERSION = "1.2.3"
-THEME_VERSION_OVERRIDES = dict.fromkeys((
-    "neon-horizon", "royal-blue-strong", "desert-tactical", "loom", "halftone",
-    "rfblue-pro", "rfsuite-blue",
-), "1.2.4")
+THEME_VERSION = "1.2.5"
+THEME_VERSION_OVERRIDES: dict[str, str] = {}
+PREVIEW_RELEASE_NOTES = (
+    "Download update: includes preview.png to view the theme before installing. "
+    "The preview is excluded from ETHOS Suite's installed files; radio code and artwork are unchanged."
+)
+PREVIEW_README = (
+    "## Preview before installing\n\n"
+    "After extracting the ZIP on your computer, open [preview.png](preview.png) to see this theme's "
+    "colors and artwork. The control layout is illustrative, not a firmware screenshot.\n\n"
+    "ETHOS Suite installs only the runtime files and leaves this preview on your computer. "
+    "For manual installation, you can omit `preview.png`.\n"
+)
 STRONG_LOGO_OUTLINES = {"loom", "halftone", "desert-tactical"}
 WORDMARK_MASK = Path(__file__).resolve().parent / "assets" / "ethos-logo" / "wordmark-alpha.png"
 LOGO_SIZE = (128, 26)
@@ -85,7 +94,7 @@ def mix(a: tuple[int, int, int], b: tuple[int, int, int], amount: float) -> tupl
 
 
 def theme_version(slug: str) -> str:
-    """Keep unchanged downloads on their existing release version."""
+    """Resolve the shared collection version or an explicit per-theme version."""
     return THEME_VERSION_OVERRIDES.get(slug, THEME_VERSION)
 
 
@@ -388,11 +397,29 @@ def write_release(theme_dir: Path, release: Path) -> None:
     """Build a Suite-compatible ZIP with its manifest and files at the root.
 
     Suite reads ``folder`` from the root manifest to choose the radio install
-    directory; it does not strip a wrapper folder from the ZIP.
+    directory; it does not strip a wrapper folder from the ZIP. A desktop-only
+    preview is bundled alongside the selected runtime files.
     """
     manifest = json.loads((theme_dir / "ethos_lua_manifest.json").read_text(encoding="utf-8"))
     if manifest.get("folder") != theme_dir.name:
         raise ValueError(f"Manifest folder does not match {theme_dir}")
+    if any(fnmatchcase("preview.png", selector.lower()) for selector in manifest["files"]):
+        raise ValueError(f"Desktop preview must not be selected for radio installation: {theme_dir}")
+    # Keep the downloadable preview and its instructions current for generated
+    # and hand-maintained themes, without changing the radio's install scope.
+    notes = manifest["releaseNotes"]["content"]
+    if PREVIEW_RELEASE_NOTES not in notes:
+        manifest["releaseNotes"]["content"] = PREVIEW_RELEASE_NOTES + " " + notes
+        (theme_dir / "ethos_lua_manifest.json").write_text(
+            json.dumps(manifest, indent=4) + "\n", encoding="utf-8", newline="\n")
+    readme_path = theme_dir / "README.md"
+    readme = readme_path.read_text(encoding="utf-8")
+    if "## Preview before installing" not in readme:
+        title, _, body = readme.partition("\n\n")
+        readme_path.write_text(title + "\n\n" + PREVIEW_README + "\n" + body,
+                               encoding="utf-8", newline="\n")
+    from preview_lib import render_theme_preview
+    render_theme_preview(theme_dir, theme_dir / "preview.png")
     RELEASES_ROOT.mkdir(parents=True, exist_ok=True)
     if release.exists():
         release.unlink()

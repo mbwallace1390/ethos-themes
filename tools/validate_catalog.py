@@ -55,6 +55,8 @@ def manifest_errors(manifest: object) -> list[str]:
             if ("\\" in pattern or re.match(r"^[A-Za-z]:", pattern)
                     or any(segment in ("", "..") for segment in pattern.split("/"))):
                 errors.append(f"manifest files selector {pattern!r} must be relative, use '/', and omit empty or '..' segments")
+        if any(fnmatchcase("preview.png", pattern.lower()) for pattern in files):
+            errors.append("manifest files must not install preview.png; it is a desktop preview")
     if "introduction" in manifest:
         value = manifest["introduction"]
         if not isinstance(value, str) or len(value) > 1024:
@@ -89,6 +91,8 @@ def check_theme(theme_dir: Path, problems: list[str]) -> tuple[str | None, str |
         source = ""
     if "main.luac" in [p.name for p in theme_dir.iterdir()]:
         fail("main.luac must not be committed")
+    if re.search(r'''(["'])(?:[^"'\r\n]*[/\\])?preview\.png\1''', source, re.IGNORECASE):
+        fail("preview.png must not be referenced by main.lua; it is a desktop preview")
 
     key_match = KEY_RE.search(source)
     name_match = NAME_RE.search(source)
@@ -114,10 +118,12 @@ def check_theme(theme_dir: Path, problems: list[str]) -> tuple[str | None, str |
             fail(f"main.lua never references {asset}")
     # Optional bitmap overrides must be present and installed just like the toolbar.
     referenced_images = set(re.findall(r'"([^"\n]+\.png)"', source))
-    for asset in sorted(set(toolbar_sizes) | referenced_images):
+    # The packaged preview is required, but is deliberately not a radio asset.
+    for asset in sorted(set(toolbar_sizes) | referenced_images | {"preview.png"}):
         path = theme_dir / asset
         if not path.is_file():
-            fail(f"main.lua references missing image {asset}")
+            fail("missing preview.png" if asset == "preview.png"
+                 else f"main.lua references missing image {asset}")
             continue
         try:
             with Image.open(path) as image:
@@ -127,6 +133,13 @@ def check_theme(theme_dir: Path, problems: list[str]) -> tuple[str | None, str |
                         fail(f"{asset} is {image.size}, expected {expected}")
                     if image.mode != "P":
                         fail(f"{asset} is {image.mode}, expected palette-encoded 'P'")
+                elif asset == "preview.png":
+                    if image.format != "PNG":
+                        fail(f"preview.png is {image.format}, expected PNG")
+                    if image.mode != "RGB":
+                        fail(f"preview.png is {image.mode}, expected RGB")
+                    if image.width <= 0 or image.height <= 0:
+                        fail("preview.png dimensions must be positive")
                 image.verify()
             # Verification checks PNG chunks; decoding also catches a damaged
             # compressed pixel stream even when its chunk checksum is valid.

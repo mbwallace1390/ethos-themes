@@ -17,7 +17,7 @@ NAVY, PANEL = (4, 14, 31), (8, 24, 47)
 IVORY, RED, GOLD = (240, 231, 207), (184, 48, 49), (216, 170, 78)
 BLUE = (127, 169, 210)
 SLUG = "america250"
-VERSION = "1.2.1"
+VERSION = "1.2.2"
 
 # Fixed five-column glyphs keep radio art crisp and independent of host fonts.
 GLYPHS = {

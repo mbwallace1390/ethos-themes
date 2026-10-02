@@ -16,7 +16,7 @@ from theme_lib import (
     write_release, write_theme_files,
 )
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 FAMILY = "New Designs"
 ART_SCALE = 3
 STORM_SOURCE = Path(__file__).resolve().parent / "assets" / "stormfront" / "clouds-source.png"

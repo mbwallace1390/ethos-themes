@@ -2,9 +2,17 @@
 
 All 71 current themes target **ETHOS 26.1.0 and newer** on the existing 480px and 800px display layouts. Their API was checked against **26.1.2**, released September 10, 2026. FrSky describes that release as being for early adopters. [Official release](https://github.com/FrSkyRC/ETHOS-Feedback-Community/releases/tag/26.1.2)
 
-The current catalog contains three new designs at v1.0.0, seven collection packages at v1.2.4, 59 collection packages at v1.2.3, Ink & Halo at v1.0.2, and America 250 at v1.2.1. The v1.2.0 collection introduced the shared [readability and preview improvements](VISUAL_UPGRADE.md).
+The current catalog contains 66 collection packages at v1.2.5, America 250 at v1.2.2, Ink & Halo at v1.0.3, and Copperline, Stormfront, and Night Current at v1.0.1. The v1.2.0 collection introduced the shared [readability and preview improvements](VISUAL_UPGRADE.md).
 
 Each theme ZIP includes **784x50** artwork for 800px radios and **464x50** artwork for 480px radios, selected automatically. Current catalog previews show one header sample per theme using the larger artwork. They are desktop illustrations, not firmware screenshots; both native-size assets remain in every download.
+
+## Offline previews in every download
+
+All 71 current theme ZIPs include an individual `preview.png` at the archive root. Extract the ZIP on your computer and open the image to compare themes without revisiting GitHub or installing them. It shows that theme's colors, header artwork, and illustrative controls; it is not a firmware screenshot.
+
+This packaging-only update preserves the Lua runtime, palettes, native artwork, identities, and install folders. The preview is excluded from the manifest's `files` selectors, so ETHOS Suite installs only the runtime assets. For manual installation, you may omit `preview.png`.
+
+The update adds 71 new ZIPs; all 413 earlier archives remain unchanged. The catalog now contains 484 ZIPs, including historical versions.
 
 ## Copperline, Stormfront, and Night Current: v1.0.0
 
@@ -14,7 +22,7 @@ The themes register their native controls and load static bitmaps during initial
 
 ## Targeted refinements: v1.2.4
 
-Seven themes receive v1.2.4 packages:
+Seven themes received v1.2.4 packages:
 
 - **Neon Horizon:** clips the horizontal sun stripes inside its outline and gives the perspective grid more depth while keeping the logo clear.
 - **Royal Blue Strong and Desert Tactical:** strengthen selected-control outlines against the theme backgrounds.
@@ -23,13 +31,13 @@ Seven themes receive v1.2.4 packages:
 
 Check these details in both packaged toolbar sizes and on both radio sizes using [the testing checklist](TESTING.md). The single header sample in the catalog does not replace those checks.
 
-The remaining 59 collection themes stay at v1.2.3; Ink & Halo stays at v1.0.2 and America 250 at v1.2.1. Previous ZIPs remain frozen snapshots. The changes add no recurring Lua drawing work.
+At that release, the remaining 59 collection themes stayed at v1.2.3; Ink & Halo stayed at v1.0.2 and America 250 at v1.2.1. Previous ZIPs remain frozen snapshots. The changes add no recurring Lua drawing work.
 
 ## Continuous header artwork: v1.2.3
 
 The 66 collection themes use continuous backgrounds and textures across each native toolbar width. Fine material detail remains visible through the transparent ETHOS logo; a flat rectangle no longer replaces the artwork at the center. Accent rails run below the wordmark, connected decorative paths bend around its lettering, and prominent illustrations sit beside it.
 
-The design preserves each theme's palette, logo colors, controls, name, and runtime key. Only the static artwork layout changes; the radio still loads the background and logo during initialization without a recurring drawing task. Ink & Halo remains v1.0.2, and America 250 remains v1.2.1.
+The design preserves each theme's palette, logo colors, controls, name, and runtime key. Only the static artwork layout changes; the radio still loads the background and logo during initialization without a recurring drawing task. At that release, Ink & Halo remained v1.0.2, and America 250 remained v1.2.1.
 
 The updated previews illustrate these layouts using the shipped assets. Inspect both 480px and 800px layouts for continuous materials and lines, complete motifs, and readable logo lettering using [the testing checklist](TESTING.md). Desktop artwork checks do not establish firmware placement or physical-radio acceptance. Earlier ZIPs, including v1.2.2, remain frozen snapshots.
 
@@ -37,7 +45,7 @@ The updated previews illustrate these layouts using the shipped assets. Inspect 
 
 Collection v1.2.2 moved motifs into left and right panels with a clear 160px center around the ETHOS logo. Version 1.2.3 supersedes that layout to restore continuous backgrounds and decorative paths; the v1.2.2 archives remain unchanged.
 
-Ink & Halo v1.0.2 raised and widened its halo arc to leave a clear gap behind and around the baked-in wordmark at both display sizes. Its palette and transparent logo override were preserved, and this remains its current release. America 250's v1.2.1 artwork and hidden default logo remain unchanged.
+Ink & Halo v1.0.2 raised and widened its halo arc to leave a clear gap behind and around the baked-in wordmark at both display sizes. Its palette and transparent logo override were preserved; the subsequent offline-preview package retains this artwork. America 250's v1.2.1 artwork and hidden default logo remain unchanged.
 
 ## Collection logo update: v1.2.1
 
@@ -67,11 +75,12 @@ Startup and About/Info branding remain unchanged. The [ETHOS 26.1.2 native-theme
 
 ## Install or update
 
-1. Download the theme's latest ZIP from the main catalog: **Copperline, Stormfront, and Night Current v1.0.0**, **seven updated themes v1.2.4**, **59 collection themes v1.2.3**, **Ink & Halo v1.0.2**, or **America 250 v1.2.1**.
-2. In Suite, use **Lua Library > Install from local .zip**, then select that ZIP.
-3. Restart the transmitter and select the theme under **System > General > Theme**.
+1. Download the theme's latest ZIP from the main catalog: **66 collection themes v1.2.5**, **America 250 v1.2.2**, **Ink & Halo v1.0.3**, or **Copperline, Stormfront, and Night Current v1.0.1**.
+2. To preview it first, extract the ZIP on your computer and open `preview.png`.
+3. In Suite, use **Lua Library > Install from local .zip**, then select the original ZIP.
+4. Restart the transmitter and select the theme under **System > General > Theme**.
 
-For manual installation, create the theme's named folder inside `scripts` and extract the ZIP **contents into that folder**. For Carbon, the result must be `scripts/theme-carbon/main.lua`, with the manifest and both toolbar PNGs beside it. Do not extract the loose files directly into `scripts`. Remove an old `main.luac` from that same theme folder when updating, so the firmware can compile the new source. Copying the complete source folder from this repository into `scripts` also works.
+For manual installation, create the theme's named folder inside `scripts` and extract the ZIP **contents into that folder**. For Carbon, the result must be `scripts/theme-carbon/main.lua`, with the manifest and both toolbar PNGs beside it. Do not extract the loose files directly into `scripts`. Remove an old `main.luac` from that same theme folder when updating, so the firmware can compile the new source. Copying the complete source folder from this repository into `scripts` also works. You may omit `preview.png` from a manual copy; it is for viewing on your computer.
 
 The manual install location and theme selection follow FrSky's [theme instructions](https://github.com/FrSkyRC/ETHOS-Feedback-Community/blob/26.1.2/lua/themes/README.md). Old, folder-wrapped ZIPs are retained for manual installation only; use the current catalog links for the Suite workflow.
 

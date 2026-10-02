@@ -1,6 +1,7 @@
-"""Shared, source-driven catalog previews; never installed on a radio."""
+"""Shared, source-driven desktop previews of native ETHOS theme assets."""
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
@@ -29,7 +30,12 @@ def font(size, bold=False):
 
 
 def parse_theme(slug):
-    folder = THEMES_ROOT / f"theme-{slug}"
+    return parse_theme_dir(THEMES_ROOT / f"theme-{slug}")
+
+
+def parse_theme_dir(folder: Path):
+    """Read a theme directly from its folder, including staged release files."""
+    folder = Path(folder)
     source = (folder / "main.lua").read_text(encoding="utf-8")
     colors = {role: (int(r, 16), int(g, 16), int(b, 16))
               for r, g, b, role in ROLE_RE.findall(source)}
@@ -142,3 +148,29 @@ def render_collection(slug, title, theme_slugs, *, display_names=None):
         draw_card(canvas, theme, 36 + index % 2 * 576, 144 + index // 2 * CARD_ROW_STEP)
     PREVIEWS_ROOT.mkdir(parents=True, exist_ok=True)
     canvas.save(PREVIEWS_ROOT / f"{slug}.png", optimize=True)
+
+
+def render_theme_preview(theme_dir: Path, output_path: Path):
+    """Save one portrait preview using the package's palette, art, and version.
+
+    The existing catalog card is reused unchanged. This desktop illustration
+    shows representative controls; it is not a captured firmware screen.
+    """
+    theme_dir, output_path = Path(theme_dir), Path(output_path)
+    theme = parse_theme_dir(theme_dir)
+    manifest = json.loads((theme_dir / "ethos_lua_manifest.json").read_text(encoding="utf-8"))
+    version = manifest.get("version")
+    if not isinstance(version, str) or re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version) is None:
+        raise ValueError(f"Missing or invalid theme version: {theme_dir}")
+
+    canvas = Image.new("RGB", (600, 624), (7, 12, 21))
+    draw = ImageDraw.Draw(canvas)
+    draw.text((24, 25), "ETHOS 26  /  THEME PREVIEW", font=font(13, True), fill=(140, 169, 198))
+    draw.text((22, 49), "Theme preview", font=font(32, True), fill=(245, 247, 250))
+    draw.text((24, 98), f"Version {version}", font=font(15), fill=(168, 185, 203))
+    draw_card(canvas, theme, 24, 132)
+    draw.text((24, 529), "Illustrative layout", font=font(16, True), fill=(211, 225, 237))
+    draw.text((24, 557), "Actual palette and header artwork.", font=font(14), fill=(168, 185, 203))
+    draw.text((24, 580), "Not a firmware screenshot.", font=font(14), fill=(168, 185, 203))
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(output_path, format="PNG", optimize=True)

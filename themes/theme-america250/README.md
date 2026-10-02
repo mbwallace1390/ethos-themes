@@ -1,4 +1,10 @@
-# America 250 v1.2.1
+# America 250 v1.2.2
+
+## Preview before installing
+
+After extracting the ZIP on your computer, open [preview.png](preview.png) to see this theme's colors and artwork. The control layout is illustrative, not a firmware screenshot.
+
+ETHOS Suite installs only the runtime files and leaves this preview on your computer. For manual installation, you can omit `preview.png`.
 
 Requires ETHOS 26.1.0 or newer; API checked against 26.1.2. Radio validation is still required.
 

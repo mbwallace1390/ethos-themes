@@ -42,6 +42,9 @@ class ReleaseValidationTests(unittest.TestCase):
             "toolbar-example.png": b"large artwork",
             "toolbar-example-x18.png": b"small artwork",
         }
+        preview = io.BytesIO()
+        Image.new("RGB", (6, 8), (20, 30, 40)).save(preview, format="PNG")
+        self.files["preview.png"] = preview.getvalue()
         for name, content in self.files.items():
             (self.theme / name).write_bytes(content)
         patches = patch.multiple(
@@ -74,6 +77,14 @@ class ReleaseValidationTests(unittest.TestCase):
         self.archive()
         self.assertEqual(self.problems(), [])
 
+    def test_frozen_releases_without_previews_are_accepted_and_unchanged(self) -> None:
+        self.archive("1.0.0", omit="preview.png", nested=True)
+        self.archive("1.0.1", omit="preview.png")
+        older = {path: path.read_bytes() for path in self.releases.iterdir()}
+        self.archive()
+        self.assertEqual(self.problems(), [])
+        self.assertEqual(older, {path: path.read_bytes() for path in older})
+
     def test_only_superseded_archive_does_not_count_as_current(self) -> None:
         self.archive("1.0.0", nested=True)
         self.assertTrue(any("no current release ZIP" in item for item in self.problems()))
@@ -105,6 +116,11 @@ class ReleaseValidationTests(unittest.TestCase):
         (self.theme / "main.lua").write_bytes(b"updated Lua\n")
         self.assertTrue(any("main.lua is stale" in item for item in self.problems()))
 
+    def test_stale_archive_preview_is_rejected(self) -> None:
+        self.archive()
+        Image.new("RGB", (6, 8), (80, 90, 100)).save(self.theme / "preview.png")
+        self.assertTrue(any("preview.png is stale" in item for item in self.problems()))
+
 
 class ManifestInstallTests(unittest.TestCase):
     def setUp(self) -> None:
@@ -124,6 +140,7 @@ class ManifestInstallTests(unittest.TestCase):
         for name, size in (("toolbar-example.png", (784, 50)),
                            ("toolbar-example-x18.png", (464, 50))):
             Image.new("P", size).save(self.theme / name)
+        Image.new("RGB", (6, 8), (20, 30, 40)).save(self.theme / "preview.png")
 
     def problems(self, files: object, *, overrides: dict | None = None,
                  omit: tuple[str, ...] = ()) -> list[str]:
@@ -171,6 +188,51 @@ class ManifestInstallTests(unittest.TestCase):
         for files in (["main.lua", "toolbar-*", "main.luac"], ["*"]):
             with self.subTest(files=files):
                 self.assertTrue(any("main.luac" in item for item in self.problems(files)))
+
+    def test_install_patterns_cannot_include_preview_case_insensitively(self) -> None:
+        for selector in ("preview.png", "PREVIEW.PNG", "*.png", "*.PNG", "*"):
+            with self.subTest(selector=selector):
+                problems = self.problems(["main.lua", "toolbar-*", selector])
+                self.assertTrue(any("must not install preview.png" in item
+                                    for item in problems), problems)
+
+    def test_preview_is_required_even_when_matching_archive_also_omits_it(self) -> None:
+        (self.theme / "preview.png").unlink()
+        problems = self.problems(["main.lua", "toolbar-*"])
+        self.assertTrue(any("missing preview.png" in item for item in problems), problems)
+        result, output = self.catalog_result()
+        self.assertEqual(result, 1, output)
+        self.assertIn("missing preview.png", output)
+
+    def test_corrupt_preview_is_rejected_even_when_archive_matches(self) -> None:
+        (self.theme / "preview.png").write_bytes(b"not a PNG")
+        problems = self.problems(["main.lua", "toolbar-*"])
+        self.assertTrue(any("unreadable image preview.png" in item for item in problems), problems)
+        result, output = self.catalog_result()
+        self.assertEqual(result, 1, output)
+        self.assertIn("unreadable image preview.png", output)
+
+    def test_preview_must_be_an_rgb_png(self) -> None:
+        for mode, image_format, message in (("RGBA", "PNG", "expected RGB"),
+                                             ("P", "PNG", "expected RGB"),
+                                             ("RGB", "JPEG", "expected PNG")):
+            with self.subTest(mode=mode, image_format=image_format):
+                Image.new(mode, (6, 8)).save(self.theme / "preview.png", format=image_format)
+                problems = self.problems(["main.lua", "toolbar-*"])
+                self.assertTrue(any("preview.png" in item and message in item
+                                    for item in problems), problems)
+
+    def test_preview_cannot_be_referenced_by_radio_lua(self) -> None:
+        source = self.theme / "main.lua"
+        original = source.read_text(encoding="utf-8")
+        for statement in ('local preview = lcd.loadBitmap("preview.png")',
+                          "local ok, preview = pcall(lcd.loadBitmap, 'PREVIEW.PNG')",
+                          'local filename = "./preview.png"'):
+            with self.subTest(statement=statement):
+                source.write_text(original + statement + "\n", encoding="utf-8")
+                problems = self.problems(["main.lua", "toolbar-*"])
+                self.assertTrue(any("preview.png must not be referenced by main.lua" in item
+                                    for item in problems), problems)
 
     def test_custom_logo_must_exist_and_be_installed(self) -> None:
         source = self.theme / "main.lua"
